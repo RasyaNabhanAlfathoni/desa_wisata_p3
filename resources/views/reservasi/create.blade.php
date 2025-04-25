@@ -1,3 +1,5 @@
+{{-- Kelola Reservasi / create.blade.php --}}
+
 @extends('be.master')
 @section('navbar')
     @include('be.navbar')

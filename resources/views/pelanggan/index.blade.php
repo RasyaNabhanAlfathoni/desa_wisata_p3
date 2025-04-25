@@ -157,7 +157,7 @@
                             <hr>
                             <p class="bottom-area d-flex">
                                 <span><i class="icon-map-o"></i> {{Str::limit($paket->fasilitas,25)}}</span>
-                                <span class="ml-auto"><a href="{{ route('paket-wisata.detail', $paket->id) }}">Pesan</a></span>
+                                <span class="ml-auto"><a href="{{ route('pelanggan.paket-wisata.detail', $paket->id) }}">Pesan</a></span>
                             </p>
                         </div>
                     </div>
