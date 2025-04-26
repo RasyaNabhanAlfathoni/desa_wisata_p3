@@ -214,7 +214,7 @@
                             @foreach($chunk as $item)
                                 <div class="col-md-4 p-3">
                                     <div class="card h-100 border-0 shadow-sm">
-                                        <a href="{{ route('paket-wisata.detail', $item->id) }}">
+                                        <a href="{{ route('pelanggan.paket-wisata.detail', $item->id) }}">
                                             <div class="bg-image rounded-top" style="background-image: url('{{ asset('storage/' . $item->foto1) }}'); height: 250px; background-size: cover; background-position: center;">
                                                 <div class="d-flex justify-content-center align-items-center h-100 bg-dark-transparent">
                                                     <span class="icon-search2 text-white"></span>
@@ -225,7 +225,7 @@
                                             <div class="d-flex justify-content-between">
                                                 <div>
                                                     <h5 class="card-title">
-                                                        <a href="{{ route('paket-wisata.detail', $item->id) }}" class="text-dark">{{ $item->nama_paket }}</a>
+                                                        <a href="{{ route('pelanggan.paket-wisata.detail', $item->id) }}" class="text-dark">{{ $item->nama_paket }}</a>
                                                     </h5>
                                                     <p class="text-success font-weight-bold h5 mb-2">Rp. {{ number_format($item->harga_per_pack, 0, ',', '.') }}</p>
                                                 </div>

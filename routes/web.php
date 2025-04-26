@@ -205,7 +205,7 @@ Route::middleware(['auth', 'level:pelanggan'])->group(function () {
     Route::get('/pelanggan/paket-wisata/{id}/reservasi', [PelangganController::class, 'showReservasiForm'])->name('pelanggan.paket-wisata.reservasi');
     Route::post('/pelanggan/paket-wisata/{id}/reservasi', [PelangganController::class, 'processReservasi'])->name('pelanggan.paket-wisata.reservasi.submit');
     Route::get('/pelanggan/paket-wisata/{id}/reservasi/pembayaran', [PelangganController::class, 'showPembayaranForm'])->name('pelanggan.paket-wisata.pembayaran');
-    Route::post('/pelanggan/paket-wisata/{id}/reservasi/pembayaran', [PelangganController::class, 'submitPembayaran'])->name('pelanggan.paket-wisata.pembayaran');
+    Route::post('/pelanggan/paket-wisata/{id}/reservasi/pembayaran', [PelangganController::class, 'submitPembayaran'])->name('pelanggan.paket-wisata.pembayaran.submit');
     Route::get('/pelanggan/obyek-wisata', [PelangganController::class, 'obyekWisata'])->name('pelanggan.obyek_wisata');
     Route::get('/pelanggan/penginapan', [PelangganController::class, 'penginapan'])->name('pelanggan.penginapan');
     Route::get('/pelanggan/berita', [PelangganController::class, 'berita'])->name('pelanggan.berita');

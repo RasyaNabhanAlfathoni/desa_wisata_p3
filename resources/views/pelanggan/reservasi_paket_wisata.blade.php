@@ -27,7 +27,7 @@
             <div class="col-lg-8">
                 <div class="card shadow-lg border-0 rounded-lg">
                     <div class="card-header bg-primary text-white">
-                        <h3 class="text-center font-weight-light my-4">Formulir Reservasi</h3>
+                        <h3 class="text-center my-4 text-white"><i class="icon-credit-card mr-2"></i> Formulir Reservasi</h3>
                     </div>
 
                     <div class="card-body">
@@ -164,6 +164,7 @@
                                     <div id="discountRow" class="d-flex justify-content-between mb-2 text-success d-none">
                                         <span>Diskon ({{ $paket->nilai_diskon }}%):</span>
                                         <span>-Rp<span id="discountAmount">0</span></span>
+                                        <input type="hidden" name="diskon" id="diskon_input" value="0">
                                     </div>
                                     <div class="d-flex justify-content-between mb-2">
                                         <span>Durasi:</span>
@@ -344,6 +345,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         const endDate = calculateEndDate(startDate);
+        // tglAkhirDisplay.value = endDate;
         tglAkhirDisplay.value = formatDate(endDate);
         tglAkhirHidden.value = endDate;
         dateRangeDisplay.textContent = `${formatDate(startDate)} - ${formatDate(endDate)}`;
@@ -389,6 +391,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Update display
         discountAmount.textContent = formatNumber(Math.round(discount));
+
+        // Set hidden input value (raw number, tanpa format titik)
+        document.getElementById('diskon_input').value = Math.round(discount);
+
         totalPayment.textContent = formatNumber(Math.round(total));
     }
 

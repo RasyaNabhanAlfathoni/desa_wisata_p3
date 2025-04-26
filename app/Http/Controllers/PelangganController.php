@@ -195,32 +195,35 @@ class PelangganController extends Controller
         try {
             DB::beginTransaction();
             // Cek ketersediaan lagi sebelum menyimpan
-            if (!$this->checkAvailability($paket, $request->tanggal_mulai, $request->tanggal_akhir)) {
+            if (!$this->checkAvailability($paket, $request->tgl_reservasi_mulai, $request->tgl_reservasi_akhir)) {
                 return back()->with('error', 'Maaf, paket wisata tidak tersedia pada tanggal yang dipilih.');
             }
 
             // Hitung total bayar
-            $total_bayar = $paket->harga_per_pack * $request->jumlah_peserta;
+            $subtotal = $paket->harga_per_pack * $request->jumlah_peserta;
 
             // Jika ada diskon
             if ($paket->peserta_diskon && $request->jumlah_peserta >= $paket->peserta_diskon) {
-                $diskon = $total_bayar * ($paket->nilai_diskon / 100);
-                $total_bayar -= $diskon;
+                $diskon = $subtotal * ($paket->nilai_diskon / 100);
             }
+
+            $total_bayar = $subtotal - $diskon;
 
             // Create reservation
             $reservasi = new Reservasi();
             $reservasi->id_pelanggan = $pelanggan->id;
             $reservasi->id_paket = $paket->id;
-            $reservasi->tgl_reservasi_mulai = $request->tanggal_mulai;
-            $reservasi->tgl_reservasi_akhir = $request->tanggal_akhir;
+            $reservasi->tgl_reservasi_mulai = $request->tgl_reservasi_mulai;
+            $reservasi->tgl_reservasi_akhir = $request->tgl_reservasi_akhir;
             $reservasi->harga = $paket->harga_per_pack;
             $reservasi->jumlah_peserta = $request->jumlah_peserta;
-            $reservasi->nilai_diskon = $request->nilai_diskon;
+            $reservasi->nilai_diskon = $paket->nilai_diskon;
             $reservasi->diskon = $request->diskon;
-            $reservasi->total_bayar = $request->total_bayar;
+            $reservasi->total_bayar = $total_bayar;
             $reservasi->status_reservasi_wisata = 'pesan'; // Default status is 'pesan'
             $reservasi->save();
+
+            DB::commit();
 
             return redirect()->route('pelanggan.paket-wisata.pembayaran', ['id' => $reservasi->id])->with('pesan', 'Reservasi berhasil dibuat!');
         } catch (\Exception $e) {
@@ -242,11 +245,11 @@ class PelangganController extends Controller
         $overlapping = Reservasi::where('id_paket', $paket->id)
             ->where('status_reservasi_wisata', '!=', 'dibatalkan')
             ->where(function($query) use ($tanggal_mulai, $tanggal_akhir) {
-                $query->whereBetween('tanggal_mulai', [$tanggal_mulai, $tanggal_akhir])
-                    ->orWhereBetween('tanggal_akhir', [$tanggal_mulai, $tanggal_akhir])
+                $query->whereBetween('tgl_reservasi_mulai', [$tanggal_mulai, $tanggal_akhir])
+                    ->orWhereBetween('tgl_reservasi_akhir', [$tanggal_mulai, $tanggal_akhir])
                     ->orWhere(function($q) use ($tanggal_mulai, $tanggal_akhir) {
-                        $q->where('tanggal_mulai', '<=', $tanggal_mulai)
-                            ->where('tanggal_akhir', '>=', $tanggal_akhir);
+                        $q->where('tgl_reservasi_mulai', '<=', $tanggal_mulai)
+                            ->where('tgl_reservasi_akhir', '>=', $tanggal_akhir);
                     });
             })
             ->exists();
@@ -254,12 +257,14 @@ class PelangganController extends Controller
         return !$overlapping;
     }
 
+
     /**
      * Show the payment form for a reservation.
      */
     public function showPembayaranForm($id)
     {
         $reservasi = Reservasi::with('paket')->findOrFail($id);
+        $pelanggan = Pelanggan::where('id_user', auth()->id())->firstOrFail();
 
         // Ensure the reservation belongs to the logged-in user
         if ($reservasi->pelanggan->id_user != Auth::id()) {
@@ -269,7 +274,9 @@ class PelangganController extends Controller
 
         return view('pelanggan.form_pembayaran', [
             'title' => 'Pembayaran Reservasi',
-            'reservasi' => $reservasi
+            'title2' => 'Pembayaran Reservasi Paket Wisata',
+            'reservasi' => $reservasi,
+            'pelanggan' => $pelanggan,
         ]);
     }
 
