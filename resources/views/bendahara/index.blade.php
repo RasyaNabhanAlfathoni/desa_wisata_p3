@@ -172,7 +172,7 @@
                                     <td>{{ ($reservasis->currentPage() - 1) * $reservasis->perPage() + $index + 1 }}</td>
                                         <td>{{ $reservasi->pelanggan->nama_lengkap }}</td>
                                         <td>{{ $reservasi->paket->nama_paket }}</td>
-                                        <td>{{ \Carbon\Carbon::parse($reservasi->tgl_reservasi_wisata)->format('d/m/Y') }}</td>
+                                        <td>{{ \Carbon\Carbon::parse($reservasi->tgl_reservasi_mulai)->format('d/m/Y') }}</td>
                                         <td>Rp. {{ number_format($reservasi->harga, 0, ',', '.') }}</td>
                                         <td>Rp. {{ number_format($reservasi->total_bayar, 0, ',', '.') }}</td>
                                         <td class="h4">

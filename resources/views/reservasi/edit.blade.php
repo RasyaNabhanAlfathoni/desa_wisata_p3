@@ -214,7 +214,7 @@
         const kuotaInfo = document.getElementById("kuota-info");
         const pesertaError = document.getElementById("peserta-error");
         const diskonInfo = document.getElementById("diskon-info");
-        const form = document.getElementById("frmReservasi");
+        const frm = document.getElementById("frmReservasi");
         const btnSimpan = document.getElementById('save');
 
         // Fungsi untuk menghitung tanggal akhir
@@ -335,12 +335,12 @@
         });
 
         // Validasi form sebelum submit
-        form.addEventListener('submit', function(e) {
+        frm.addEventListener('submit', function(e) {
             // Pastikan semua perhitungan sudah benar sebelum submit
             hitungTotalBayar();
             validasiJumlahPeserta();
 
-            if (!form.checkValidity()) {
+            if (!frm.checkValidity()) {
                 e.preventDefault();
                 e.stopPropagation();
             }

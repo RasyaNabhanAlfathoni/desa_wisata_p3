@@ -82,10 +82,10 @@
                                                  onclick="showModal(this)">
                                         </div>
                                     @elseif($reservasi->status_reservasi_wisata == 'pesan')
-                                        <form action="{{ route('kelola_reservasi.upload', $reservasi->id) }}" method="POST" enctype="multipart/form-data">
+                                        <form action="{{ route('kelola_reservasi.upload', $reservasi->id) }}" id="frmUpload" method="POST" enctype="multipart/form-data">
                                             @csrf
-                                            <input type="file" name="file_bukti_tf" class="form-control mt-2">
-                                            <button type="submit" class="btn btn-primary btn-sm mt-2">
+                                            <input type="file" id="bukti" name="file_bukti_tf" class="form-control mt-2">
+                                            <button type="button" id="save" class="btn btn-primary btn-sm mt-2">
                                                 <i class="fe fe-cloud-upload"></i> Upload Bukti Bayar
                                             </button>
                                         </form>
@@ -121,7 +121,7 @@
                                 @if($reservasi->status_reservasi_wisata == 'pesan')
                                     <form action="{{ route('kelola_reservasi.konfirmasi', $reservasi->id) }}" method="POST" class="d-inline">
                                         @csrf
-                                        <button type="submit" class="btn btn-success me-2">
+                                        <button type="submit" class="btn btn-success text-white me-2">
                                             <i class="fe fe-check-circle"></i> Konfirmasi
                                         </button>
                                     </form>
@@ -149,7 +149,9 @@
     const body = document.getElementById('body');
     const status = document.getElementById('status');
     const pesan = document.getElementById('pesan');
-    const frm = document.getElementById('frmHapus');
+    const frm = document.getElementById('frmUpload');
+    const btnSimpan = document.getElementById('save');
+    const bukti = document.getElementById('bukti');
 
     function tampil_pesan(){
         let pesan = "{{ session('pesan') }}";
@@ -167,6 +169,17 @@
         // // }else if(status.innerHTML.trim() === 'edit'){
         // // swal('Good Job', pesan.innerHTML, 'success')
         // }
+    }
+
+    function simpan(event) {
+         // Cek apakah ada field yang kosong dan tampilkan pesan error sesuai
+         if (bukti.value === '') {
+            event.preventDefault();
+            swal("Invalid Data!", "Mohon isi terlebih dahulu file bukti TF!", "error");
+        } else {
+            // Menampilkan pesan sukses saat frm valid dan berhasil disubmit
+            frm.submit();
+        }
     }
 
     // function hapus(event, el){
@@ -189,6 +202,10 @@
 
     body.onload = function(){
         tampil_pesan()
+    }
+
+    btnSimpan.onclick = function(event) {
+        simpan(event); // Kirim event ke fungsi simpan
     }
 
 </script>

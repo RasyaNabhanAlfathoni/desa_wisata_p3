@@ -34,8 +34,8 @@ class PemilikController extends Controller
         $totalPendapatan = Reservasi::whereIn('status_reservasi_wisata', ['dibayar', 'selesai'])->sum('total_bayar');
 
         $totalPendapatanPerBulan = Reservasi::whereIn('status_reservasi_wisata', ['dibayar', 'selesai'])
-            ->whereMonth('tgl_reservasi_wisata', date('m'))
-            ->whereYear('tgl_reservasi_wisata', date('Y'))
+            ->whereMonth('tgl_reservasi_mulai', date('m'))
+            ->whereYear('tgl_reservasi_mulai', date('Y'))
             ->sum('total_bayar');
 
         $totalPembayaranTertunda = Reservasi::where('status_reservasi_wisata', 'pesan')->sum('total_bayar');

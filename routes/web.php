@@ -142,12 +142,13 @@ Route::middleware(['auth', 'level:admin,pemilik'])->group(function () {
     Route::resource('/kelola_penginapan', PenginapanController::class);
     Route::resource('/kelola_berita', BeritaController::class);
     Route::resource('/kelola_kategori_berita', KategoriBeritaController::class);
-    Route::resource('/kelola_notifikasi', NotifikasiController::class);
+
 });
 
 // CRUD DATA ADMIN, PEMILIK & BENDAHARA
 Route::middleware(['auth', 'level:admin,pemilik,bendahara'])->group(function () {
     Route::resource('/kelola_keuangan', KeuanganController::class);
+    Route::resource('/kelola_notifikasi', NotifikasiController::class);
 
     // For Export keuangan data to excel
     Route::get('/download-excel-keuangan', function (Request $request) {
@@ -183,7 +184,7 @@ Route::middleware(['auth', 'level:admin,pemilik,bendahara'])->group(function () 
 
 
     Route::resource('/kelola_reservasi', ReservasiController::class);
-    Route::post('/reservasi/{id}/upload', [ReservasiController::class, 'upload'])->name('reservasi.upload');
+    Route::post('/reservasi/{id}/upload', [ReservasiController::class, 'upload'])->name('kelola_reservasi.upload');
     Route::post('/reservasi/{id}/konfirmasi', [ReservasiController::class, 'konfirmasi'])->name('kelola_reservasi.konfirmasi');
     Route::delete('/reservasi/{id}/batal', [ReservasiController::class, 'batal'])->name('kelola_reservasi.batal');
 

@@ -30,7 +30,7 @@
   </head>
   <body class="light" id="body" >
 
-    <div class="wrapper vh-100 d-flex align-items-center justify-content-center" style="background: url('{{asset('front-end/images/lsp/wisata/jalanan utama/00.jpg')}}') center/cover no-repeat;">
+    <div class="wrapper vh-100 d-flex align-items-center justify-content-center" style="background: url('{{asset('front-end/images/bg1.jpg')}}') center/cover no-repeat;">
         <form class="col-lg-6 col-md-8 col-10 mx-auto p-4 shadow-lg" style="background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); border-radius: 15px;" id="registerForm" action="{{ route('register') }}" method="POST">
             @csrf
             <div class="mx-auto text-center my-4">

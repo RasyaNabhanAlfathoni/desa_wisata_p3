@@ -185,7 +185,7 @@
                                         <strong class="text-dark">Reservasi Baru</strong>
                                         <small class="text-muted">{{ $reservasi->created_at->diffForHumans() }}</small>
                                     </div>
-                                    <div class="text-muted small">Reservasi oleh Pelanggan <strong>{{ $reservasi->pelanggan->nama_lengkap }}</strong> untuk tanggal <strong>{{ $reservasi->tanggal_reservasi }}</strong>.</div>
+                                    <div class="text-muted small">Reservasi oleh Pelanggan <strong>{{ $reservasi->pelanggan->nama_lengkap }}</strong> untuk tanggal <strong>{{ $reservasi->tgl_reservasi_mulai }}</strong>.</div>
                                 </div>
                             </a>
                         @endforeach
@@ -201,7 +201,7 @@
                                         <strong class="text-dark">Reservasi Diterima</strong>
                                         <small class="text-muted">{{ $reservasi->created_at->diffForHumans() }}</small>
                                     </div>
-                                    <div class="text-muted small">Reservasi Anda untuk tanggal <strong>{{ $reservasi->tanggal_reservasi }}</strong> telah diterima.</div>
+                                    <div class="text-muted small">Reservasi Anda untuk tanggal <strong>{{ $reservasi->tgl_reservasi_mulai }}</strong> telah diterima.</div>
                                 </div>
                             </a>
                         @endforeach

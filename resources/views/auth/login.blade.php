@@ -32,7 +32,7 @@
   </head>
   <body class="light " id="body" >
     <div class="wrapper vh-100 d-flex align-items-center justify-content-center bg-dark bg-opacity-50"
-     style="background: url('{{asset('front-end/images/lsp/wisata/jalanan utama/menyusuri-desa-penglipuran-bali-yang-dinobatkan-terbersih-di-dunia-3_169.jpeg')}}') center/cover no-repeat;">
+     style="background: url('{{asset('front-end/images/bg2.jpg')}}') center/cover no-repeat;">
         <div class="col-lg-4 col-md-6 col-10 " >
           <div class="card shadow-lg border-0 p-4 text-center" style="background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); border-radius: 15px;">
             <div class="card-body">
