@@ -76,17 +76,17 @@
               </div>
         </div>
         <div class="col-md">
-          <div class="ftco-footer-widget mb-4 ml-md-5">
-            <h2 class="ftco-heading-2">Informasi</h2>
-            <ul class="list-unstyled">
-              <li><a href="#" class="pb-2 d-block">Tentang Kami</a></li>
-              <li><a href="#" class="pb-2 d-block">Paket Wisata</a></li>
-              <li><a href="#" class="pb-2 d-block">Obyek Wisata</a></li>
-              <li><a href="#" class="pb-2 d-block">Penginapan</a></li>
-              <li><a href="#" class="pb-2 d-block">Berita</a></li>
-            </ul>
+            <div class="ftco-footer-widget mb-4 ml-md-5">
+              <h2 class="ftco-heading-2">Informasi</h2>
+              <ul class="list-unstyled">
+                <li><a href="{{ $title === 'Pelanggan' ? route('pelanggan.about') : route('about') }}" class="pb-2 d-block">Tentang Kami</a></li>
+                <li><a href="{{ $title === 'Pelanggan' ? route('pelanggan.paket_wisata') : route('paket_wisata') }}" class="pb-2 d-block">Paket Wisata</a></li>
+                <li><a href="{{ $title === 'Pelanggan' ? route('pelanggan.obyek_wisata') : route('obyek_wisata') }}" class="pb-2 d-block">Obyek Wisata</a></li>
+                <li><a href="{{ $title === 'Pelanggan' ? route('pelanggan.penginapan') : route('penginapan') }}" class="pb-2 d-block">Penginapan</a></li>
+                <li><a href="{{ $title === 'Pelanggan' ? route('pelanggan.berita') : route('berita') }}" class="pb-2 d-block">Berita</a></li>
+              </ul>
+            </div>
           </div>
-        </div>
         <div class="col-md">
            <div class="ftco-footer-widget mb-4">
             <h2 class="ftco-heading-2">Hubungi Kami</h2>

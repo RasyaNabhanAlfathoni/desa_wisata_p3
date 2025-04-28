@@ -41,8 +41,8 @@
             </li>
 
             <!-- Contact -->
-            <li class="nav-item @if(@isset($menu) and $menu === 'Contact') active @endif">
-                <a href="contact.html" class="nav-link">Contact</a>
+            <li class="nav-item @if(@isset($menu) and $menu === 'Reservasiku') active @endif">
+                <a href="contact.html" class="nav-link">Reservasiku</a>
             </li>
 
             <!-- Dropdown Profil -->
@@ -65,10 +65,10 @@
                         height="30"
                     />
                     <!-- Nama (Hanya Tampil di Desktop) -->
-                    <span class="d-none d-lg-inline text-dark font-weight-bold">{{ explode(' ', $pelanggan->nama_lengkap ?? 'User')[0] }}</span>
+                    <span class="d-lg-inline text-dark font-weight-bold">{{ explode(' ', $pelanggan->nama_lengkap ?? 'User')[0] }}</span>
                 </a>
                 <div class="dropdown-menu dropdown-menu-right shadow" aria-labelledby="navbarDropdownMenuLink">
-                    <a class="dropdown-item text-info" href="{{ route('profile.index') }}"><i class="fas fa-user mr-2"></i>Profile</a>
+                    <a class="dropdown-item text-info" href="{{ route('profile-pelanggan.index') }}"><i class="fas fa-user mr-2"></i>Profile</a>
                     <form action="{{ route('logout') }}" method="POST">
                         @csrf
                         <button type="submit" class="dropdown-item text-danger"><i class="fas fa-sign-out-alt mr-2"></i>Logout</button>
@@ -92,7 +92,6 @@
           <li class="nav-item @if(@isset($menu) and $menu === 'Obyek_wisata') active @endif"><a href="{{route('obyek_wisata')}}" class="nav-link">Obyek Wisata</a></li>
           <li class="nav-item @if(@isset($menu) and $menu === 'Penginapan') active @endif"><a href="{{route('penginapan')}}" class="nav-link">Penginapan</a></li>
           <li class="nav-item @if(@isset($menu) and $menu === 'Berita') active @endif"><a href="{{route('berita')}}" class="nav-link">Berita</a></li>
-          <li class="nav-item @if(@isset($menu) and $menu === 'Contact') active @endif"><a href="contact.html" class="nav-link">Contact</a></li>
           <li class="nav-item cta"><a href="{{route('login')}}" class="nav-link"><span>Login</span></a></li>
         </ul>
       </div>

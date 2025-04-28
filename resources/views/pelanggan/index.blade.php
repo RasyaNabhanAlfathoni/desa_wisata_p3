@@ -13,26 +13,6 @@
           <div class="col-md-9 ftco-animate" data-scrollax=" properties: { translateY: '70%' }">
             <h1 class="mb-4" data-scrollax="properties: { translateY: '30%', opacity: 1.6 }"><strong>Jelajahi <br></strong> keindahan Desa Penglipuran</h1>
             <p data-scrollax="properties: { translateY: '30%', opacity: 1.6 }">Temukan tempat terbaik untuk dikunjungi, aktivitas menarik, dan pengalaman tidak terlupakan</p>
-            <div class="block-17 my-4">
-              <form action="" method="post" class="d-block d-flex">
-                <div class="fields d-block d-flex">
-                  <div class="textfield-search one-third">
-                  	<input type="text" class="form-control" placeholder="Cari paket wisata...">
-                  </div>
-                  <div class="select-wrap one-third">
-                    <div class="icon"><span class="ion-ios-arrow-down"></span></div>
-                    <select name="" id="" class="form-control">
-                      <option value="">Kategori Wisata</option>
-                      <option value="alam">Wisata Alam</option>
-                      <option value="budaya">Wisata Budaya</option>
-                      <option value="kuliner">Wisata Kuliner</option>
-                      <option value="edukasi">Wisata Edukasi</option>
-                    </select>
-                  </div>
-                </div>
-                <input type="submit" class="search-submit btn btn-primary" value="Search">
-              </form>
-            </div>
           </div>
         </div>
       </div>

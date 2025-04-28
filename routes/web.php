@@ -19,6 +19,7 @@ use App\Http\Controllers\ReservasiController;
 use App\Http\Controllers\ObyekWisataController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\NotifikasiController;
+use App\Http\Controllers\ProfilePelangganController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
@@ -211,4 +212,9 @@ Route::middleware(['auth', 'level:pelanggan'])->group(function () {
     Route::get('/pelanggan/penginapan', [PelangganController::class, 'penginapan'])->name('pelanggan.penginapan');
     Route::get('/pelanggan/berita', [PelangganController::class, 'berita'])->name('pelanggan.berita');
     Route::get('/pelanggan/contact', [PelangganController::class, 'contact'])->name('pelanggan.contact');
+
+    // Profile Pelanggan
+    Route::get('/pelanggan/profile', [ProfilePelangganController::class, 'index'])->name('profile-pelanggan.index');
+    Route::get('/pelanggan/profile/edit', [ProfilePelangganController::class, 'edit'])->name('profile-pelanggan.edit');
+    Route::put('/pelanggan/profile/update/{id}', [ProfilePelangganController::class, 'update'])->name('profile-pelanggan.update');
 });

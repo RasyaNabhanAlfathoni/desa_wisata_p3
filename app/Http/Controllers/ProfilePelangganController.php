@@ -14,18 +14,26 @@ use App\Models\Karyawan;
 use App\Models\Pelanggan;
 use Illuminate\Database\QueryException;
 
-class ProfileController extends Controller
+class ProfilePelangganController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return view('profile.index', [
+        $user = auth()->user();
+
+        // Mengambil data pelanggan terkait
+        $pelanggan = $user->pelanggan;
+
+        return view('profile-pelanggan.index', [
             'title' => ucfirst(Auth::user()->level), // Menyesuaikan title dengan role user
+            'title2' => 'Profile - Pelanggan',
             'menu' => 'Profile',
             'page' => 'Profile',
             'user' => Auth::user(), // Kirim data user ke view
+            'pelanggan' => $pelanggan,
+            'reservasis' => $pelanggan->reservasi()->latest()->take(3)->get()
         ]);
     }
 
@@ -58,11 +66,18 @@ class ProfileController extends Controller
      */
     public function edit()
     {
-        return view('profile.edit', [
+        $user = auth()->user();
+
+        // Mengambil data pelanggan terkait
+        $pelanggan = $user->pelanggan;
+
+        return view('profile-pelanggan.edit', [
             'title' => ucfirst(Auth::user()->level), // Menyesuaikan title dengan role user
+            'title2' => 'Profile - Pelanggan',
             'menu' => 'Profile',
             'page' => 'Edit Profile',
             'user' => Auth::user(), // Kirim data user ke form edit
+            'pelanggan' => $pelanggan,
         ]);
     }
 
@@ -104,26 +119,6 @@ class ProfileController extends Controller
 
             $user->save();
 
-            // Update profile data berdasarkan level
-            if (in_array($user->level, ['admin', 'pemilik', 'bendahara'])) {
-                $existingKaryawan = Karyawan::where('id_user', $id)->first();
-                if ($existingKaryawan) {
-                    $existingKaryawan->update([
-                        'nama_karyawan' => $request->nama,
-                        'alamat' => $request->alamat,
-                        'no_hp' => $request->no_hp,
-                        'jabatan' => $request->jabatan
-                    ]);
-                } else {
-                    Karyawan::create([
-                        'id_user' => $id,
-                        'nama_karyawan' => $request->nama,
-                        'alamat' => $request->alamat,
-                        'no_hp' => $request->no_hp,
-                        'jabatan' => $request->jabatan
-                    ]);
-                }
-            } elseif ($user->level == 'pelanggan') {
                 $existingPelanggan = Pelanggan::where('id_user', $id)->first();
                 if ($existingPelanggan) {
                     // Validasi ukuran foto (Maksimal 3MB)
@@ -146,7 +141,7 @@ class ProfileController extends Controller
                     }
 
                     $existingPelanggan->update([
-                        'nama_pelanggan' => $request->nama,
+                        'nama_lengkap' => $request->nama_lengkap,
                         'alamat' => $request->alamat,
                         'no_hp' => $request->no_hp,
                         'foto' => $fotoPath,
@@ -168,11 +163,10 @@ class ProfileController extends Controller
                         'foto' => $fotoPath,
                     ]);
                 }
-            }
 
             DB::commit();
 
-            return redirect()->route('profile.index')->with('pesan', 'Profil berhasil diperbarui');
+            return redirect()->route('profile-pelanggan.index')->with('pesan', 'Profil berhasil diperbarui');
 
         } catch (QueryException $e) {
             DB::rollBack();
@@ -196,7 +190,7 @@ class ProfileController extends Controller
                 return redirect()->back()->with('error', 'Data yang Anda masukkan melanggar aturan database!')->withInput();
             }
 
-            return redirect()->route('profile.edit', $id)->with([
+            return redirect()->route('profile-pelanggan.edit', $id)->with([
                 'status' => 'error',
                 'error' => 'Terjadi kesalahan saat memperbarui data: ' . $e->getMessage(),
             ])->withInput();
