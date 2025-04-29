@@ -65,7 +65,7 @@
                                                     <input type="password" id="password_lama" name="password_lama" class="form-control @error('password_lama') is-invalid @enderror">
                                                     <div class="input-group-append">
                                                         <span class="input-group-text" onclick="togglePasswordLama()" style="cursor: pointer;">
-                                                            <i class="fa fa-eye" id="togglePasswordLamaIcon"></i>
+                                                            <i class="fa fa-eye-slash" id="togglePasswordLamaIcon"></i>
                                                         </span>
                                                     </div>
                                                 </div>
@@ -82,7 +82,7 @@
                                                     <input type="password" id="password" name="password" class="form-control @error('password') is-invalid @enderror">
                                                     <div class="input-group-append">
                                                         <span class="input-group-text" onclick="togglePassword()" style="cursor: pointer;">
-                                                            <i class="fa fa-eye" id="togglePasswordIcon"></i>
+                                                            <i class="fa fa-eye-slash" id="togglePasswordIcon"></i>
                                                         </span>
                                                     </div>
                                                 </div>
@@ -142,7 +142,7 @@
                                         <div class="form-group">
                                             <label>Nama Pelanggan</label>
                                             <input type="text" name="nama" id="nama" class="form-control @error('nama') is-invalid @enderror"
-                                                value="{{ old('nama', $user->pelanggan ? $user->pelanggan->nama_pelanggan : '') }}" required>
+                                                value="{{ old('nama', $user->pelanggan ? $user->pelanggan->nama_lengkap : '') }}" required>
                                             @error('nama')
                                                 {{-- <div class="invalid-feedback">{{ $message }}</div> --}}
                                             @enderror
@@ -216,12 +216,12 @@
         let icon = document.getElementById("togglePasswordIcon");
         if (passwordField.type === "password") {
             passwordField.type = "text";
-            icon.classList.remove("fa-eye");
-            icon.classList.add("fa-eye-slash");
-        } else {
-            passwordField.type = "password";
             icon.classList.remove("fa-eye-slash");
             icon.classList.add("fa-eye");
+        } else {
+            passwordField.type = "password";
+            icon.classList.remove("fa-eye");
+            icon.classList.add("fa-eye-slash");
         }
     }
 
@@ -230,12 +230,12 @@
         let icon = document.getElementById("togglePasswordLamaIcon");
         if (passwordField.type === "password") {
             passwordField.type = "text";
-            icon.classList.remove("fa-eye");
-            icon.classList.add("fa-eye-slash");
-        } else {
-            passwordField.type = "password";
             icon.classList.remove("fa-eye-slash");
             icon.classList.add("fa-eye");
+        } else {
+            passwordField.type = "password";
+            icon.classList.remove("fa-eye");
+            icon.classList.add("fa-eye-slash");
         }
     }
 </script>

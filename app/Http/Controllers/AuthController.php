@@ -79,13 +79,13 @@ class AuthController extends Controller
             // }
 
             if ($user->level === 'admin') {
-                return redirect()->route('admin.index')->with('pesan', 'Selamat datang, Admin!');
+                return redirect()->route('admin.index')->with('pesan', 'Selamat datang, Admin ' . $user->karyawan->nama_karyawan . '!');
             } elseif ($user->level === 'pemilik') {
-                return redirect()->route('pemilik.index')->with('pesan', 'Selamat datang, Pemilik!');
+                return redirect()->route('pemilik.index')->with('pesan', 'Selamat datang, Pemilik ' . $user->karyawan->nama_karyawan . '!');
             } elseif ($user->level === 'bendahara') {
-                return redirect()->route('bendahara.index')->with('pesan', 'Selamat datang, Bendahara!');
+                return redirect()->route('bendahara.index')->with('pesan', 'Selamat datang, Bendahara ' . $user->karyawan->nama_karyawan . '!');
             } elseif ($user->level === 'pelanggan') {
-                return redirect()->route('pelanggan.index')->with('pesan', 'Selamat datang, Pelanggan!');
+                return redirect()->route('pelanggan.index')->with('pesan', 'Selamat datang, Pelanggan ' . $user->pelanggan->nama_lengkap . '!');
             }
 
             // Redirect berdasarkan level pengguna

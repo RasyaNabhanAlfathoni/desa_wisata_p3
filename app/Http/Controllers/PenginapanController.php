@@ -194,7 +194,7 @@ class PenginapanController extends Controller
                     if ($penginapan->$fotoField) {
                         Storage::delete($penginapan->$fotoField);
                     }
-                    $fotoPaths[$fotoField] = $request->file($fotoField)->store('ObyekWisata');
+                    $fotoPaths[$fotoField] = $request->file($fotoField)->store('Penginapan');
                 } else {
                     $fotoPaths[$fotoField] = $penginapan->$fotoField;
                 }

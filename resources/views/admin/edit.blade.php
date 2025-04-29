@@ -84,7 +84,7 @@
                                                     <input type="password" id="password" name="password" class="form-control @error('password') is-invalid @enderror">
                                                     <div class="input-group-append">
                                                         <span class="input-group-text" onclick="togglePassword()" style="cursor: pointer;">
-                                                            <i class="fa fa-eye" id="togglePasswordIcon"></i>
+                                                            <i class="fa fa-eye-slash" id="togglePasswordIcon"></i>
                                                         </span>
                                                     </div>
                                                 </div>
@@ -261,12 +261,12 @@
         let icon = document.getElementById("togglePasswordIcon");
         if (passwordField.type === "password") {
             passwordField.type = "text";
-            icon.classList.remove("fa-eye");
-            icon.classList.add("fa-eye-slash");
-        } else {
-            passwordField.type = "password";
             icon.classList.remove("fa-eye-slash");
             icon.classList.add("fa-eye");
+        } else {
+            passwordField.type = "password";
+            icon.classList.remove("fa-eye");
+            icon.classList.add("fa-eye-slash");
         }
     }
 </script>

@@ -298,6 +298,56 @@
         </div>
     </section>
 
+    {{-- <div class="invisible" id="status">@isset($status) {{$status}} @endisset</div> --}}
+    <div class="invisible" id="pesan">@isset($pesan) {{$pesan}} @endisset</div>
+
+    <script>
+        const body = document.getElementById('body');
+        const status = document.getElementById('status');
+        const pesan = document.getElementById('pesan');
+        const frm = document.getElementById('frmHapus');
+
+        function tampil_pesan(){
+            let pesan = "{{ session('pesan') }}";
+            let error = "{{ session('error') }}";
+
+            if (pesan.trim() !== '') {
+                swal('Good Job', pesan.trim(), 'success');
+            }
+
+            if (error.trim() !== '') {
+                swal('Error', error.trim(), 'error');
+            }
+            // if(pesan.innerHTML.trim() !== ''){
+            // swal('Good Job', pesan.innerHTML, 'success')
+            // // }else if(status.innerHTML.trim() === 'edit'){
+            // // swal('Good Job', pesan.innerHTML, 'success')
+            // }
+        }
+
+        function hapus(event, el){
+            event.preventDefault()
+            swal({
+            title: "Anda Yakin?",
+            text: "Anda Akan Menghapus Data Reservasi Ini Secara Permanen!",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonClass: "btn-danger",
+            confirmButtonText: "Iya, Hapus Itu!",
+            closeOnConfirm: false
+            },
+            function(){
+
+                frm.setAttribute('action', el.getAttribute('href'))
+                frm.submit()
+            });
+        }
+
+        body.onload = function(){
+            tampil_pesan()
+        }
+
+    </script>
 
     @endsection
 

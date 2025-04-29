@@ -5,19 +5,17 @@
 @endsection
 @section('content')
 
-<div class="hero-wrap hero-wrap-2" style="background-image: url('{{ asset('front-end/images/lsp/wisata/jalanan utama/1018586_720 (1).jpg') }}');">
+<div class="hero-wrap js-fullheight" style="background-image: url('{{ asset('front-end/images/lsp/wisata/jalanan utama/1018586_720 (1).jpg') }}');">
     <div class="overlay"></div>
     <div class="container">
-        <div class="row no-gutters slider-text align-items-center justify-content-center">
-            <div class="col-md-9 ftco-animate text-center">
-                <h1 class="mb-2 bread">Edit Profil</h1>
-                <p class="breadcrumbs"><span class="mr-2"><a href="{{ route('home') }}">Beranda <i class="ion-ios-arrow-forward"></i></a></span>
-                   <span><a href="{{ route('profile-pelanggan.index') }}">Profil <i class="ion-ios-arrow-forward"></i></a></span>
-                   <span>Edit Profil</span></p>
-            </div>
+      <div class="row no-gutters slider-text js-fullheight align-items-center justify-content-center" data-scrollax-parent="true">
+        <div class="col-md-9 ftco-animate text-center" data-scrollax=" properties: { translateY: '70%' }">
+            <h1 class="mb-2 bread">Edit Profil</h1>
+            <p class="breadcrumbs"><span class="mr-2"><a href="{{ route('pelanggan.index') }}">Beranda <i class="ion-ios-arrow-forward"></i></a></span> <span>Profil <i class="ion-ios-arrow-forward"></i></span></p>
         </div>
+      </div>
     </div>
-</div>
+  </div>
 
 <section class="ftco-section">
     <div class="container">
@@ -25,7 +23,7 @@
             <div class="col-md-8">
                 <div class="card shadow">
                     <div class="card-header bg-primary text-white">
-                        <h4 class="mb-0">Form Edit Profil</h4>
+                        <h4 class="mb-0 text-white text-center">Form Edit Profil</h4>
                     </div>
                     <div class="card-body">
                         <form action="{{ route('profile-pelanggan.update', $user->id) }}" id="frmUser" method="POST" enctype="multipart/form-data">
@@ -53,11 +51,11 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="nama">Nama Lengkap</label>
-                                <input type="text" class="form-control @error('nama') is-invalid @enderror"
-                                       id="nama" name="nama"
-                                       value="{{ old('nama', $user->pelanggan->nama_lengkap ?? '') }}" required>
-                                @error('nama')
+                                <label for="nama_lengkap">Nama Lengkap</label>
+                                <input type="text" class="form-control @error('nama_lengkap') is-invalid @enderror"
+                                       id="nama_lengkap" name="nama_lengkap"
+                                       value="{{ old('nama_lengkap', $user->pelanggan->nama_lengkap ?? '') }}" required>
+                                @error('nama_lengkap')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
@@ -94,19 +92,35 @@
                             <hr class="my-4">
 
                             <h5 class="mb-3">Ubah Password</h5>
+
                             <div class="form-group">
                                 <label for="password_lama">Password Lama</label>
-                                <input type="password" class="form-control @error('password_lama') is-invalid @enderror"
-                                       id="password_lama" name="password_lama">
-                                @error('password_lama')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
+                                <div class="input-group">
+                                    <input type="password" class="form-control @error('password_lama') is-invalid @enderror"
+                                    id="password_lama" name="password_lama">
+                                    @error('password_lama')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                    <div class="input-group-append">
+                                        <span class="input-group-text" onclick="togglePasswordLama()" style="cursor: pointer;">
+                                            <i class="fa fa-eye-slash" id="togglePasswordLamaIcon"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                                <small class="form-text text-muted">Diperlukan jika ingin mengubah password</small>
                             </div>
 
                             <div class="form-group">
                                 <label for="password">Password Baru</label>
-                                <input type="password" class="form-control @error('password') is-invalid @enderror"
-                                       id="password" name="password">
+                                <div class="input-group">
+                                    <input type="password" class="form-control @error('password') is-invalid @enderror"
+                                    id="password" name="password">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text" onclick="togglePassword()" style="cursor: pointer;">
+                                            <i class="fa fa-eye-slash" id="togglePasswordIcon"></i>
+                                            </span>
+                                        </div>
+                               </div>
                                 @error('password')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
@@ -114,9 +128,18 @@
 
                             <div class="form-group">
                                 <label for="password_confirmation">Konfirmasi Password Baru</label>
-                                <input type="password" class="form-control"
+                                <div class="input-group">
+                                    <input type="password" class="form-control"
                                        id="password_confirmation" name="password_confirmation">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text" onclick="togglePasswordConfrm()" style="cursor: pointer;">
+                                            <i class="fa fa-eye-slash" id="togglePasswordConfrmIcon"></i>
+                                            </span>
+                                        </div>
+                                </div>
                             </div>
+
+                            <label class="text-warning">Note: Bagian Password (Kosongkan jika tidak diubah)</label>
 
                             <div class="form-group text-center mt-4">
                                 <button type="submit" class="btn btn-primary px-5">
@@ -173,12 +196,12 @@
         let icon = document.getElementById("togglePasswordIcon");
         if (passwordField.type === "password") {
             passwordField.type = "text";
-            icon.classList.remove("fa-eye");
-            icon.classList.add("fa-eye-slash");
-        } else {
-            passwordField.type = "password";
             icon.classList.remove("fa-eye-slash");
             icon.classList.add("fa-eye");
+        } else {
+            passwordField.type = "password";
+            icon.classList.remove("fa-eye");
+            icon.classList.add("fa-eye-slash");
         }
     }
 
@@ -187,12 +210,26 @@
         let icon = document.getElementById("togglePasswordLamaIcon");
         if (passwordField.type === "password") {
             passwordField.type = "text";
-            icon.classList.remove("fa-eye");
-            icon.classList.add("fa-eye-slash");
-        } else {
-            passwordField.type = "password";
             icon.classList.remove("fa-eye-slash");
             icon.classList.add("fa-eye");
+        } else {
+            passwordField.type = "password";
+            icon.classList.remove("fa-eye");
+            icon.classList.add("fa-eye-slash");
+        }
+    }
+
+    function togglePasswordConfrm() {
+        let passwordField = document.getElementById("password_confirmation");
+        let icon = document.getElementById("togglePasswordConfrmIcon");
+        if (passwordField.type === "password") {
+            passwordField.type = "text";
+            icon.classList.remove("fa-eye-slash");
+            icon.classList.add("fa-eye");
+        } else {
+            passwordField.type = "password";
+            icon.classList.remove("fa-eye");
+            icon.classList.add("fa-eye-slash");
         }
     }
 </script>

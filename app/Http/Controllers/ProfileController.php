@@ -72,33 +72,28 @@ class ProfileController extends Controller
     public function update(Request $request, string $id)
     {
         try {
-            // Mulai transaksi database
             DB::beginTransaction();
 
-            // Pastikan user hanya bisa mengubah profil sendiri
             if ($id != Auth::id()) {
                 return redirect()->back()->with('error', 'Anda hanya dapat mengubah profil sendiri!');
             }
 
-            // Ambil data user
             $user = User::findOrFail($id);
 
-            // Validasi email unik
-            $existingUser = User::where('email', $request->email)->where('id', '!=', $id)->first();
-            if ($existingUser) {
-                return redirect()->back()->with('error', 'Email sudah digunakan oleh pengguna lain!')->withInput();
+            // Hanya validasi email jika email berubah
+            if ($request->email !== $user->email) {
+                $existingUser = User::where('email', $request->email)->where('id', '!=', $id)->first();
+                if ($existingUser) {
+                    return redirect()->back()->with('error', 'Email sudah digunakan oleh pengguna lain!')->withInput();
+                }
+                $user->email = $request->email;
             }
-
-            // Update data user (email dan password jika diisi)
-            $user->email = $request->email;
 
             // Jika password diisi, update password
             if ($request->filled('password')) {
-                // Validasi password lama
                 if (!Hash::check($request->password_lama, $user->password)) {
                     return redirect()->back()->with('error', 'Password lama tidak sesuai!')->withInput();
                 }
-
                 $user->password = Hash::make($request->password);
             }
 
@@ -126,23 +121,18 @@ class ProfileController extends Controller
             } elseif ($user->level == 'pelanggan') {
                 $existingPelanggan = Pelanggan::where('id_user', $id)->first();
                 if ($existingPelanggan) {
-                    // Validasi ukuran foto (Maksimal 3MB)
                     if ($request->hasFile('foto') && $request->file('foto')->getSize() > 3 * 1024 * 1024) {
                         return redirect()->back()->with('error', 'Ukuran foto tidak boleh lebih dari 3MB!')->withInput();
                     }
 
-                    // Jika ada foto baru, hapus foto lama dan simpan yang baru
                     if ($request->hasFile('foto')) {
-                        // Hapus foto lama jika ada
                         if (!empty($existingPelanggan->foto) && Storage::exists('Storage/' . $existingPelanggan->foto)) {
                             Storage::delete('Storage/' . $existingPelanggan->foto);
                         }
-
-                        // Simpan foto baru
                         $fotoPath = $request->file('foto')->store('Pelanggan');
-                        $fotoPath = str_replace('Storage/', '', $fotoPath); // Simpan tanpa "public/" di database
+                        $fotoPath = str_replace('Storage/', '', $fotoPath);
                     } else {
-                        $fotoPath = $existingPelanggan->foto; // Gunakan foto lama jika tidak ada upload baru
+                        $fotoPath = $existingPelanggan->foto;
                     }
 
                     $existingPelanggan->update([
@@ -152,7 +142,6 @@ class ProfileController extends Controller
                         'foto' => $fotoPath,
                     ]);
                 } else {
-                    // Jika pelanggan baru, simpan foto jika ada
                     if ($request->hasFile('foto')) {
                         $fotoPath = $request->file('foto')->store('Pelanggan');
                         $fotoPath = str_replace('Storage/', '', $fotoPath);
@@ -171,21 +160,16 @@ class ProfileController extends Controller
             }
 
             DB::commit();
-
             return redirect()->route('profile.index')->with('pesan', 'Profil berhasil diperbarui');
 
         } catch (QueryException $e) {
             DB::rollBack();
-
-            // Tangani Unique Constraint Violation (Kode Error 23000)
             if ($e->getCode() == "23000") {
-                // Cek apakah duplikasi terjadi pada email
                 $existing = User::where('email', $request->email)->first();
-                if ($existing) {
+                if ($existing && $existing->id != $id) {
                     return redirect()->back()->with('error', 'Email sudah terdaftar, silakan gunakan email lain!')->withInput();
                 }
 
-                // Cek apakah duplikasi terjadi di tabel Karyawan atau Pelanggan
                 $existingKaryawan = Karyawan::where('no_hp', $request->no_hp)->first();
                 $existingPelanggan = Pelanggan::where('no_hp', $request->no_hp)->first();
 

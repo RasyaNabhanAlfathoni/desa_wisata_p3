@@ -11,7 +11,7 @@
       <div class="row no-gutters slider-text js-fullheight align-items-center justify-content-center" data-scrollax-parent="true">
         <div class="col-md-9 ftco-animate text-center" data-scrollax=" properties: { translateY: '70%' }">
             <h1 class="mb-2 bread">Profil Saya</h1>
-            <p class="breadcrumbs"><span class="mr-2"><a href="{{ route('home') }}">Beranda <i class="ion-ios-arrow-forward"></i></a></span> <span>Profil <i class="ion-ios-arrow-forward"></i></span></p>
+            <p class="breadcrumbs"><span class="mr-2"><a href="{{ route('pelanggan.index') }}">Beranda <i class="ion-ios-arrow-forward"></i></a></span> <span>Profil <i class="ion-ios-arrow-forward"></i></span></p>
         </div>
       </div>
     </div>

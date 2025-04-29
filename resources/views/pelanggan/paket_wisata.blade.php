@@ -24,7 +24,7 @@
           <div class="col-lg-3 sidebar ftco-animate">
               <div class="sidebar-wrap bg-light ftco-animate">
                   <h3 class="mb-4">Temukan Paket Wisata</h3>
-                  <form action="{{ url('paket-wisata') }}" method="GET">
+                  <form action="{{ url('pelanggan.paket-wisata') }}" method="GET">
                     <div class="fields">
                       <div class="form-group">
                         <div class="select-wrap one-third">
@@ -69,6 +69,13 @@
               </div>
         </div>
         <div class="col-lg-9">
+            @if($paketWisatas->isEmpty())
+                <div class="col-12">
+                    <div class="alert alert-warning">
+                        <i class="icon-info-circle"></i>Tidak ditemukan paket wisata yang sesuai dengan kriteria pencarian Anda.
+                    </div>
+                </div>
+            @else
             <div class="row">
                 @foreach($paketWisatas as $paket)
                 <div class="col-md-4 ftco-animate">
@@ -101,6 +108,7 @@
                 </div>
                 @endforeach
             </div>
+            @endif
             <div class="row mt-5">
                 <div class="col text-center">
                   <div class="block-27">

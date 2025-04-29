@@ -144,7 +144,7 @@
                             <!-- Discount Information (dynamic based on jumlah_peserta) -->
                             <div id="discountInfo" class="alert d-none">
                                 <i id="discountIcon" class="icon-gift mr-2"></i>
-                                <span id="discountText">Anda mendapatkan diskon {{ $paket->nilai_diskon }}% karena memesan minimal {{ $paket->peserta_diskon }} peserta.</span>
+                                <span id="discountText"></span>
                             </div>
 
                             <!-- Payment Summary (dynamic) -->
@@ -359,32 +359,52 @@ document.addEventListener('DOMContentLoaded', function() {
         let subtotal = pricePerPerson * jumlahPeserta;
         let discount = 0;
 
-        // Check if eligible for discount
-        if (discountPercentage > 0 && jumlahPeserta >= discountThreshold) {
-            // Eligible for discount
-            discount = subtotal * (discountPercentage / 100);
-            discountInfo.classList.remove('d-none');
-            discountRow.classList.remove('d-none');
+        // Check if package has discount
+        if (discountPercentage > 0) {
+            // Check if eligible for discount
+            if (jumlahPeserta >= discountThreshold) {
+                // Eligible for discount
+                discount = subtotal * (discountPercentage / 100);
+                discountInfo.classList.remove('d-none');
+                discountRow.classList.remove('d-none');
 
-            // Update to success style
-            discountInfo.classList.add('alert-success');
-            discountInfo.classList.remove('alert-warning');
-            discountIcon.classList.remove('icon-info-circle');
-            discountIcon.classList.add('icon-gift');
+                // Update to success style
+                discountInfo.classList.add('alert-success');
+                discountInfo.classList.remove('alert-warning', 'alert-danger');
+                discountIcon.classList.remove('icon-info-circle');
+                discountIcon.classList.add('icon-gift');
 
-            discountText.textContent = `Anda mendapatkan diskon ${discountPercentage}% karena memesan minimal ${discountThreshold} peserta.`;
+                discountText.textContent = `Anda mendapatkan diskon ${discountPercentage}% karena memesan minimal ${discountThreshold} peserta.`;
+            } else {
+                // Not eligible for discount
+                discountInfo.classList.remove('d-none');
+                discountRow.classList.remove('d-none');
+
+                // Update to warning style
+                discountInfo.classList.add('alert-warning');
+                discountInfo.classList.remove('alert-success', 'alert-danger');
+                discountIcon.classList.remove('icon-gift');
+                discountIcon.classList.add('icon-info-circle');
+
+                discountText.textContent = `Anda akan mendapatkan diskon ${discountPercentage}% jika memesan minimal ${discountThreshold} peserta.`;
+            }
         } else {
-            // Not eligible for discount
-            discountInfo.classList.remove('d-none');
-            discountRow.classList.remove('d-none');
+            // No discount available for this package
+            if (jumlahPeserta > 0) {
+                discountInfo.classList.remove('d-none');
+                discountRow.classList.add('d-none'); // Hide discount row
 
-            // Update to warning style
-            discountInfo.classList.add('alert-warning');
-            discountInfo.classList.remove('alert-success');
-            discountIcon.classList.remove('icon-gift');
-            discountIcon.classList.add('icon-info-circle');
+                // Update to danger style
+                discountInfo.classList.add('alert-danger');
+                discountInfo.classList.remove('alert-success', 'alert-warning');
+                discountIcon.classList.remove('icon-gift', 'icon-info-circle');
+                discountIcon.classList.add('icon-info-circle');
 
-            discountText.textContent = `Anda akan mendapatkan diskon ${discountPercentage}% jika memesan minimal ${discountThreshold} peserta.`;
+                discountText.textContent = 'Paket ini tidak memiliki diskon untuk jumlah peserta berapapun.';
+            } else {
+                discountInfo.classList.add('d-none');
+                discountRow.classList.add('d-none');
+            }
         }
 
         const total = subtotal - discount;

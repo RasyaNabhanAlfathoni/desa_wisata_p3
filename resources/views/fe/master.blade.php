@@ -91,8 +91,8 @@
            <div class="ftco-footer-widget mb-4">
             <h2 class="ftco-heading-2">Hubungi Kami</h2>
             <ul class="list-unstyled">
-                <li><a href="#"><span class="icon icon-phone mr-2"></span><span class="text">+2 392 3929 210</span></a></li>
-                <li><a href="#"><span class="icon icon-envelope mr-2"></span><span class="text">info@yourdomain.com</span></a></li>
+                <li><a href="#"><span class="icon icon-phone mr-2"></span><span class="text">+62 392 3929 210</span></a></li>
+                <li><a href="#"><span class="icon icon-envelope mr-2"></span><span class="text">pemilik@pesonaDesa.co.id</span></a></li>
             </ul>
           </div>
         </div>
@@ -101,7 +101,7 @@
               <h2 class="ftco-heading-2">Alamat</h2>
               <div class="block-23 mb-3">
                 <ul>
-                  <li><span class="icon icon-map-marker"></span><span class="text">203 Fake St. Mountain View, San Francisco, California, USA</span></li>
+                  <li><span class="icon icon-map-marker"></span><span class="text">Jl. Raya Karadenan No.7, Karadenan, Kec. Cibinong, Kabupaten Bogor, Jawa Barat 16111</span></li>
                 </ul>
               </div>
           </div>

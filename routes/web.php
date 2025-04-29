@@ -215,6 +215,6 @@ Route::middleware(['auth', 'level:pelanggan'])->group(function () {
 
     // Profile Pelanggan
     Route::get('/pelanggan/profile', [ProfilePelangganController::class, 'index'])->name('profile-pelanggan.index');
-    Route::get('/pelanggan/profile/edit', [ProfilePelangganController::class, 'edit'])->name('profile-pelanggan.edit');
+    Route::get('/pelanggan/profile/edit/{id}', [ProfilePelangganController::class, 'edit'])->name('profile-pelanggan.edit');
     Route::put('/pelanggan/profile/update/{id}', [ProfilePelangganController::class, 'update'])->name('profile-pelanggan.update');
 });
