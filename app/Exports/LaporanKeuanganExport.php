@@ -39,14 +39,19 @@ class LaporanKeuanganExport implements FromCollection, WithHeadings
             ]);
         }
 
-        return $reservasi->with(['pelanggan', 'paket'])->get()->map(function ($item) {
+        return $reservasi->with(['pelanggan', 'paket'])->get()->map(function ($item, $key) {
             return [
+                'No' => $key + 1,
                 'Nama Pelanggan' => $item->pelanggan->nama_lengkap ?? '-',
                 'Paket Wisata' => $item->paket->nama_paket ?? '-',
                 'Tanggal Mulai' => $item->tgl_reservasi_mulai,
+                'Tanggal Akhir' => $item->tgl_reservasi_akhir,
+                'Harga' => $item->harga,
                 'Jumlah Peserta' => $item->jumlah_peserta,
+                'Diskon (Rp)' => $item->diskon ?: '-',
+                'Diskon (%)' => $item->nilai_diskon ? $item->nilai_diskon.'%' : '-',
                 'Total Bayar' => $item->total_bayar,
-                'Status' => $item->status_reservasi_wisata,
+                'Status' => ucfirst($item->status_reservasi_wisata),
             ];
         });
     }
@@ -54,10 +59,15 @@ class LaporanKeuanganExport implements FromCollection, WithHeadings
     public function headings(): array
     {
         return [
+            'No',
             'Nama Pelanggan',
             'Paket Wisata',
             'Tanggal Mulai',
+            'Tanggal Akhir',
+            'Harga',
             'Jumlah Peserta',
+            'Diskon (Rp)',
+            'Diskon (%)',
             'Total Bayar',
             'Status',
         ];

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Reservasi;
+use Carbon\Carbon;
 
 class BendaharaController extends Controller
 {
@@ -44,6 +45,23 @@ class BendaharaController extends Controller
 
         $totalReservasi = Reservasi::count();
 
+        // Hitung reservasi hari ini
+        $today = Carbon::today();
+        $reservasiHariIni = Reservasi::whereDate('created_at', $today)->count();
+        $reservasiKemarin = Reservasi::whereDate('created_at', $today->subDay())->count();
+        $reservasiPerubahan = $reservasiKemarin != 0 ?
+            round(($reservasiHariIni - $reservasiKemarin) / $reservasiKemarin * 100, 2) : 0;
+
+        // Data untuk chart (7 hari terakhir)
+        $chart_labels = [];
+        $reservasi_data = [];
+
+        for ($i = 6; $i >= 0; $i--) {
+            $date = Carbon::today()->subDays($i);
+            $chart_labels[] = $date->format('d M');
+            $reservasi_data[] = Reservasi::whereDate('created_at', $date)->count();
+        }
+
         return view('bendahara.index', [
             'title' => 'Bendahara',
             'menu' => 'Bendahara',
@@ -52,7 +70,11 @@ class BendaharaController extends Controller
             'totalPendapatan' => $totalPendapatan,
             'totalPendapatanPerBulan' => $totalPendapatanPerBulan,
             'totalPembayaranTertunda' => $totalPembayaranTertunda,
-            'totalReservasi' => $totalReservasi
+            'totalReservasi' => $totalReservasi,
+            'reservasiHariIni' => $reservasiHariIni,
+            'reservasiPerubahan' => $reservasiPerubahan,
+            'chart_labels' => $chart_labels,
+            'reservasi_data' => $reservasi_data,
         ]);
     }
 

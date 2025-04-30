@@ -121,9 +121,14 @@
                             <th>No</th>
                             <th>Nama Pelanggan</th>
                             <th>Paket Wisata</th>
-                            <th>Tanggal Reservasi</th>
+                            <th>Tanggal Mulai</th>
+                            <th>Tanggal Akhir</th> <!-- Kolom baru -->
+                            <th>Harga</th> <!-- Kolom baru -->
                             <th>Jumlah Peserta</th>
+                            <th>Diskon (Rp)</th> <!-- Kolom baru -->
+                            <th>Diskon (%)</th> <!-- Kolom baru -->
                             <th>Total Bayar</th>
+                            <th>Bukti TF</th>
                             <th>Status</th>
                         </tr>
                     </thead>
@@ -134,8 +139,20 @@
                                 <td>{{ $data->pelanggan->nama_lengkap }}</td>
                                 <td>{{ $data->paket->nama_paket }}</td>
                                 <td>{{ $data->tgl_reservasi_mulai }}</td>
+                                <td>{{ $data->tgl_reservasi_akhir }}</td> <!-- Data baru -->
+                                <td>Rp {{ number_format($data->harga, 0, ',', '.') }}</td> <!-- Data baru -->
                                 <td>{{ $data->jumlah_peserta }}</td>
+                                <td>{{ $data->diskon ? 'Rp '.number_format($data->diskon, 0, ',', '.') : '-' }}</td>
+                                <td>{{ $data->nilai_diskon }}%</td> <!-- Data baru -->
                                 <td>Rp {{ number_format($data->total_bayar, 0, ',', '.') }}</td>
+                                <td>
+                                    <div class="avatar avatar-md">
+                                        <img src="{{ !empty($data->file_bukti_tf) && file_exists(public_path('storage/' . $data->file_bukti_tf)) ? asset('storage/' . $data->file_bukti_tf) : asset('back-end/assets/avatars/no-imag.jpg') }}"
+                                             alt="P" class="img-thumbnail rounded"
+                                             style="cursor: pointer;"
+                                             onclick="showModal(this)">
+                                    </div>
+                                </td>
                                 <td class="text-white">
                                     @php
                                         $statusBadge = match ($data->status_reservasi_wisata) {
@@ -153,7 +170,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="7" class="text-center">
+                                <td colspan="11" class="text-center"> <!-- Update colspan menjadi 11 -->
                                     <i class="fe fe-alert-circle"></i> Tidak ada data yang ditemukan.
                                 </td>
                             </tr>
@@ -163,8 +180,33 @@
             </div>
         </div>
 
+        <!-- Modal untuk menampilkan gambar -->
+        <div class="modal fade" id="modalFoto" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalLabel">Bukti TF</h5>
+                        {{-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> --}}
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">Tutup</button>
+                    </div>
+                    <div class="modal-body text-center">
+                        <img id="fotoPreview" src="" alt="Foto Berita" class="img-fluid rounded shadow">
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 </main>
+
+<script>
+    function showModal(imgElement) {
+        const modalImage = document.getElementById("fotoPreview");
+        modalImage.src = imgElement.src;
+        const modal = new bootstrap.Modal(document.getElementById("modalFoto"));
+        modal.show();
+    }
+</script>
 
 <!-- main -->
 @endsection

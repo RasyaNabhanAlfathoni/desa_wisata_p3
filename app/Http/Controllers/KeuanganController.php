@@ -24,7 +24,21 @@ class KeuanganController extends Controller
 
         // Cek apakah tombol "Tampilkan" ditekan (filter dikirimkan)
         if ($request->has('filter')) {
-            $query = Reservasi::with('pelanggan', 'paket');
+            $query = Reservasi::with('pelanggan', 'paket')
+            ->select([
+                'id',
+                'id_pelanggan',
+                'id_paket',
+                'tgl_reservasi_mulai',
+                'tgl_reservasi_akhir',
+                'harga',
+                'jumlah_peserta',
+                'diskon',
+                'nilai_diskon',
+                'total_bayar',
+                'file_bukti_tf',
+                'status_reservasi_wisata'
+            ]);
 
             // Filter Nama Pelanggan
             if ($request->filled('nama_lengkap')) {

@@ -101,6 +101,56 @@
         </div>
         {{-- End Section Widgets --}}
 
+        <!-- New Chart Section -->
+        <div class="card shadow my-4">
+            <div class="card-body">
+                <div class="row align-items-center">
+                    <div class="col-md-4">
+                        <div class="pl-3">
+                            <h2 class="h3 mb-3">Statistik Pengguna</h2>
+                            <div class="mb-4">
+                                <h2 class="mb-1">{{ $total_user ?? 0 }}</h2>
+                                <p class="text-muted mb-0">Total Pengguna Terdaftar</p>
+                            </div>
+
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="bg-primary rounded-circle p-2 mr-3">
+                                    <i class="fe fe-briefcase text-white"></i>
+                                </div>
+                                <div>
+                                    <p class="mb-0 text-muted">Karyawan</p>
+                                    <h4 class="mb-0">+{{ $karyawan_hari_ini ?? 0 }} / Hari ini</h4>
+                                    <small class="{{ $karyawan_perubahan >= 0 ? 'text-success' : 'text-danger' }}">
+                                        <i class="fe fe-arrow-{{ $karyawan_perubahan >= 0 ? 'up' : 'down' }}"></i>
+                                        {{ abs($karyawan_perubahan) }}%
+                                    </small>
+                                </div>
+                            </div>
+
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="bg-success rounded-circle p-2 mr-3">
+                                    <i class="fe fe-shopping-bag text-white"></i>
+                                </div>
+                                <div>
+                                    <p class="mb-0 text-muted">Pelanggan</p>
+                                    <h4 class="mb-0">+{{ $pelanggan_hari_ini ?? 0 }} / Hari ini</h4>
+                                    <small class="{{ $pelanggan_perubahan >= 0 ? 'text-success' : 'text-danger' }}">
+                                        <i class="fe fe-arrow-{{ $pelanggan_perubahan >= 0 ? 'up' : 'down' }}"></i>
+                                        {{ abs($pelanggan_perubahan) }}%
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="chart-container" style="position: relative; height:300px;">
+                            <canvas id="newChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Small table -->
             <div class="card shadow">
                 <div class="card-body">
@@ -345,4 +395,118 @@
 
 </script>
 <!-- main -->
+
+<!-- Chart Script -->
+<!-- Gunakan CDN Chart.js jika belum -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const ctx = document.getElementById('newChart').getContext('2d');
+
+    // Data dari controller
+    const labels = @json($chart_labels);
+    const karyawanData = @json($karyawan_data).map(value => Math.round(value));
+    const pelangganData = @json($pelanggan_data).map(value => Math.round(value));
+
+    // Cari nilai maksimum dari data untuk skala Y
+    const maxDataValue = Math.max(
+        Math.max(...karyawanData),
+        Math.max(...pelangganData)
+    );
+    const yMax = maxDataValue < 5 ? 5 : Math.ceil(maxDataValue + 1);
+
+    const config = {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Karyawan',
+                data: karyawanData,
+                borderColor: 'rgba(94, 114, 228, 1)',
+                backgroundColor: 'rgba(94, 114, 228, 0.3)',
+                borderWidth: 3,
+                tension: 0.4,
+                fill: true,
+                pointRadius: 4,
+                pointBackgroundColor: '#fff',
+                pointBorderWidth: 2,
+                pointHoverRadius: 6
+            }, {
+                label: 'Pelanggan',
+                data: pelangganData,
+                borderColor: 'rgba(45, 206, 137, 1)',
+                backgroundColor: 'rgba(45, 206, 137, 0.3)',
+                borderWidth: 3,
+                tension: 0.4,
+                fill: true,
+                pointRadius: 4,
+                pointBackgroundColor: '#fff',
+                pointBorderWidth: 2,
+                pointHoverRadius: 6
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'top',
+                    labels: {
+                        usePointStyle: true,
+                        padding: 15,
+                        font: { size: 12 }
+                    }
+                },
+                tooltip: {
+                    backgroundColor: 'rgba(0,0,0,0.8)',
+                    titleFont: { size: 12 },
+                    bodyFont: { size: 12 },
+                    padding: 10,
+                    displayColors: true
+                },
+                title: {
+                    display: true,
+                    text: 'Statistik Pengguna Harian'
+                }
+            },
+            scales: {
+                x: {
+                    grid: {
+                        display: false
+                    },
+                    ticks: {
+                        font: { size: 11 }
+                    }
+                },
+                y: {
+                    beginAtZero: true,
+                    min: 0,
+                    max: yMax,
+                    ticks: {
+                        stepSize: 1,
+                        precision: 0,
+                        callback: function(value) {
+                            return Number.isInteger(value) ? value : '';
+                        },
+                        font: { size: 11 }
+                    },
+                    grid: {
+                        color: 'rgba(0,0,0,0.05)'
+                    }
+                }
+            },
+            elements: {
+                line: {
+                    borderCapStyle: 'round',
+                    borderJoinStyle: 'round'
+                }
+            }
+        }
+    };
+
+    new Chart(ctx, config);
+});
+</script>
+
 @endsection

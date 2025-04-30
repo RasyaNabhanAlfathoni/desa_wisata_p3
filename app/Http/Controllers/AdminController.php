@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Storage;
+use Carbon\Carbon;
+
 class AdminController extends Controller
 {
     /**
@@ -20,8 +22,6 @@ class AdminController extends Controller
      */
     public function index(Request $request)
     {
-        // $user = User::paginate(5);
-
         // Hitung total Karyawan
         $karyawan = Karyawan::count();
 
@@ -30,12 +30,47 @@ class AdminController extends Controller
 
         // Hitung total user aktif
         $user_aktif = User::where('aktif', '1')->count();
-
         $user_nonaktif = User::where('aktif', '!=', 1)->count();
 
+        // Hitung total semua user
+        $total_user = User::count();
+
+        // Hitung perubahan untuk hari ini
+        $today = Carbon::today();
+
+        // Karyawan hari ini
+        $karyawan_hari_ini = Karyawan::whereDate('created_at', $today)->count();
+        $karyawan_kemarin = Karyawan::whereDate('created_at', $today->subDay())->count();
+        $karyawan_perubahan = $karyawan_kemarin != 0 ?
+            round(($karyawan_hari_ini - $karyawan_kemarin) / $karyawan_kemarin * 100, 2) : 0;
+
+
+        // Reset $today
+        $today = Carbon::today();
+
+        // Pelanggan hari ini
+        $pelanggan_hari_ini = Pelanggan::whereDate('created_at', $today)->count();
+        $pelanggan_kemarin = Pelanggan::whereDate('created_at', $today->subDay())->count();
+        $pelanggan_perubahan = $pelanggan_kemarin != 0 ?
+            round(($pelanggan_hari_ini - $pelanggan_kemarin) / $pelanggan_kemarin * 100, 2) : 0;
+
+
+        // Data untuk chart (7 hari terakhir)
+        $chart_labels = [];
+        $karyawan_data = [];
+        $pelanggan_data = [];
+
+        for ($i = 6; $i >= 0; $i--) {
+            $date = Carbon::today()->subDays($i);
+            $chart_labels[] = $date->format('d M');
+
+            $karyawan_data[] = Karyawan::whereDate('created_at', $date)->count();
+            $pelanggan_data[] = Pelanggan::whereDate('created_at', $date)->count();
+        }
+
         // Ambil jumlah data per halaman
-        $perPage = $request->input('per_page', 5); // Default 5 jika tidak dipilih
-        $level = $request->input('level', ''); // Filter berdasarkan level
+        $perPage = $request->input('per_page', 5);
+        $level = $request->input('level', '');
 
         // Query untuk mengambil data pengguna dengan filter level
         $query = User::query();
@@ -58,6 +93,14 @@ class AdminController extends Controller
             'pelanggan' => $pelanggan,
             'user_aktif' => $user_aktif,
             'user_nonaktif' => $user_nonaktif,
+            'total_user' => $total_user,
+            'karyawan_hari_ini' => $karyawan_hari_ini,
+            'pelanggan_hari_ini' => $pelanggan_hari_ini,
+            'karyawan_perubahan' => $karyawan_perubahan,
+            'pelanggan_perubahan' => $pelanggan_perubahan,
+            'chart_labels' => $chart_labels,
+            'karyawan_data' => $karyawan_data,
+            'pelanggan_data' => $pelanggan_data,
         ]);
     }
 

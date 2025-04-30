@@ -42,6 +42,7 @@
                     </g>
                   </svg>
                 <h2 class="h3 mt-3">{{$title}}</h2>
+                <label class="form-label text-danger fs-5">( Khusus Pelanggan )</label>
             </div>
 
             <!-- Step 1: Data Pribadi -->
@@ -100,7 +101,7 @@
                       </div>
                 </div>
 
-                <p class="h6">Note: Pastikan memiliki kata sandi yang kuat dan mudah diingat.</p>
+                <p class="h6 text-warning">Note: Pastikan memiliki kata sandi yang kuat dan mudah diingat.</p>
 
                 <button type="button" class="btn btn-secondary prev-step">Previous</button>
                 <button type="button" id="save" class="btn btn-info text-white"><i class="fe fe-save mr-1"></i> Register</button>

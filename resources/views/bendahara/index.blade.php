@@ -100,6 +100,42 @@
         </div>
         {{-- End Section Widgets --}}
 
+        <!-- New Chart Section -->
+        <div class="card shadow my-4">
+            <div class="card-body">
+                <div class="row align-items-center">
+                    <div class="col-md-4">
+                        <div class="pl-3">
+                            <h2 class="h3 mb-3">Statistik Reservasi</h2>
+                            <div class="mb-4">
+                                <h2 class="mb-1">{{ $totalReservasi ?? 0 }}</h2>
+                                <p class="text-muted mb-0">Total Reservasi</p>
+                            </div>
+
+                            <div class="d-flex align-items-center">
+                                <div class="bg-primary rounded-circle p-2 mr-3">
+                                    <i class="fe fe-calendar text-white"></i>
+                                </div>
+                                <div>
+                                    <p class="mb-0 text-muted">Reservasi Hari Ini</p>
+                                    <h4 class="mb-0">+{{ $reservasiHariIni ?? 0 }}</h4>
+                                    <small class="{{ $reservasiPerubahan >= 0 ? 'text-success' : 'text-danger' }}">
+                                        <i class="fe fe-arrow-{{ $reservasiPerubahan >= 0 ? 'up' : 'down' }}"></i>
+                                        {{ abs($reservasiPerubahan) }}%
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="chart-container" style="position: relative; height:300px;">
+                            <canvas id="reservasiChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Small table -->
         <div class="card shadow">
             <div class="card-body">
@@ -301,4 +337,99 @@
 
 </script>
 <!-- main -->
+
+<!-- Chart Script -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const ctx = document.getElementById('reservasiChart').getContext('2d');
+
+    // Data dari controller
+    const labels = @json($chart_labels);
+    const reservasiData = @json($reservasi_data).map(value => Math.round(value));
+
+    // Cari nilai maksimum untuk skala Y
+    const maxReservasi = Math.max(...reservasiData);
+    const yMax = maxReservasi < 5 ? 5 : Math.ceil(maxReservasi + 1);
+
+    const config = {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Jumlah Reservasi',
+                data: reservasiData,
+                borderColor: 'rgba(94, 114, 228, 1)',
+                backgroundColor: 'rgba(94, 114, 228, 0.3)',
+                borderWidth: 3,
+                tension: 0.4,
+                fill: true,
+                pointRadius: 4,
+                pointBackgroundColor: '#fff',
+                pointBorderWidth: 2,
+                pointHoverRadius: 6
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'top',
+                    labels: {
+                        usePointStyle: true,
+                        padding: 15,
+                        font: { size: 12 }
+                    }
+                },
+                tooltip: {
+                    backgroundColor: 'rgba(0,0,0,0.8)',
+                    titleFont: { size: 12 },
+                    bodyFont: { size: 12 },
+                    padding: 10,
+                    displayColors: true
+                },
+                title: {
+                    display: true,
+                    text: 'Statistik Reservasi Harian'
+                }
+            },
+            scales: {
+                x: {
+                    grid: {
+                        display: false
+                    },
+                    ticks: {
+                        font: { size: 11 }
+                    }
+                },
+                y: {
+                    beginAtZero: true,
+                    min: 0,
+                    max: yMax,
+                    ticks: {
+                        stepSize: 1,
+                        precision: 0,
+                        callback: function(value) {
+                            return Number.isInteger(value) ? value : '';
+                        },
+                        font: { size: 11 }
+                    },
+                    grid: {
+                        color: 'rgba(0,0,0,0.05)'
+                    }
+                }
+            },
+            elements: {
+                line: {
+                    borderCapStyle: 'round',
+                    borderJoinStyle: 'round'
+                }
+            }
+        }
+    };
+
+    new Chart(ctx, config);
+});
+</script>
 @endsection
