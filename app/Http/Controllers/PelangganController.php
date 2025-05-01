@@ -166,6 +166,79 @@ class PelangganController extends Controller
         ]);
     }
 
+    // Di dalam controller Anda
+    public function reservasiSaya()
+    {
+        $user = auth()->user();
+        $pelanggan = $user->pelanggan;
+
+        // Ambil reservasi milik pelanggan yang login
+        $reservasis = Reservasi::with('paket')
+            ->where('id_pelanggan', $pelanggan->id)
+            ->latest()
+            ->paginate(10);
+
+        return view('pelanggan.reservasiku', [
+            'title' => 'Pelanggan',
+            'title2' => 'Daftar Reservasi Saya',
+            'menu' => 'Reservasiku',
+            'reservasis' => $reservasis,
+            'pelanggan' => $pelanggan,
+            'user' => $user,
+        ]);
+    }
+
+    public function detailReservasi($id)
+    {
+        $reservasi = Reservasi::with('paket')->findOrFail($id);
+        $pelanggan = Pelanggan::where('id_user', auth()->id())->firstOrFail();
+
+        // Pastikan reservasi milik pelanggan yang login
+        if ($reservasi->id_pelanggan != $pelanggan->id) {
+            return redirect()->route('pelanggan.reservasiku')
+                ->with('error', 'Anda tidak memiliki akses ke reservasi ini.');
+        }
+
+        return view('pelanggan.detail_reservasi', [
+            'title' => 'Pelanggan',
+            'title2' => 'Detail Reservasi Paket Wisata',
+            'menu' => 'Reservasiku',
+            'reservasi' => $reservasi,
+            'pelanggan' => $pelanggan,
+        ]);
+    }
+
+    public function batalkanReservasi($id)
+    {
+        $reservasi = Reservasi::findOrFail($id);
+        $pelanggan = Pelanggan::where('id_user', auth()->id())->firstOrFail();
+
+        // Pastikan reservasi milik pelanggan yang login
+        if ($reservasi->id_pelanggan != $pelanggan->id) {
+            return redirect()->route('pelanggan.reservasiku')
+                ->with('error', 'Anda tidak memiliki akses ke reservasi ini.');
+        }
+
+        // Hanya bisa dibatalkan jika status masih 'pesan' atau 'dibayar'
+        if (!in_array($reservasi->status_reservasi_wisata, ['pesan', 'dibayar'])) {
+            return redirect()->route('pelanggan.reservasiku')
+                ->with('error', 'Reservasi tidak dapat dibatalkan karena status sudah ' . $reservasi->status_reservasi_wisata);
+        }
+
+        try {
+            $reservasi->status_reservasi_wisata = 'dibatalkan';
+            $reservasi->save();
+
+            return redirect()->route('pelanggan.reservasiku')
+                ->with('pesan', 'Reservasi berhasil dibatalkan');
+        } catch (\Exception $e) {
+            return redirect()->route('pelanggan.reservasiku')
+                ->with('error', 'Gagal membatalkan reservasi: ' . $e->getMessage());
+        }
+    }
+
+
+    // Proses Reservasi
     public function showReservasiForm($id)
     {
         $paket = PaketWisata::findOrFail($id);
@@ -199,6 +272,7 @@ class PelangganController extends Controller
 
             // Hitung total bayar
             $subtotal = $paket->harga_per_pack * $request->jumlah_peserta;
+            $diskon = 0;
 
             // Jika ada diskon
             if ($paket->peserta_diskon && $request->jumlah_peserta >= $paket->peserta_diskon) {
@@ -287,7 +361,7 @@ class PelangganController extends Controller
 
         // Ensure the reservation belongs to the logged-in user
         if ($reservasi->pelanggan->id_user != Auth::id()) {
-            return redirect()->route('pelanggan.paket-wisata')
+            return redirect()->route('pelanggan.paket_wisata')
                 ->with('error', 'Anda tidak memiliki akses ke reservasi ini.');
         }
 
@@ -304,7 +378,7 @@ class PelangganController extends Controller
 
                 // Update reservation status
                 $reservasi->file_bukti_tf = $filePath;
-                $reservasi->status_reservasi_wisata = 'dibayar';
+                // $reservasi->status_reservasi_wisata = 'dibayar';
                 $reservasi->updated_at = Carbon::now();
                 $reservasi->save();
 

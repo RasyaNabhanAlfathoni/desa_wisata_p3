@@ -79,7 +79,11 @@
             <div class="ftco-footer-widget mb-4 ml-md-5">
               <h2 class="ftco-heading-2">Informasi</h2>
               <ul class="list-unstyled">
-                <li><a href="{{ $title === 'Pelanggan' ? route('pelanggan.about') : route('about') }}" class="pb-2 d-block">Tentang Kami</a></li>
+                @if($title !== 'Pelanggan')
+                    <li>
+                        <a href="{{ route('about') }}" class="pb-2 d-block">Tentang Kami</a>
+                    </li>
+                @endif
                 <li><a href="{{ $title === 'Pelanggan' ? route('pelanggan.paket_wisata') : route('paket_wisata') }}" class="pb-2 d-block">Paket Wisata</a></li>
                 <li><a href="{{ $title === 'Pelanggan' ? route('pelanggan.obyek_wisata') : route('obyek_wisata') }}" class="pb-2 d-block">Obyek Wisata</a></li>
                 <li><a href="{{ $title === 'Pelanggan' ? route('pelanggan.penginapan') : route('penginapan') }}" class="pb-2 d-block">Penginapan</a></li>

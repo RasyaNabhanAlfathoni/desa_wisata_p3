@@ -204,7 +204,7 @@ Route::middleware(['auth', 'level:admin,pemilik,bendahara'])->group(function () 
 // ✅ Pelanggan hanya bisa melakukan reservasi
 Route::middleware(['auth', 'level:pelanggan'])->group(function () {
     Route::get('/pelanggan', [PelangganController::class, 'index'])->name('pelanggan.index');
-    Route::get('/pelanggan/about', [PelangganController::class, 'about'])->name('pelanggan.about');
+    // Route::get('/pelanggan/about', [PelangganController::class, 'about'])->name('pelanggan.about');
     Route::get('/pelanggan/paket-wisata', [PelangganController::class, 'paketWisata'])->name('pelanggan.paket_wisata');
     Route::get('/pelanggan/paket-wisata/{id}', [PelangganController::class, 'paketWisataDetail'])->name('pelanggan.paket-wisata.detail');
     Route::get('/pelanggan/paket-wisata/{id}/reservasi', [PelangganController::class, 'showReservasiForm'])->name('pelanggan.paket-wisata.reservasi');
@@ -217,7 +217,11 @@ Route::middleware(['auth', 'level:pelanggan'])->group(function () {
     Route::get('/pelanggan/penginapan/{id}', [PelangganController::class, 'detailPenginapan'])->name('pelanggan.penginapan.detail');
     Route::get('/pelanggan/berita', [PelangganController::class, 'berita'])->name('pelanggan.berita');
     Route::get('/pelanggan/berita/{id}', [PelangganController::class, 'beritaDetail'])->name('pelanggan.berita.detail');
-    Route::get('/pelanggan/contact', [PelangganController::class, 'contact'])->name('pelanggan.contact');
+
+    Route::get('/pelanggan/reservasiku', [PelangganController::class, 'reservasiSaya'])->name('pelanggan.reservasiku');
+    Route::get('/pelanggan/reservasiku/detail/{id}', [PelangganController::class, 'detailReservasi'])->name('pelanggan.paket-wisata.reservasi.detail');
+    Route::delete('/pelanggan/reservasiku/batal/{id}', [PelangganController::class, 'batalkanReservasi'])->name('pelanggan.paket-wisata.reservasi.batal');
+
 
     // Profile Pelanggan
     Route::get('/pelanggan/profile', [ProfilePelangganController::class, 'index'])->name('profile-pelanggan.index');

@@ -16,9 +16,9 @@
             </li>
 
             <!-- Tentang Kami -->
-            <li class="nav-item @if(@isset($menu) and $menu === 'About') active @endif">
+            {{-- <li class="nav-item @if(@isset($menu) and $menu === 'About') active @endif">
                 <a href="{{ route('pelanggan.about') }}" class="nav-link">Tentang Kami</a>
-            </li>
+            </li> --}}
 
             <!-- Paket Wisata -->
             <li class="nav-item @if(@isset($menu) and $menu === 'Paket_wisata') active @endif">
@@ -42,7 +42,7 @@
 
             <!-- Contact -->
             <li class="nav-item @if(@isset($menu) and $menu === 'Reservasiku') active @endif">
-                <a href="contact.html" class="nav-link">Reservasiku</a>
+                <a href="{{route('pelanggan.reservasiku')}}" class="nav-link">Reservasiku</a>
             </li>
 
             <!-- Dropdown Profil -->
