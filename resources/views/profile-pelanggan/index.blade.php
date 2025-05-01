@@ -123,9 +123,9 @@
                                             @endif
                                         </td>
                                         <td>
-                                            {{-- <a href="{{ route('reservasi.detail', $reservasi->id) }}" class="btn btn-sm btn-info">
+                                            <a href="{{ route('pelanggan.paket-wisata.reservasi.detail', $reservasi->id) }}" class="btn btn-sm btn-info">
                                                 Detail
-                                            </a> --}}
+                                            </a>
                                         </td>
                                     </tr>
                                     @endforeach

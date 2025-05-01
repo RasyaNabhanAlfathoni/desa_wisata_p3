@@ -4,7 +4,7 @@
 @endsection
 
 @section('content')
-<div class="hero-wrap js-fullheight" style="background-image: url('{{ asset('front-end/images/bg_1.jpg') }}');">
+<div class="hero-wrap js-fullheight" style="background-image: url('{{ asset('front-end/images/lsp/wisata/jalanan utama/Penglipuran.jpg') }}');">
     <div class="overlay"></div>
     <div class="container">
         <div class="row no-gutters slider-text js-fullheight align-items-center justify-content-center" data-scrollax-parent="true">
@@ -214,7 +214,7 @@
                                     </div>
 
                                     <div class="d-flex justify-content-between mt-4">
-                                        <a href="{{ route('pelanggan.paket_wisata') }}" class="btn btn-outline-secondary btn-lg px-4">
+                                        <a href="{{ route('pelanggan.paket-wisata.reservasi.detail', $reservasi->id) }}" class="btn btn-outline-secondary btn-lg px-4">
                                             <i class="icon-arrow-left mr-2"></i> Kembali
                                         </a>
                                         <button type="submit" class="btn btn-primary btn-lg px-5">
