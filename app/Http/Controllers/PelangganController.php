@@ -8,6 +8,7 @@ use App\Models\ObyekWisata;
 use App\Models\PaketWisata;
 use App\Models\Penginapan;
 use App\Models\Berita;
+use App\Models\KategoriBerita;
 use App\Models\Pelanggan;
 use App\Models\KategoriWisata; // Add this for categories
 use Carbon\Carbon;
@@ -323,13 +324,26 @@ class PelangganController extends Controller
         }
     }
 
-    public function obyekWisata()
+    public function obyekWisata(Request $request)
     {
-        $obyekWisatas = ObyekWisata::latest()->get();
-        $paketWisatas = PaketWisata::latest()->get();
-        $penginapans = Penginapan::latest()->get();
-        $beritas = Berita::latest()->get();
-        $pelanggans = Pelanggan::latest()->get();
+        $query = ObyekWisata::query()->with('kategori');
+
+        // Filter berdasarkan kategori wisata
+        if ($request->has('kategori_id') && $request->kategori_id != '') {
+            $query->where('id_kategori_wisata', $request->kategori_id);
+        }
+
+        // Filter berdasarkan nama wisata
+        if ($request->has('nama_wisata') && $request->nama_wisata != '') {
+            $query->where('nama_wisata', 'like', '%'.$request->nama_wisata.'%');
+        }
+
+        // Ambil hasil akhir dengan pagination
+        $obyekWisatas = $query->latest()->paginate(6)->appends($request->query());
+
+        // Ambil data tambahan untuk tampilan
+        $kategoriWisatas = KategoriWisata::all();
+        $allObyekWisatas = ObyekWisata::latest()->take(5)->get();
 
         $user = auth()->user();
 
@@ -341,22 +355,49 @@ class PelangganController extends Controller
             'title2' => 'Obyek Wisata',
             'menu' => 'Obyek_wisata',
             'obyekWisatas' => $obyekWisatas,
-            'penginapans' => $penginapans,
-            'paketWisatas' => $paketWisatas,
-            'beritas' => $beritas,
-            'pelanggans' => $pelanggans,
-            'pelanggan' => $pelanggan,
+            'kategoriWisatas' => $kategoriWisatas,
+            'allObyekWisatas' => $allObyekWisatas,
             'user' => $user,
+            'pelanggan' => $pelanggan,
         ]);
     }
 
-    public function penginapan()
+    public function obyekWisatadetail($id)
     {
-        $obyekWisatas = ObyekWisata::latest()->get();
-        $paketWisatas = PaketWisata::latest()->get();
-        $penginapans = Penginapan::latest()->get();
-        $beritas = Berita::latest()->get();
-        $pelanggans = Pelanggan::latest()->get();
+        $obyekWisata = ObyekWisata::with('kategori')->findOrFail($id);
+        $relatedObyekWisatas = ObyekWisata::where('id_kategori_wisata', $obyekWisata->id_kategori_wisata)
+            ->where('id', '!=', $id)
+            ->latest()
+            // ->take(3)
+            ->get();
+
+            $user = auth()->user();
+
+            // Mengambil data pelanggan terkait
+            $pelanggan = $user->pelanggan;
+
+        return view('pelanggan.detail_obyek_wisata', [
+            'title' => 'Pelanggan',
+            'title2' => 'Detail Obyek Wisata',
+            'menu' => 'Obyek_wisata',
+            'obyek' => $obyekWisata,
+            'relatedObyekWisatas' => $relatedObyekWisatas,
+            'user' => $user,
+            'pelanggan' => $pelanggan,
+        ]);
+    }
+
+    public function penginapan(Request $request)
+    {
+        $query = Penginapan::query();
+
+        // Filter berdasarkan nama penginapan
+        if ($request->has('nama_penginapan') && $request->nama_penginapan != '') {
+            $query->where('nama_penginapan', 'like', '%'.$request->nama_penginapan.'%');
+        }
+
+        // Ambil hasil akhir dengan pagination
+        $penginapans = $query->latest()->paginate(6)->appends($request->query());
 
         $user = auth()->user();
 
@@ -367,23 +408,55 @@ class PelangganController extends Controller
             'title' => 'Pelanggan',
             'title2' => 'Penginapan',
             'menu' => 'Penginapan',
-            'obyekWisatas' => $obyekWisatas,
             'penginapans' => $penginapans,
-            'paketWisatas' => $paketWisatas,
-            'beritas' => $beritas,
-            'pelanggans' => $pelanggans,
-            'pelanggan' => $pelanggan,
             'user' => $user,
+            'pelanggan' => $pelanggan,
         ]);
     }
 
-    public function berita()
+    public function detailPenginapan($id)
     {
-        $obyekWisatas = ObyekWisata::latest()->get();
-        $paketWisatas = PaketWisata::latest()->get();
-        $penginapans = Penginapan::latest()->get();
-        $beritas = Berita::latest()->get();
-        $pelanggans = Pelanggan::latest()->get();
+        $penginapan = Penginapan::findOrFail($id);
+        $relatedPenginapans = Penginapan::where('id', '!=', $id)
+            ->latest()
+            ->get();
+
+            $user = auth()->user();
+
+            // Mengambil data pelanggan terkait
+            $pelanggan = $user->pelanggan;
+
+        return view('pelanggan.detail_penginapan', [
+            'title' => 'Pelanggan',
+            'title2' => 'Detail Penginapan',
+            'menu' => 'Penginapan',
+            'penginapan' => $penginapan,
+            'relatedPenginapans' => $relatedPenginapans,
+            'user' => $user,
+            'pelanggan' => $pelanggan,
+        ]);
+    }
+
+    public function berita(Request $request)
+    {
+        $query = Berita::query()->with('kategori');
+
+        // Filter berdasarkan kategori berita
+        if ($request->has('kategori_id') && $request->kategori_id != '') {
+            $query->where('id_kategori_berita', $request->kategori_id);
+        }
+
+        // Filter berdasarkan judul berita
+        if ($request->has('judul') && $request->judul != '') {
+            $query->where('judul', 'like', '%'.$request->judul.'%');
+        }
+
+        // Ambil hasil akhir dengan pagination
+        $beritas = $query->latest('tgl_post')->paginate(6)->appends($request->query());
+
+        // Ambil data tambahan untuk tampilan
+        $kategoriBeritas = KategoriBerita::all();
+        $recentBeritas = Berita::latest('tgl_post')->take(3)->get();
 
         $user = auth()->user();
 
@@ -394,13 +467,46 @@ class PelangganController extends Controller
             'title' => 'Pelanggan',
             'title2' => 'Berita',
             'menu' => 'Berita',
-            'obyekWisatas' => $obyekWisatas,
-            'penginapans' => $penginapans,
-            'paketWisatas' => $paketWisatas,
             'beritas' => $beritas,
-            'pelanggans' => $pelanggans,
-            'pelanggan' => $pelanggan,
+            'kategoriBeritas' => $kategoriBeritas,
+            'recentBeritas' => $recentBeritas,
             'user' => $user,
+            'pelanggan' => $pelanggan,
+        ]);
+    }
+
+    public function beritaDetail($id)
+    {
+        $berita = Berita::with('kategori')->findOrFail($id);
+        $relatedBeritas = Berita::where('id_kategori_berita', $berita->id_kategori_berita)
+            ->where('id', '!=', $id)
+            ->latest('tgl_post')
+            ->take(3)
+            ->get();
+
+        $recentBeritas = Berita::latest('tgl_post')
+            ->where('id', '!=', $id)
+            ->take(3)
+            ->get();
+
+        // Ambil data tambahan untuk tampilan
+        $kategoriBeritas = KategoriBerita::all();
+
+        $user = auth()->user();
+
+        // Mengambil data pelanggan terkait
+        $pelanggan = $user->pelanggan;
+
+        return view('pelanggan.detail_berita', [
+            'title' => 'Pelanggan',
+            'title2' => 'Detail Berita',
+            'menu' => 'Berita',
+            'berita' => $berita,
+            'relatedBeritas' => $relatedBeritas,
+            'recentBeritas' => $recentBeritas,
+            'kategoriBeritas' => $kategoriBeritas,
+            'user' => $user,
+            'pelanggan' => $pelanggan,
         ]);
     }
 

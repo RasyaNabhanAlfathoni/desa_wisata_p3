@@ -212,8 +212,11 @@ Route::middleware(['auth', 'level:pelanggan'])->group(function () {
     Route::get('/pelanggan/paket-wisata/{id}/reservasi/pembayaran', [PelangganController::class, 'showPembayaranForm'])->name('pelanggan.paket-wisata.pembayaran');
     Route::post('/pelanggan/paket-wisata/{id}/reservasi/pembayaran', [PelangganController::class, 'submitPembayaran'])->name('pelanggan.paket-wisata.pembayaran.submit');
     Route::get('/pelanggan/obyek-wisata', [PelangganController::class, 'obyekWisata'])->name('pelanggan.obyek_wisata');
+    Route::get('/pelanggan/obyek-wisata/{id}', [PelangganController::class, 'obyekWisatadetail'])->name('pelanggan.obyek-wisata.detail');
     Route::get('/pelanggan/penginapan', [PelangganController::class, 'penginapan'])->name('pelanggan.penginapan');
+    Route::get('/pelanggan/penginapan/{id}', [PelangganController::class, 'detailPenginapan'])->name('pelanggan.penginapan.detail');
     Route::get('/pelanggan/berita', [PelangganController::class, 'berita'])->name('pelanggan.berita');
+    Route::get('/pelanggan/berita/{id}', [PelangganController::class, 'beritaDetail'])->name('pelanggan.berita.detail');
     Route::get('/pelanggan/contact', [PelangganController::class, 'contact'])->name('pelanggan.contact');
 
     // Profile Pelanggan
