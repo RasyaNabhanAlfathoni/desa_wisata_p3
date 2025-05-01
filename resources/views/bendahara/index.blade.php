@@ -113,7 +113,7 @@
                             </div>
 
                             <div class="d-flex align-items-center">
-                                <div class="bg-primary rounded-circle p-2 mr-3">
+                                <div class="bg-danger rounded-circle p-2 mr-3">
                                     <i class="fe fe-calendar text-white"></i>
                                 </div>
                                 <div>
@@ -357,17 +357,17 @@ document.addEventListener('DOMContentLoaded', function () {
         data: {
             labels: labels,
             datasets: [{
-                label: 'Jumlah Reservasi',
-                data: reservasiData,
-                borderColor: 'rgba(94, 114, 228, 1)',
-                backgroundColor: 'rgba(94, 114, 228, 0.3)',
-                borderWidth: 3,
-                tension: 0.4,
-                fill: true,
-                pointRadius: 4,
-                pointBackgroundColor: '#fff',
-                pointBorderWidth: 2,
-                pointHoverRadius: 6
+            label: 'Jumlah Reservasi',
+            data: reservasiData,
+            borderColor: 'rgba(220, 53, 69, 1)',           // warna merah
+            backgroundColor: 'rgba(220, 53, 69, 0.2)',     // isian merah transparan
+            borderWidth: 3,
+            tension: 0.4,
+            fill: true,
+            pointRadius: 4,
+            pointBackgroundColor: '#fff',
+            pointBorderWidth: 2,
+            pointHoverRadius: 6
             }]
         },
         options: {

@@ -85,14 +85,14 @@
                         @foreach ($obyekWisatas as $obyek)
                         <div class="item">
                             <div class="destination">
-                                <a href="#" class="img d-flex justify-content-center align-items-center"
+                                <a href="{{ route('obyek-wisata.detail', $obyek->id) }}" class="img d-flex justify-content-center align-items-center"
                                     style="background-image: url('{{ asset('Storage/' . $obyek->foto1) }}');">
                                     <div class="icon d-flex justify-content-center align-items-center">
                                         <span class="icon-search2"></span>
                                     </div>
                                 </a>
                                 <div class="text p-3">
-                                    <h3><a href="#">{{ $obyek->nama_wisata }}</a></h3>
+                                    <h3><a href="{{ route('obyek-wisata.detail', $obyek->id) }}">{{ $obyek->nama_wisata }}</a></h3>
                                     <span class="listing">{{ Str::limit($obyek->kategori->kategori_wisata, 30) }}</span>
                                 </div>
                             </div>
@@ -119,7 +119,7 @@
                 @foreach ($paketWisatas as $paket)
                 <div class="item">
                     <div class="destination">
-                        <a href="#" class="img d-flex justify-content-center align-items-center"
+                        <a href="{{ route('paket-wisata.detail', $paket->id) }}" class="img d-flex justify-content-center align-items-center"
                                     style="background-image: url('{{ asset('Storage/' . $paket->foto1) }}');">
                                     <div class="icon d-flex justify-content-center align-items-center">
                                         <span class="icon-search2"></span>
@@ -128,7 +128,7 @@
                         <div class="text p-3">
                             <div class="d-flex">
                                 <div class="one">
-                                    <h3><a href="#">{{$paket->nama_paket}}</a></h3>
+                                    <h3><a href="{{ route('paket-wisata.detail', $paket->id) }}">{{$paket->nama_paket}}</a></h3>
                                          <span class="price text-success font-weight-bold h5">Rp. {{ number_format($paket->harga_per_pack, 0, ',', '.') }}</span>
                                 </div>
                             </div>
@@ -213,7 +213,7 @@
                 <!-- Item 1 -->
                 <div class="item">
                     <div class="destination">
-                        <a href="#" class="img d-flex justify-content-center align-items-center"
+                        <a href="{{ route('penginapan.detail', $penginapan->id) }}" class="img d-flex justify-content-center align-items-center"
                                     style="background-image: url('{{ asset('Storage/' . $penginapan->foto1) }}');">
                                     <div class="icon d-flex justify-content-center align-items-center">
                                         <span class="icon-search2"></span>
@@ -222,7 +222,7 @@
                         <div class="text p-3">
                             <div class="d-flex">
                                 <div class="one">
-                                    <h3><a href="#">{{$penginapan->nama_penginapan}}</a></h3>
+                                    <h3><a href="{{ route('penginapan.detail', $penginapan->id) }}">{{$penginapan->nama_penginapan}}</a></h3>
                                     {{-- <p class="rate">
                                         <i class="icon-star"></i>
                                         <i class="icon-star"></i>
@@ -240,7 +240,7 @@
                             <hr>
                             <p class="bottom-area d-flex">
                                 <span><i class="icon-map-o"></i> {{Str::limit($penginapan->fasilitas,30)}}</span>
-                                <span class="ml-auto"><a href="#">Detail</a></span>
+                                <span class="ml-auto"><a href="{{ route('penginapan.detail', $penginapan->id) }}">Detail</a></span>
                             </p>
                         </div>
                     </div>
@@ -268,7 +268,7 @@
                 <!-- Item 1 -->
                 <div class="item px-2">
                     <div class="blog-entry h-100">
-                        <a href="#" class="block-20 d-flex justify-content-center align-items-center"
+                        <a href="{{ route('berita.detail', $berita->id) }}" class="block-20 d-flex justify-content-center align-items-center"
                                     style="background-image: url('{{ asset('Storage/' . $berita->foto) }}'); min-height: 200px;">
                         </a>
                         <div class="text p-4">
@@ -277,17 +277,16 @@
 
                             @if(strlen($berita->judul) > 30)
                             <h3 class="heading mt-3" style="cursor: pointer" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="{{$berita->judul}}">
-                                <a href="berita-detail.html">{{substr($berita->judul, 0, 30) . '...'}}</a>
+                                <a href="{{ route('berita.detail', $berita->id) }}">{{substr($berita->judul, 0, 30) . '...'}}</a>
                             </h3>
                             @else
                             <h3 class="heading mt-3" style="cursor: pointer" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="{{$berita->judul}}">
-                                <a href="berita-detail.html">{{ $berita->judul }}</a>
+                                <a href="{{ route('berita.detail', $berita->id) }}">{{ $berita->judul }}</a>
                             </h3>
                             @endif
 
                             <div class="meta mb-3 d-flex justify-content-between">
-                                <div><a href="#"><i class="icon-calendar mr-1"></i> {{$berita->tgl_post}}</a></div>
-                                <div><a href="#" class="meta-chat"><i class="icon-chat mr-1"></i> 5</a></div>
+                                <div><a href="{{ route('berita.detail', $berita->id) }}"><i class="icon-calendar mr-1"></i> {{$berita->tgl_post}}</a></div>
                             </div>
                         </div>
                     </div>

@@ -40,8 +40,11 @@ Route::get('/paket-wisata/{id}', [HomeController::class, 'paketWisataDetail'])->
 Route::get('/paket-wisata/{id}/reservasi', [HomeController::class, 'showReservasiForm'])->name('paket-wisata.reservasi');
 Route::post('/paket-wisata/{id}/reservasi', [HomeController::class, 'processReservasi'])->name('paket-wisata.reservasi.submit');
 Route::get('/obyek-wisata', [HomeController::class, 'obyekWisata'])->name('obyek_wisata');
+Route::get('/obyek-wisata/{id}', [HomeController::class, 'obyekWisatadetail'])->name('obyek-wisata.detail');
 Route::get('/penginapan', [HomeController::class, 'penginapan'])->name('penginapan');
+Route::get('/penginapan/{id}', [HomeController::class, 'detailPenginapan'])->name('penginapan.detail');
 Route::get('/berita', [HomeController::class, 'berita'])->name('berita');
+Route::get('/berita/{id}', [HomeController::class, 'beritaDetail'])->name('berita.detail');
 Route::get('/contact', [HomeController::class, 'contact'])->name('contact');
 
 
