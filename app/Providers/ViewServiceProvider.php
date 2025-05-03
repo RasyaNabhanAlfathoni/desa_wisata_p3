@@ -80,6 +80,70 @@ class ViewServiceProvider extends ServiceProvider
                 'notif_paket_wisata_baru'
             ));
         });
+
+        // FE Notifications (pelanggan)
+        View::composer('fe.navbar', function ($view) {
+            $user = Auth::user();
+
+            if (!$user || $user->level != 'pelanggan') {
+                return $view->with([
+                    'notif_berita_baru' => collect(),
+                    'notif_paket_wisata_baru' => collect(),
+                    'notif_reservasi_diproses' => collect(),
+                    'notif_reservasi_dibayar' => collect(),
+                    'notif_reservasi_dibatalkan' => collect(),
+                    'jumlah_notif' => 0
+                ]);
+            }
+
+            // Filter notifikasi dari 7 hari terakhir
+            $applyTimeFilter = function ($query) {
+                return $query->where('created_at', '>=', Carbon::now()->subDays(7));
+            };
+
+            // Berita baru
+            $notif_berita_baru = $applyTimeFilter(Berita::query())->latest()->take(5)->get();
+
+            // Paket wisata baru
+            $notif_paket_wisata_baru = $applyTimeFilter(PaketWisata::query())->latest()->take(5)->get();
+
+            // Reservasi status "dipesan"
+            $notif_reservasi_diproses = $applyTimeFilter(
+                Reservasi::query()
+                    ->where('id_pelanggan', $user->pelanggan->id)
+                    ->where('status_reservasi_wisata', 'pesan')
+            )->latest()->take(5)->get();
+
+            // Reservasi status "dibayar" (konfirmasi)
+            $notif_reservasi_dibayar = $applyTimeFilter(
+                Reservasi::query()
+                    ->where('id_pelanggan', $user->pelanggan->id)
+                    ->where('status_reservasi_wisata', 'dibayar')
+            )->latest()->take(5)->get();
+
+            // Reservasi status "dibatalkan"
+            $notif_reservasi_dibatalkan = $applyTimeFilter(
+                Reservasi::query()
+                    ->where('id_pelanggan', $user->pelanggan->id)
+                    ->where('status_reservasi_wisata', 'dibatalkan')
+            )->latest()->take(5)->get();
+
+            // Hitung total notifikasi
+            $jumlah_notif = $notif_berita_baru->count() +
+                          $notif_paket_wisata_baru->count() +
+                          $notif_reservasi_diproses->count() +
+                          $notif_reservasi_dibayar->count() +
+                          $notif_reservasi_dibatalkan->count();
+
+            $view->with(compact(
+                'notif_berita_baru',
+                'notif_paket_wisata_baru',
+                'notif_reservasi_diproses',
+                'notif_reservasi_dibayar',
+                'notif_reservasi_dibatalkan',
+                'jumlah_notif'
+            ));
+        });
     }
 
     public function register()

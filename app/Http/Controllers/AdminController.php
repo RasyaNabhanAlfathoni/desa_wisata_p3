@@ -68,6 +68,25 @@ class AdminController extends Controller
             $pelanggan_data[] = Pelanggan::whereDate('created_at', $date)->count();
         }
 
+        $totalReservasi = Reservasi::count();
+
+        // Hitung reservasi hari ini
+        $today = Carbon::today();
+        $reservasiHariIni = Reservasi::whereDate('created_at', $today)->count();
+        $reservasiKemarin = Reservasi::whereDate('created_at', $today->subDay())->count();
+        $reservasiPerubahan = $reservasiKemarin != 0 ?
+            round(($reservasiHariIni - $reservasiKemarin) / $reservasiKemarin * 100, 2) : 0;
+
+        // Data untuk chart (7 hari terakhir)
+        $chart_labels2 = [];
+        $reservasi_data = [];
+
+        for ($i = 6; $i >= 0; $i--) {
+            $date = Carbon::today()->subDays($i);
+            $chart_labels2[] = $date->format('d M');
+            $reservasi_data[] = Reservasi::whereDate('created_at', $date)->count();
+        }
+
         // Ambil jumlah data per halaman
         $perPage = $request->input('per_page', 5);
         $level = $request->input('level', '');
@@ -101,6 +120,11 @@ class AdminController extends Controller
             'chart_labels' => $chart_labels,
             'karyawan_data' => $karyawan_data,
             'pelanggan_data' => $pelanggan_data,
+            'totalReservasi' => $totalReservasi,
+            'reservasiHariIni' => $reservasiHariIni,
+            'reservasiPerubahan' => $reservasiPerubahan,
+            'chart_labels2' => $chart_labels2,
+            'reservasi_data' => $reservasi_data,
         ]);
     }
 

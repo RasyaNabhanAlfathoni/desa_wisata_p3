@@ -86,7 +86,7 @@ class PelangganController extends Controller
 
         // Filter berdasarkan jumlah peserta (minimal kapasitas)
         if ($request->has('jumlah_peserta') && $request->jumlah_peserta != '') {
-            $query->where('jumlah_peserta', '<=', $request->jumlah_peserta);
+            $query->where('jumlah_peserta', '>=', $request->jumlah_peserta);
         }
 
         // Filter berdasarkan rentang harga
@@ -105,12 +105,16 @@ class PelangganController extends Controller
             $dateFrom = $request->date_from;
             $dateTo = $request->date_to;
 
-            $query->whereDoesntHave('reservasiWisata', function($q) use ($dateFrom, $dateTo) {
+            $query->whereDoesntHave('reservasi', function($q) use ($dateFrom, $dateTo) {
                 $q->where(function($q) use ($dateFrom, $dateTo) {
                     $q->whereBetween('tgl_reservasi_mulai', [$dateFrom, $dateTo])
-                    ->orWhereBetween('tgl_reservasi_akhir', [$dateFrom, $dateTo]);
+                    ->orWhereBetween('tgl_reservasi_akhir', [$dateFrom, $dateTo])
+                    ->orWhere(function($q) use ($dateFrom, $dateTo) {
+                        $q->where('tgl_reservasi_mulai', '<=', $dateFrom)
+                            ->where('tgl_reservasi_akhir', '>=', $dateTo);
+                    });
                 })
-                ->whereNotIn('status_reservasi_wisata', ['selesai', 'dibatalkan']);
+                ->whereIn('status_reservasi_wisata', ['pesan', 'dibayar']);
             });
         }
 
@@ -315,7 +319,7 @@ class PelangganController extends Controller
 
         // Cek apakah ada reservasi yang overlapping
         $overlapping = Reservasi::where('id_paket', $paket->id)
-            ->where('status_reservasi_wisata', '!=', 'dibatalkan')
+            ->whereNotIn('status_reservasi_wisata', ['dibatalkan', 'selesai'])
             ->where(function($query) use ($tanggal_mulai, $tanggal_akhir) {
                 $query->whereBetween('tgl_reservasi_mulai', [$tanggal_mulai, $tanggal_akhir])
                     ->orWhereBetween('tgl_reservasi_akhir', [$tanggal_mulai, $tanggal_akhir])
@@ -581,6 +585,53 @@ class PelangganController extends Controller
             'kategoriBeritas' => $kategoriBeritas,
             'user' => $user,
             'pelanggan' => $pelanggan,
+        ]);
+    }
+
+    public function notifikasi()
+    {
+        $user = auth()->user();
+
+        if (!$user || $user->level != 'pelanggan') {
+            return redirect()->route('home');
+        }
+
+        // Filter untuk notifikasi dari 30 hari terakhir (lebih lama dari tampilan navbar)
+        $timeFilter = Carbon::now()->subDays(30);
+
+        // Berita baru
+        $notif_berita = Berita::where('created_at', '>=', $timeFilter)
+            ->latest()
+            ->paginate(5, ['*'], 'berita');
+
+        // Paket wisata baru
+        $notif_paket_wisata = PaketWisata::where('created_at', '>=', $timeFilter)
+            ->latest()
+            ->paginate(5, ['*'], 'paket');
+
+        // Reservasi-reservasi pelanggan
+        // $notif_reservasi = Reservasi::where('id_pelanggan', $user->id_pelanggan)
+        //     ->whereIn('status_reservasi_wisata', ['pesan', 'dibayar', 'dibatalkan'])
+        //     ->where('created_at', '>=', $timeFilter)
+        //     ->latest()
+        //     ->paginate(10, ['*'], 'reservasi');
+
+         // Reservasi-reservasi pelanggan (menambahkan eager loading untuk relasi dengan paket)
+        $notif_reservasi = Reservasi::where('id_pelanggan', $user->pelanggan->id)
+        ->where('created_at', '>=', $timeFilter)
+        ->with('paket')  // Eager loading untuk relasi paket
+        ->latest()
+        ->paginate(10, ['*'], 'reservasi');
+
+        return view('pelanggan.notifikasi', [
+            'title' => 'Pelanggan',
+            'title2' => 'Notifikasi',
+            'menu' => 'Notifikasi',
+            'pelanggan' => $user->pelanggan,
+            'notif_berita' => $notif_berita,
+            'notif_paket_wisata' => $notif_paket_wisata,
+            'notif_reservasi' => $notif_reservasi,
+            'user' => $user,
         ]);
     }
 

@@ -5,8 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="Register Page">
     <meta name="author" content="Your Website Name">
-    <link rel="icon" href="{{ asset('favicon.ico') }}">
-    <title>{{$title}}</title>
+    <!-- Favicon -->
+    <link rel="icon" href="{{ asset('back-end/assets/images/pesona_desa2.png') }}" type="image/png">
+    <title>{{$title}} - PesonaDesa</title>
 
     <!-- Simple bar CSS -->
     <link rel="stylesheet" href="{{ asset('back-end/css/simplebar.css') }}">

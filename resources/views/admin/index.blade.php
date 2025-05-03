@@ -151,6 +151,42 @@
             </div>
         </div>
 
+        <!-- New Chart Section -->
+        <div class="card shadow my-4">
+            <div class="card-body">
+                <div class="row align-items-center">
+                    <div class="col-md-4">
+                        <div class="pl-3">
+                            <h2 class="h3 mb-3">Statistik Reservasi</h2>
+                            <div class="mb-4">
+                                <h2 class="mb-1">{{ $totalReservasi ?? 0 }}</h2>
+                                <p class="text-muted mb-0">Total Reservasi</p>
+                            </div>
+
+                            <div class="d-flex align-items-center">
+                                <div class="bg-danger rounded-circle p-2 mr-3">
+                                    <i class="fe fe-calendar text-white"></i>
+                                </div>
+                                <div>
+                                    <p class="mb-0 text-muted">Reservasi Hari Ini</p>
+                                    <h4 class="mb-0">+{{ $reservasiHariIni ?? 0 }}</h4>
+                                    <small class="{{ $reservasiPerubahan >= 0 ? 'text-success' : 'text-danger' }}">
+                                        <i class="fe fe-arrow-{{ $reservasiPerubahan >= 0 ? 'up' : 'down' }}"></i>
+                                        {{ abs($reservasiPerubahan) }}%
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="chart-container" style="position: relative; height:300px;">
+                            <canvas id="reservasiChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Small table -->
             <div class="card shadow">
                 <div class="card-body">
@@ -507,6 +543,99 @@ document.addEventListener('DOMContentLoaded', function () {
 
     new Chart(ctx, config);
 });
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const ctx2 = document.getElementById('reservasiChart').getContext('2d');
+
+        // Data dari controller
+        const labels2 = @json($chart_labels2);
+        const reservasiData = @json($reservasi_data).map(value => Math.round(value));
+
+        // Cari nilai maksimum untuk skala Y
+        const maxReservasi = Math.max(...reservasiData);
+        const yMax2 = maxReservasi < 5 ? 5 : Math.ceil(maxReservasi + 1);
+
+        const config2 = {
+            type: 'line',
+            data: {
+                labels: labels2,
+                datasets: [{
+                label: 'Jumlah Reservasi',
+                data: reservasiData,
+                borderColor: 'rgba(220, 53, 69, 1)',           // warna merah
+                backgroundColor: 'rgba(220, 53, 69, 0.2)',     // isian merah transparan
+                borderWidth: 3,
+                tension: 0.4,
+                fill: true,
+                pointRadius: 4,
+                pointBackgroundColor: '#fff',
+                pointBorderWidth: 2,
+                pointHoverRadius: 6
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: {
+                            usePointStyle: true,
+                            padding: 15,
+                            font: { size: 12 }
+                        }
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(0,0,0,0.8)',
+                        titleFont: { size: 12 },
+                        bodyFont: { size: 12 },
+                        padding: 10,
+                        displayColors: true
+                    },
+                    title: {
+                        display: true,
+                        text: 'Statistik Reservasi Harian'
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: {
+                            display: false
+                        },
+                        ticks: {
+                            font: { size: 11 }
+                        }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        min: 0,
+                        max: yMax2,
+                        ticks: {
+                            stepSize: 1,
+                            precision: 0,
+                            callback: function(value) {
+                                return Number.isInteger(value) ? value : '';
+                            },
+                            font: { size: 11 }
+                        },
+                        grid: {
+                            color: 'rgba(0,0,0,0.05)'
+                        }
+                    }
+                },
+                elements: {
+                    line: {
+                        borderCapStyle: 'round',
+                        borderJoinStyle: 'round'
+                    }
+                }
+            }
+        };
+
+        new Chart(ctx2, config2);
+    });
 </script>
 
 @endsection

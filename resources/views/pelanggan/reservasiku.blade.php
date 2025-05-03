@@ -206,11 +206,11 @@
 </script>
 
 <style>
-    .badge {
+    /* .badge {
         padding: 0.5em 0.75em;
         font-size: 0.875rem;
         font-weight: 500;
-    }
+    } */
 
     .table th, .table td {
         vertical-align: middle;

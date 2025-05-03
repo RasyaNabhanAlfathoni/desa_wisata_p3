@@ -11,6 +11,7 @@ use App\Models\PaketWisata;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Storage;
+use Carbon\Carbon;
 
 class ReservasiController extends Controller
 {
@@ -19,6 +20,9 @@ class ReservasiController extends Controller
      */
     public function index(Request $request)
     {
+        // First, update status for any reservations that have passed their end date
+        $this->updateExpiredReservations();
+
         $reservasi = Reservasi::with(['pelanggan','paket'])->get();
 
         // Ambil jumlah data per halaman
@@ -45,6 +49,17 @@ class ReservasiController extends Controller
             'page' => 'Reservasi',
             'reservasis' => $reservasis,
         ]);
+    }
+
+    // Add this new private method to handle status updates
+    private function updateExpiredReservations()
+    {
+        $today = Carbon::today()->toDateString();
+
+        // Update reservations where end date has passed and status is not already 'selesai'
+        Reservasi::where('tgl_reservasi_akhir', '<', $today)
+             ->whereNotIn('status_reservasi_wisata', ['selesai', 'dibatalkan'])
+             ->update(['status_reservasi_wisata' => 'selesai']);
     }
 
     /**

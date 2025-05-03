@@ -67,6 +67,7 @@
                                     <option value="pesan" {{ request('status') == 'pesan' ? 'selected' : '' }}>Pesan</option>
                                     <option value="dibayar" {{ request('status') == 'dibayar' ? 'selected' : '' }}>Dibayar</option>
                                     <option value="selesai" {{ request('status') == 'selesai' ? 'selected' : '' }}>Selesai</option>
+                                    <option value="dibatalkan" {{ request('status') == 'dibatalkan' ? 'selected' : '' }}>Dibatalkan</option>
                                 </select>
                             </div>
                         </div>

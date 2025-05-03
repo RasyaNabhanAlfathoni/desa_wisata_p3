@@ -5,8 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="icon" href="{{asset('back-end/favicon.ico')}}">
-    <title>{{$title}}</title>
+    <!-- Favicon -->
+    <link rel="icon" href="{{ asset('back-end/assets/images/pesona_desa2.png') }}" type="image/png">
+    <title>{{$title}} - PesonaDesa</title>
     <!-- Simple bar CSS -->
     <link rel="stylesheet" href="{{asset('back-end/css/simplebar.css')}}">
     <!-- Fonts CSS -->

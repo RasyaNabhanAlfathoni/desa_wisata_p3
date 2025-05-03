@@ -222,6 +222,8 @@ Route::middleware(['auth', 'level:pelanggan'])->group(function () {
     Route::get('/pelanggan/reservasiku/detail/{id}', [PelangganController::class, 'detailReservasi'])->name('pelanggan.paket-wisata.reservasi.detail');
     Route::delete('/pelanggan/reservasiku/batal/{id}', [PelangganController::class, 'batalkanReservasi'])->name('pelanggan.paket-wisata.reservasi.batal');
 
+    Route::get('/pelanggan/notifikasi', [PelangganController::class, 'notifikasi'])->name('pelanggan.notifikasi');
+
 
     // Profile Pelanggan
     Route::get('/pelanggan/profile', [ProfilePelangganController::class, 'index'])->name('profile-pelanggan.index');

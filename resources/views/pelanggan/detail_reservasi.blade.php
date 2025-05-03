@@ -192,10 +192,14 @@
                                             @if($reservasi->file_bukti_tf)
                                                 <div class="alert alert-success">
                                                     <p><strong>Status Pembayaran:</strong>
-                                                        @if($reservasi->status_reservasi_wisata == 'dibayar')
-                                                            <span class="badge badge-primary">Sudah Dibayar</span>
-                                                        @elseif($reservasi->status_reservasi_wisata == 'dikonfirmasi')
+                                                        @if($reservasi->status_reservasi_wisata == 'pesan')
+                                                            <span class="badge badge-warning">Belum Dibayar</span>
+                                                        @elseif($reservasi->status_reservasi_wisata == 'dibayar')
                                                             <span class="badge badge-success">Sudah Dikonfirmasi</span>
+                                                        @elseif($reservasi->status_reservasi_wisata == 'dibatalkan')
+                                                            <span class="badge badge-danger">Telah Dibatalkan</span>
+                                                        @elseif($reservasi->status_reservasi_wisata == 'selesai')
+                                                            <span class="badge badge-secondary">Selesai</span>
                                                         @endif
                                                     </p>
                                                     <p><strong>Bukti Transfer:</strong></p>
@@ -301,11 +305,11 @@
 </script>
 
 <style>
-    .badge {
+    /* .badge {
         padding: 0.5em 0.75em;
         font-size: 0.875rem;
         font-weight: 500;
-    }
+    } */
 
     .card {
         border-radius: 10px;

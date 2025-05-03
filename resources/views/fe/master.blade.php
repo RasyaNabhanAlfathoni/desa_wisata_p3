@@ -2,6 +2,10 @@
 <html lang="en">
   <head>
     <title>{{$title}} - {{$title2}} - PesonaDesa.</title>
+
+    <!-- Favicon -->
+    <link rel="icon" href="{{ asset('back-end/assets/images/pesona_desa.png2') }}" type="image/png">
+
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
@@ -47,6 +51,7 @@
 
     {{-- Font Awesome --}}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
 
   </head>
   <body id="body">

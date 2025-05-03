@@ -18,10 +18,10 @@
     <div class="w-100 mb-4 d-flex align-items-center justify-content-center">
         <a class="navbar-brand d-flex align-items-center mt-3 " href="{{route('admin.index')}}">
             <img
-                    src="{{ asset('back-end/assets/images/pesona_desa.png') }}"
+                    src="{{ asset('back-end/assets/images/pesona_desa2.png') }}"
                     alt="Logo Pesona Desa"
                     class="navbar-brand-img brand-sm"
-                    style="width: 48px; height: 48px;"
+                    style="width: 48px; height: 38px;"
                 />
                 <g>
                     <polygon class="st0" points="78,105 15,105 24,87 87,87" />
@@ -167,10 +167,10 @@
     <div class="w-100 mb-4 d-flex align-items-center justify-content-center">
         <a class="navbar-brand d-flex align-items-center mt-3" href="{{route('pemilik.index')}}">
             <img
-                src="{{ asset('back-end/assets/images/pesona_desa.png') }}"
+                src="{{ asset('back-end/assets/images/pesona_desa2.png') }}"
                 alt="Logo Pesona Desa"
                 class="navbar-brand-img brand-sm"
-                style="width: 48px; height: 48px;"
+                style="width: 48px; height: 38px;"
             />
                 <g>
                     <polygon class="st0" points="78,105 15,105 24,87 87,87" />
@@ -284,10 +284,10 @@
     <div class="w-100 mb-4 d-flex align-items-center justify-content-center">
         <a class="navbar-brand d-flex align-items-center mt-3 " href="{{route('bendahara.index')}}">
             <img
-                src="{{ asset('back-end/assets/images/pesona_desa.png') }}"
+                src="{{ asset('back-end/assets/images/pesona_desa2.png') }}"
                 alt="Logo Pesona Desa"
                 class="navbar-brand-img brand-sm mb-3"
-                style="width: 48px; height: 48px;"
+                style="width: 48px; height: 38px;"
             />
                 <g>
                     <polygon class="st0" points="78,105 15,105 24,87 87,87" />
