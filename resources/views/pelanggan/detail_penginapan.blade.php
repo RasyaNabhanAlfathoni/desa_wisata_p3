@@ -4,7 +4,7 @@
 @endsection
 @section('content')
 <!-- Hero Banner with Overlay and Text -->
-<div class="hero-wrap js-fullheight" style="background-image: url('{{ asset('front-end/images/lsp/wisata/hutan bambu/panglipuran-bamboo-forest.jpg') }}');">
+<div class="hero-wrap js-fullheight" style="background-image: url('{{ asset('storage/' . $penginapan->foto1) }}'););">
     <div class="overlay"></div>
     <div class="container">
         <div class="row no-gutters slider-text js-fullheight align-items-center justify-content-center" data-scrollax-parent="true">

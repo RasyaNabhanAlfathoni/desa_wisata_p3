@@ -34,13 +34,9 @@
         <form class="col-lg-6 col-md-8 col-10 mx-auto p-4 shadow-lg" style="background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); border-radius: 15px;" id="registerForm" action="{{ route('register') }}" method="POST">
             @csrf
             <div class="mx-auto text-center my-4">
-                <svg version="1.1" id="logo" class="navbar-brand-img brand-md mb-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
-                    <g>
-                      <polygon class="st0" points="78,105 15,105 24,87 87,87"/>
-                      <polygon class="st0" points="96,69 33,69 42,51 105,51"/>
-                      <polygon class="st0" points="78,33 15,33 24,15 87,15"/>
-                    </g>
-                  </svg>
+                <img src="{{ asset('back-end/assets/images/pesona_desa.png') }}"
+                alt="Logo Pesona Desa"
+                class=" brand-md mb-3">
                 <h2 class="h3 mt-3">{{$title}}</h2>
                 <label class="form-label text-danger fs-5">( Khusus Pelanggan )</label>
             </div>

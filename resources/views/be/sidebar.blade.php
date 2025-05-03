@@ -17,19 +17,12 @@
     <!-- nav bar -->
     <div class="w-100 mb-4 d-flex align-items-center justify-content-center">
         <a class="navbar-brand d-flex align-items-center mt-3 " href="{{route('admin.index')}}">
-            <svg
-                version="1.1"
-                id="logo"
-                class="navbar-brand-img brand-sm"
-                xmlns="http://www.w3.org/2000/svg"
-                xmlns:xlink="http://www.w3.org/1999/xlink"
-                x="0px"
-                y="0px"
-                viewBox="0 0 120 120"
-                xml:space="preserve"
-                width="40"
-                height="40"
-            >
+            <img
+                    src="{{ asset('back-end/assets/images/pesona_desa.png') }}"
+                    alt="Logo Pesona Desa"
+                    class="navbar-brand-img brand-sm"
+                    style="width: 48px; height: 48px;"
+                />
                 <g>
                     <polygon class="st0" points="78,105 15,105 24,87 87,87" />
                     <polygon class="st0" points="96,69 33,69 42,51 105,51" />
@@ -152,7 +145,7 @@
                         <span class="ml-3 item-text">Notifikasi</span>
                     </div>
                     {{-- $notifBaru dari AppServiceProvider --}}
-                    @if(isset($notifBaru) && $notifBaru) 
+                    @if(isset($notifBaru) && $notifBaru)
                         <span class="badge badge-danger ml-2">!</span>
                     @endif
                 </a>
@@ -173,19 +166,12 @@
     <!-- nav bar -->
     <div class="w-100 mb-4 d-flex align-items-center justify-content-center">
         <a class="navbar-brand d-flex align-items-center mt-3" href="{{route('pemilik.index')}}">
-            <svg
-                version="1.1"
-                id="logo"
+            <img
+                src="{{ asset('back-end/assets/images/pesona_desa.png') }}"
+                alt="Logo Pesona Desa"
                 class="navbar-brand-img brand-sm"
-                xmlns="http://www.w3.org/2000/svg"
-                xmlns:xlink="http://www.w3.org/1999/xlink"
-                x="0px"
-                y="0px"
-                viewBox="0 0 120 120"
-                xml:space="preserve"
-                width="40"
-                height="40"
-            >
+                style="width: 48px; height: 48px;"
+            />
                 <g>
                     <polygon class="st0" points="78,105 15,105 24,87 87,87" />
                     <polygon class="st0" points="96,69 33,69 42,51 105,51" />
@@ -297,19 +283,12 @@
     <!-- nav bar -->
     <div class="w-100 mb-4 d-flex align-items-center justify-content-center">
         <a class="navbar-brand d-flex align-items-center mt-3 " href="{{route('bendahara.index')}}">
-            <svg
-                version="1.1"
-                id="logo"
-                class="navbar-brand-img brand-sm"
-                xmlns="http://www.w3.org/2000/svg"
-                xmlns:xlink="http://www.w3.org/1999/xlink"
-                x="0px"
-                y="0px"
-                viewBox="0 0 120 120"
-                xml:space="preserve"
-                width="40"
-                height="40"
-            >
+            <img
+                src="{{ asset('back-end/assets/images/pesona_desa.png') }}"
+                alt="Logo Pesona Desa"
+                class="navbar-brand-img brand-sm mb-3"
+                style="width: 48px; height: 48px;"
+            />
                 <g>
                     <polygon class="st0" points="78,105 15,105 24,87 87,87" />
                     <polygon class="st0" points="96,69 33,69 42,51 105,51" />

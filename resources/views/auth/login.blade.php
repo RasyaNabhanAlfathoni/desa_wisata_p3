@@ -38,13 +38,9 @@
             <div class="card-body">
               <form action="{{route('login')}}" method="POST" id="frmLogin">
                 @csrf
-                <svg version="1.1" id="logo" class="navbar-brand-img brand-md mb-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
-                  <g>
-                    <polygon class="st0" points="78,105 15,105 24,87 87,87"/>
-                    <polygon class="st0" points="96,69 33,69 42,51 105,51"/>
-                    <polygon class="st0" points="78,33 15,33 24,15 87,15"/>
-                  </g>
-                </svg>
+                <img src="{{ asset('back-end/assets/images/pesona_desa.png') }}"
+                alt="Logo Pesona Desa"
+                class="navbar-brand-img brand-md mb-3">
                 <h1 class="h3 mb-3">{{$title}}</h1>
                 <div class="form-group">
                   <label for="inputEmail" class="sr-only">Alamat Email</label>
