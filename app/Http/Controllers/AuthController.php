@@ -40,7 +40,7 @@ class AuthController extends Controller
             'id_user' => $user->id, // Hubungkan dengan user yang baru dibuat
         ]);
 
-        Auth::login($user);
+        // Auth::login($user);
 
         // Kirim email verifikasi
         event(new Registered($user));
@@ -58,7 +58,16 @@ class AuthController extends Controller
 
     // Menangani verifikasi email
     public function verificationVerify(EmailVerificationRequest $request) {
+        // Jika user belum login, coba login dulu
+        if (!Auth::check()) {
+            $user = User::find($request->route('id'));
+            if ($user) {
+                Auth::login($user);
+            }
+        }
         $request->fulfill();
+        // Logout user jika kebetulan sudah login
+        Auth::logout();
         return redirect()->route('login')->with('pesan', 'Email berhasil diverifikasi. Silakan login.');
     }
 
@@ -100,10 +109,11 @@ class AuthController extends Controller
             // Cek apakah user adalah pelanggan dan perlu verifikasi email
             if ($user->level === 'pelanggan' && !$request->user()->hasVerifiedEmail()) {
                 // Pastikan $user tidak null sebelum mengirim notifikasi
-                if ($user) {
-                    $request->user()->sendEmailVerificationNotification();
-                }
-                Auth::logout();
+                // if ($user) {
+                //     $request->user()->sendEmailVerificationNotification();
+                // }
+                // Auth::logout();
+                $request->user()->sendEmailVerificationNotification();
                 return back()->with('error', 'Akun belum diverifikasi! Kami telah mengirim ulang link verifikasi ke email Anda. Silakan cek email Anda (termasuk folder spam).')
                             ->with('resend_verification', true)
                             ->with('email', $user->email);

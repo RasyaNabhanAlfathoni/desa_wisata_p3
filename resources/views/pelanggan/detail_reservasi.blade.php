@@ -193,7 +193,7 @@
                                                 <div class="alert alert-success">
                                                     <p><strong>Status Pembayaran:</strong>
                                                         @if($reservasi->status_reservasi_wisata == 'pesan')
-                                                            <span class="badge badge-warning">Belum Dibayar</span>
+                                                            <span class="badge badge-warning">Sedang Proses</span>
                                                         @elseif($reservasi->status_reservasi_wisata == 'dibayar')
                                                             <span class="badge badge-success">Sudah Dikonfirmasi</span>
                                                         @elseif($reservasi->status_reservasi_wisata == 'dibatalkan')

@@ -58,7 +58,10 @@
                 </div>
 
                 <p class="mt-3 text-center">
-                    <a href="{{ route('login') }}" class="text-decoration-none">Kembali ke halaman login</a>
+                    <form method="POST" action="{{ route('logout') }}" class="d-inline">
+                        @csrf
+                        <button type="submit" class="btn btn-link p-0 text-decoration-none">Kembali ke halaman login</button>
+                    </form>
                 </p>
 
                 <p class="mt-4 mb-2 text-center">© {{ date('Y') }}</p>

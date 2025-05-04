@@ -61,15 +61,15 @@ Route::middleware('guest')->group(function () {
 // Email Verification Routes
 Route::get('/email/verify', function () {
     return app()->make(AuthController::class)->verificationNotice();
-})->middleware('auth')->name('verification.notice');
+})->name('verification.notice');
 
 Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
     return app()->make(AuthController::class)->verificationVerify($request);
-})->middleware(['auth', 'signed'])->name('verification.verify');
+})->middleware(['signed'])->name('verification.verify');
 
 Route::post('/email/verification-notification', function (Request $request) {
     return app()->make(AuthController::class)->verificationResend($request);
-})->middleware(['auth', 'throttle:6,1'])->name('verification.send');
+})->middleware(['throttle:6,1'])->name('verification.send');
 
 
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');

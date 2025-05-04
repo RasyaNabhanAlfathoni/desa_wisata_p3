@@ -386,7 +386,7 @@ class PelangganController extends Controller
                 $reservasi->updated_at = Carbon::now();
                 $reservasi->save();
 
-                return redirect()->route('pelanggan.paket-wisata')
+                return redirect()->route('pelanggan.reservasiku')
                     ->with('pesan', 'Pembayaran berhasil dikonfirmasi. Reservasi Anda sedang diproses.');
             }
 
