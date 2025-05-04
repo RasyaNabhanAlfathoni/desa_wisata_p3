@@ -44,6 +44,10 @@
                                     <label class="text-muted"><i class="bi bi-telephone-fill"></i> Nomor Handphone</label>
                                     <div class="h6">{{ $pelanggan->no_hp }}</div>
                                 </div>
+                                <div class="form-group text-start">
+                                    <label class="text-muted"><i class="bi bi-calendar-check-fill"></i> Jumlah Reservasi</label>
+                                    <div class="h5 fw-bold">{{ $jumlahReservasi }} kali</div>
+                                </div>
                             </div>
 
                             <div class="col-md-6">
@@ -65,15 +69,22 @@
                                         @endif
                                     </div>
                                 </div>
+                                <div class="form-group">
+                                    <label class="text-muted"><i class="bi bi-patch-check-fill"></i> Verifikasi Email</label>
+                                    <div class="h6">
+                                        @if ($pelanggan->user->email_verified_at)
+                                            <span class="badge bg-success text-white">Terverifikasi</span><br>
+                                            <small>{{ \Carbon\Carbon::parse($pelanggan->user->email_verified_at)->format('d M Y H:i') }}</small>
+                                        @else
+                                            <span class="badge bg-warning text-white">Belum Diverifikasi</span>
+                                        @endif
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
                         <!-- Tambahan Jumlah Reservasi -->
                         <hr class="my-4">
-                        <div class="form-group text-start">
-                            <label class="text-muted"><i class="bi bi-calendar-check-fill"></i> Jumlah Reservasi</label>
-                            <div class="h5 fw-bold">{{ $jumlahReservasi }} kali</div>
-                        </div>
 
                         <a href="{{ route('kelola_data_pelanggan.index') }}" class="btn btn-secondary mt-4">
                             <i class="bi bi-arrow-left"></i> Kembali

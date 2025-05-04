@@ -69,6 +69,19 @@
                 <p class="mt-4 mb-2 text-center">© {{ date('Y') }}</p>
               </form>
             </div>
+            @if (session('resend_verification'))
+            <div class="alert alert-info">
+                <p>{{ session('error') }}</p>
+                <form action="{{ route('verification.send') }}" method="POST" class="mt-2">
+                    @csrf
+                    <input type="hidden" name="email" value="{{ session('email') }}">
+                    <button type="submit" class="btn btn-sm btn-primary">
+                        <i class="fas fa-paper-plane"></i> Kirim Ulang Link Verifikasi
+                    </button>
+                </form>
+                <p class="mt-2 mb-0">Sudah verifikasi? <a href="{{ route('login') }}">Coba login kembali</a></p>
+            </div>
+            @endif
           </div>
         </div>
       </div>

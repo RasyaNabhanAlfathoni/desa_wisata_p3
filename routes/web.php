@@ -58,27 +58,18 @@ Route::middleware('guest')->group(function () {
 });
 
 
-// // Halaman peringatan verifikasi
-// Route::get('/email/verify', function () {
-//     return view('auth.verify-email');
-// })->middleware('auth')->name('verification.notice');
+// Email Verification Routes
+Route::get('/email/verify', function () {
+    return app()->make(AuthController::class)->verificationNotice();
+})->middleware('auth')->name('verification.notice');
 
-// // Proses verifikasi email dari link di email
-// Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
-//     $request->fulfill();
-//     return redirect('/pelanggan'); // Redirect ke dashboard setelah verifikasi
-// })->middleware(['auth', 'signed'])->name('verification.verify');
+Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
+    return app()->make(AuthController::class)->verificationVerify($request);
+})->middleware(['auth', 'signed'])->name('verification.verify');
 
-// // Kirim ulang email verifikasi
-// Route::post('/email/resend', function (Request $request) {
-//     if ($request->user()->hasVerifiedEmail()) {
-//         return redirect('/pelanggan');
-//     }
-
-//     $request->user()->sendEmailVerificationNotification();
-
-//     return back()->with('message', 'Email verifikasi telah dikirim ulang.');
-// })->middleware(['auth', 'throttle:6,1'])->name('verification.resend');
+Route::post('/email/verification-notification', function (Request $request) {
+    return app()->make(AuthController::class)->verificationResend($request);
+})->middleware(['auth', 'throttle:6,1'])->name('verification.send');
 
 
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
@@ -202,7 +193,7 @@ Route::middleware(['auth', 'level:admin,pemilik,bendahara'])->group(function () 
 });
 
 // ✅ Pelanggan hanya bisa melakukan reservasi
-Route::middleware(['auth', 'level:pelanggan'])->group(function () {
+Route::middleware(['auth', 'verified', 'level:pelanggan'])->group(function () {
     Route::get('/pelanggan', [PelangganController::class, 'index'])->name('pelanggan.index');
     // Route::get('/pelanggan/about', [PelangganController::class, 'about'])->name('pelanggan.about');
     Route::get('/pelanggan/paket-wisata', [PelangganController::class, 'paketWisata'])->name('pelanggan.paket_wisata');

@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Models\Pelanggan;
 use Illuminate\Support\Str;
 use Illuminate\Auth\Events\Registered; // Import Event
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
 
 class AuthController extends Controller
 {
@@ -39,12 +40,36 @@ class AuthController extends Controller
             'id_user' => $user->id, // Hubungkan dengan user yang baru dibuat
         ]);
 
-        // Auth::login($user);
+        Auth::login($user);
 
         // Kirim email verifikasi
         event(new Registered($user));
 
-        return redirect()->route('login')->with('pesan', 'Silakan cek email Anda untuk verifikasi akun.');
+        // return redirect()->route('login')->with('pesan', 'Silakan cek email Anda untuk verifikasi akun.');
+        return redirect()->route('verification.notice')->with('pesan', 'Akun berhasil dibuat. Silakan cek email Anda untuk verifikasi.');
+    }
+
+    // Menampilkan halaman notice verifikasi email
+    public function verificationNotice() {
+        return view('auth.verify', [
+            'title' => 'Verifikasi Email'
+        ]);
+    }
+
+    // Menangani verifikasi email
+    public function verificationVerify(EmailVerificationRequest $request) {
+        $request->fulfill();
+        return redirect()->route('login')->with('pesan', 'Email berhasil diverifikasi. Silakan login.');
+    }
+
+    // Mengirim ulang link verifikasi
+    public function verificationResend(Request $request) {
+        if ($request->user()->hasVerifiedEmail()) {
+            return redirect()->route('login')->with('pesan', 'Email sudah diverifikasi.');
+        }
+
+        $request->user()->sendEmailVerificationNotification();
+        return back()->with('pesan', 'Link verifikasi telah dikirim ulang ke email Anda.');
     }
 
     // Menampilkan halaman login
@@ -72,11 +97,17 @@ class AuthController extends Controller
         if (Auth::attempt($credentials, $remember)) {
             $user = Auth::user();
 
-            // Cek apakah email sudah diverifikasi
-            // if (!$user->email_verified_at) {
-            //     Auth::logout();
-            //     return back()->with('error', 'Akun belum diverifikasi! Silakan cek email Anda.');
-            // }
+            // Cek apakah user adalah pelanggan dan perlu verifikasi email
+            if ($user->level === 'pelanggan' && !$request->user()->hasVerifiedEmail()) {
+                // Pastikan $user tidak null sebelum mengirim notifikasi
+                if ($user) {
+                    $request->user()->sendEmailVerificationNotification();
+                }
+                Auth::logout();
+                return back()->with('error', 'Akun belum diverifikasi! Kami telah mengirim ulang link verifikasi ke email Anda. Silakan cek email Anda (termasuk folder spam).')
+                            ->with('resend_verification', true)
+                            ->with('email', $user->email);
+            }
 
             if ($user->level === 'admin') {
                 return redirect()->route('admin.index')->with('pesan', 'Selamat datang, Admin ' . $user->karyawan->nama_karyawan . '!');
