@@ -29,7 +29,7 @@
                                  width="200" height="200"
                                  alt="Foto Profil">
                         @else
-                            <img src="{{ asset('front-end/images/default-profile.png') }}"
+                            <img src="{{ asset('back-end/assets/avatars/default.png') }}"
                                  class="rounded-circle mb-3"
                                  width="200" height="200"
                                  alt="Foto Profil Default">

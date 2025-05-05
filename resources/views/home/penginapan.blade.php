@@ -5,7 +5,7 @@
     @include('fe.navbar')
 @endsection
 @section('content')
-<div class="hero-wrap js-fullheight" style="background-image: url('{{ asset('front-end/images/lsp/wisata/hutan bambu/panglipuran-bamboo-forest.jpg') }}');">
+<div class="hero-wrap js-fullheight" style="background-image: url('{{ asset('front-end/images/lsp/Penginapan/villa/604391307.jpg') }}');">
     <div class="overlay"></div>
     <div class="container">
       <div class="row no-gutters slider-text js-fullheight align-items-center justify-content-center" data-scrollax-parent="true">

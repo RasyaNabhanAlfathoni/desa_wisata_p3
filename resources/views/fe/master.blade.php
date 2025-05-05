@@ -52,6 +52,10 @@
     {{-- Font Awesome --}}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 
+    {{-- Datepicker ID--}}
+    <!-- Flatpickr CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.13/flatpickr.min.css">
+
 
   </head>
   <body id="body">
@@ -148,6 +152,10 @@
   {{-- Alert --}}
   <script src="https://lipis.github.io/bootstrap-sweetalert/dist/sweetalert.js"></script>
   <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+  <!-- Flatpickr CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.13/flatpickr.min.css">
+    <!-- Flatpickr JS -->
 
   <!-- sebelum </body> Swiper -->
     <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>

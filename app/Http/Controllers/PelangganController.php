@@ -15,6 +15,7 @@ use Carbon\Carbon;
 use App\Models\Reservasi;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class PelangganController extends Controller
 {
@@ -173,6 +174,12 @@ class PelangganController extends Controller
     // Di dalam controller Anda
     public function reservasiSaya()
     {
+        // Batalkan reservasi yang sudah expired
+        Reservasi::where('status_reservasi_wisata', 'pesan')
+        ->whereNull('file_bukti_tf')
+        ->where('created_at', '<=', Carbon::now()->subDay())
+        ->update(['status_reservasi_wisata' => 'dibatalkan']);
+
         $user = auth()->user();
         $pelanggan = $user->pelanggan;
 
@@ -238,6 +245,58 @@ class PelangganController extends Controller
         } catch (\Exception $e) {
             return redirect()->route('pelanggan.reservasiku')
                 ->with('error', 'Gagal membatalkan reservasi: ' . $e->getMessage());
+        }
+    }
+
+    public function updateBuktiTransfer(Request $request, $id)
+    {
+        $reservasi = Reservasi::findOrFail($id);
+        $pelanggan = Pelanggan::where('id_user', auth()->id())->firstOrFail();
+
+        // Pastikan reservasi milik pelanggan yang login
+        if ($reservasi->id_pelanggan != $pelanggan->id) {
+            return redirect()->route('pelanggan.reservasiku')
+                ->with('error', 'Anda tidak memiliki akses ke reservasi ini.');
+        }
+
+        // Hanya bisa update bukti jika status masih 'pesan'
+        if ($reservasi->status_reservasi_wisata != 'pesan') {
+            return redirect()->route('pelanggan.paket-wisata.reservasi.detail', $reservasi->id)
+                ->with('error', 'Bukti transfer tidak dapat diubah karena status reservasi sudah ' . $reservasi->status_reservasi_wisata);
+        }
+
+        $request->validate([
+            'file_bukti_tf' => 'required|file|mimes:jpeg,png,jpg,pdf|max:3072',
+        ]);
+
+        try {
+            // Process file upload
+            if ($request->hasFile('file_bukti_tf')) {
+                // Hapus file lama jika ada
+                if ($reservasi->file_bukti_tf && Storage::disk('public')->exists($reservasi->file_bukti_tf)) {
+                    Storage::disk('public')->delete($reservasi->file_bukti_tf);
+                }
+
+                $file = $request->file('file_bukti_tf');
+                $fileName = time() . '_' . $file->getClientOriginalName();
+                $filePath = $file->storeAs('Reservasi', $fileName, 'public');
+
+                // Update bukti transfer
+                $reservasi->file_bukti_tf = $filePath;
+                $reservasi->save();
+
+                return redirect()->route('pelanggan.paket-wisata.reservasi.detail', $reservasi->id)
+                    ->with('pesan', 'Bukti transfer berhasil diperbarui.');
+            }
+
+            return redirect()->back()
+                ->with('error', 'Terjadi kesalahan saat mengunggah bukti pembayaran.')
+                ->withInput();
+
+        } catch (\Exception $e) {
+            return redirect()->back()
+                ->with('error', 'Terjadi kesalahan saat memperbarui bukti transfer: ' . $e->getMessage())
+                ->withInput();
         }
     }
 

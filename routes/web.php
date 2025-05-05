@@ -212,6 +212,7 @@ Route::middleware(['auth', 'verified', 'level:pelanggan'])->group(function () {
     Route::get('/pelanggan/reservasiku', [PelangganController::class, 'reservasiSaya'])->name('pelanggan.reservasiku');
     Route::get('/pelanggan/reservasiku/detail/{id}', [PelangganController::class, 'detailReservasi'])->name('pelanggan.paket-wisata.reservasi.detail');
     Route::delete('/pelanggan/reservasiku/batal/{id}', [PelangganController::class, 'batalkanReservasi'])->name('pelanggan.paket-wisata.reservasi.batal');
+    Route::post('/pelanggan/reservasiku/update-bukti/{id}', [PelangganController::class, 'updateBuktiTransfer'])->name('pelanggan.paket-wisata.update-bukti');
 
     Route::get('/pelanggan/notifikasi', [PelangganController::class, 'notifikasi'])->name('pelanggan.notifikasi');
 

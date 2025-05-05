@@ -73,7 +73,7 @@
                 @foreach($paketWisatas as $paket)
                 <div class="col-md-4 ftco-animate">
                     <div class="destination">
-                        <a href="#" class="img img-2 d-flex justify-content-center align-items-center"
+                        <a href="{{ route('paket-wisata.detail', $paket->id) }}" class="img img-2 d-flex justify-content-center align-items-center"
                            style="background-image: url('{{ asset('Storage/' . $paket->foto1) }}');">
                             <div class="icon d-flex justify-content-center align-items-center">
                                 <span class="icon-search2"></span>
@@ -82,7 +82,7 @@
                         <div class="text p-3">
                             <div class="d-flex">
                                 <div class="one">
-                                    <h3><a href="#">{{$paket->nama_paket}}</a></h3>
+                                    <h3><a href="{{ route('paket-wisata.detail', $paket->id) }}">{{$paket->nama_paket}}</a></h3>
                                          <span class="price text-info font-weight-bold h5">Rp. {{ number_format($paket->harga_per_pack, 0, ',', '.') }}</span>
 
                                 </div>
@@ -103,11 +103,20 @@
             </div>
             <div class="row mt-5">
                 <div class="col text-center">
-                  <div class="block-27">
-                    {{ $paketWisatas->links() }}
-                  </div>
+                    <div class="d-flex justify-content-center">
+                        {{ $paketWisatas->links('pagination::bootstrap-4') }}
+                    </div>
+                    <style>
+                        .pagination .page-item.active .page-link {
+                            background-color: #dc3545;
+                            border-color: #dc3545;
+                        }
+                        .pagination .page-link {
+                            color: #dc3545;
+                        }
+                    </style>
                 </div>
-              </div>
+            </div>
         </div> <!-- .col-md-8 -->
       </div>
     </div>

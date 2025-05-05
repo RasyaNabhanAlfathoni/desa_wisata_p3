@@ -205,7 +205,7 @@
                                         <label for="file_bukti_tf" class="font-weight-bold">Bukti Transfer</label>
                                         <div class="custom-file">
                                             <input type="file" class="custom-file-input @error('file_bukti_tf') is-invalid @enderror" id="file_bukti_tf" name="file_bukti_tf" required>
-                                            <label class="custom-file-label" for="file_bukti_tf">Pilih file...</label>
+                                            <label class="custom-file-label" for="file_bukti_tf" id="file_bukti_tf_label">Pilih file...</label>
                                             @error('file_bukti_tf')
                                                 <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
@@ -275,12 +275,27 @@
 @endpush
 
 @push('scripts')
-<script>
+{{-- <script>
     // Menampilkan nama file yang dipilih
     document.querySelector('.custom-file-input').addEventListener('change', function(e) {
         var fileName = document.getElementById("file_bukti_tf").files[0].name;
         var nextSibling = e.target.nextElementSibling;
         nextSibling.innerText = fileName;
+    });
+</script> --}}
+
+<script>
+    // Menampilkan nama file yang dipilih
+    document.getElementById('file_bukti_tf').addEventListener('change', function(e) {
+        // Ambil nama file
+        var fileName = e.target.files[0] ? e.target.files[0].name : "Pilih file...";
+
+        // Update label - gunakan selector yang tepat
+        var label = this.nextElementSibling; // Ambil elemen label yang bersebelahan
+        label.textContent = fileName;
+
+        // Atau jika ingin menggunakan ID:
+        document.getElementById('file_bukti_tf_label').textContent = fileName;
     });
 </script>
 @endpush

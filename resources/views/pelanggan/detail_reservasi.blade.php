@@ -208,6 +208,15 @@
                                                        class="btn btn-sm btn-info">
                                                         <i class="icon-download mr-1"></i> Lihat Bukti Transfer
                                                     </a>
+
+                                                    @if($reservasi->status_reservasi_wisata == 'pesan')
+                                                        <button type="button"
+                                                                class="btn btn-sm btn-warning mt-3"
+                                                                data-toggle="modal"
+                                                                data-target="#gantiBuktiModal">
+                                                            <i class="icon-refresh mr-1"></i> Ganti Bukti Transfer
+                                                        </button>
+                                                    @endif
                                                 </div>
                                             @else
                                                 <div class="alert alert-warning">
@@ -221,6 +230,36 @@
                                                     </a>
                                                 </div>
                                             @endif
+                                        </div>
+
+                                        <!-- Modal Ganti Bukti Transfer -->
+                                        <div class="modal fade" id="gantiBuktiModal" tabindex="-1" role="dialog" aria-labelledby="gantiBuktiModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="gantiBuktiModalLabel">Ganti Bukti Transfer</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <form action="{{ route('pelanggan.paket-wisata.update-bukti', $reservasi->id) }}" method="POST" enctype="multipart/form-data">
+                                                        @csrf
+                                                        <div class="modal-body">
+                                                            <div class="form-group">
+                                                                <label for="file_bukti_tf">Upload Bukti Transfer Baru</label>
+                                                                <input type="file" class="form-control-file" id="file_bukti_tf" name="file_bukti_tf" required>
+                                                                <small class="form-text text-muted">
+                                                                    Format: JPEG, PNG, JPG, PDF (Maksimal 3MB)
+                                                                </small>
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                                                            <button type="submit" class="btn btn-primary">Simpan</button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
                                         </div>
 
                                         <!-- Tombol Aksi -->
