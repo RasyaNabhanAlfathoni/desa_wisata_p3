@@ -33,66 +33,55 @@
   </head>
   <body class="light " id="body" >
     <div class="wrapper vh-100 d-flex align-items-center justify-content-center bg-dark bg-opacity-50"
-     style="background: url('{{asset('front-end/images/bg2.jpg')}}') center/cover no-repeat;">
-        <div class="col-lg-4 col-md-6 col-10 " >
-          <div class="card shadow-lg border-0 p-4 text-center" style="background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); border-radius: 15px;">
-            <div class="card-body">
-              <form action="{{route('login')}}" method="POST" id="frmLogin">
-                @csrf
-                <img src="{{ asset('back-end/assets/images/pesona_desa.png') }}"
-                alt="Logo Pesona Desa"
-                class="navbar-brand-img brand-md mb-3">
-                <h1 class="h3 mb-3">{{$title}}</h1>
-                <div class="form-group">
-                  <label for="inputEmail" class="sr-only">Alamat Email</label>
-                  <input type="email" id="inputEmail" name="email" class="form-control form-control-lg" placeholder="Alamat Email" required autofocus>
-                </div>
-                <div class="form-group">
-                  <label for="inputPassword" class="sr-only">Password</label>
-                  <div class="input-group">
-                  <input type="password" id="inputPassword" name="password" class="form-control form-control-lg" placeholder="Password" required>
+ style="background: url('{{asset('front-end/images/bg2.jpg')}}') center/cover no-repeat;">
+    <div class="col-lg-4 col-md-6 col-10">
+      <div class="card shadow-lg border-0 p-4 text-center" style="background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); border-radius: 15px;">
+        <div class="card-body">
+          <form action="{{route('password.update')}}" method="POST">
+            @csrf
+            <input type="hidden" name="token" value="{{ $token }}">
+            <img src="{{ asset('back-end/assets/images/pesona_desa.png') }}"
+            alt="Logo Pesona Desa"
+            class="navbar-brand-img brand-md mb-3">
+            <h1 class="h3 mb-3">Reset Password</h1>
+            <div class="form-group">
+              <label for="email" class="sr-only">Alamat Email</label>
+              <input type="email" id="email" name="email" class="form-control form-control-lg" placeholder="Alamat Email" value="{{ $email }}" required readonly>
+            </div>
+            <div class="form-group mt-3">
+              <label for="password" class="sr-only">Password Baru</label>
+              <div class="input-group">
+                <input type="password" id="password" name="password" class="form-control form-control-lg" placeholder="Masukkan Kata Password" required>
                     <div class="input-group-append">
                         <span class="input-group-text" onclick="togglePassword()" style="cursor: pointer;">
                             <i class="fa fa-eye-slash" id="togglePasswordIcon"></i>
                         </span>
-                        </div>
-                </div>
-                </div>
-                <div class="form-check d-flex align-items-center justify-content-start mb-3">
-                    <input type="checkbox" name="remember" class="form-check-input" id="rememberMe">
-                    <label class="form-check-label text-muted ms-2 mt-1" for="rememberMe"> Ingat Saya! </label>
-                </div>
-                <button class="btn btn-lg btn-primary btn-block w-100" type="submit">Login</button>
-                <p class="mt-3 text-center h6">
-                  Belum Memiliki Akun? <a href="{{ route('register') }}" class="text-success fw-bold">Daftar Disini</a>
-                  <hr>
-                    <a href="{{ route('password.request') }}" class="text-warning fw-bold">Lupa Password?</a>
-                </p>
-                <p class="mt-4 mb-2 text-center">© {{ date('Y') }}</p>
-              </form>
+                    </div>
+              </div>
             </div>
-            @if (session('resend_verification'))
-            <div class="alert alert-info">
-                <p>{{ session('error') }}</p>
-                <form action="{{ route('verification.send') }}" method="POST" class="mt-2">
-                    @csrf
-                    <input type="hidden" name="email" value="{{ session('email') }}">
-                    <button type="submit" class="btn btn-sm btn-primary">
-                        <i class="fas fa-paper-plane"></i> Kirim Ulang Link Verifikasi
-                    </button>
-                </form>
-                <p class="mt-2 mb-0">Sudah verifikasi? <a href="{{ route('login') }}">Coba login kembali</a></p>
+            <div class="form-group mt-3">
+              <label for="password_confirmation" class="sr-only">Konfirmasi Password</label>
+              <div class="input-group">
+                <input type="password" id="password_confirmation" name="password_confirmation" class="form-control form-control-lg" placeholder="Konfirmasi Password" required>
+                    <div class="input-group-append">
+                        <span class="input-group-text" onclick="togglePassword2()" style="cursor: pointer;">
+                            <i class="fa fa-eye-slash" id="togglePasswordIcon2"></i>
+                        </span>
+                    </div>
+              </div>
             </div>
-            @endif
-          </div>
+            <button class="btn btn-lg btn-primary btn-block w-100 mt-3" type="submit">Reset Password</button>
+          </form>
         </div>
       </div>
+    </div>
+  </div>
 
     <div class="invisible" id="pesan">@isset($pesan) {{$pesan}} @endisset</div>
 
     <script>
         function togglePassword() {
-            let passwordField = document.getElementById("inputPassword");
+            let passwordField = document.getElementById("password");
             let icon = document.getElementById("togglePasswordIcon");
             if (passwordField.type === "password") {
                 passwordField.type = "text";
@@ -102,6 +91,22 @@
                 passwordField.type = "password";
                 icon.classList.remove("fa-eye");
                 icon.classList.add("fa-eye-slash");
+            }
+        }
+    </script>
+
+    <script>
+        function togglePassword2() {
+            let passwordField2 = document.getElementById("password_confirmation");
+            let icon2 = document.getElementById("togglePasswordIcon2");
+            if (passwordField2.type === "password") {
+                passwordField2.type = "text";
+                icon2.classList.remove("fa-eye-slash");
+                icon2.classList.add("fa-eye");
+            } else {
+                passwordField2.type = "password";
+                icon2.classList.remove("fa-eye");
+                icon2.classList.add("fa-eye-slash");
             }
         }
     </script>

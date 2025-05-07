@@ -10,6 +10,8 @@ use App\Models\Pelanggan;
 use Illuminate\Support\Str;
 use Illuminate\Auth\Events\Registered; // Import Event
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Facades\DB;
 
 class AuthController extends Controller
 {
@@ -46,7 +48,7 @@ class AuthController extends Controller
         event(new Registered($user));
 
         // return redirect()->route('login')->with('pesan', 'Silakan cek email Anda untuk verifikasi akun.');
-        return redirect()->route('verification.notice')->with('pesan', 'Akun berhasil dibuat. Silakan cek email Anda untuk verifikasi.');
+        return redirect()->route('verification.notice')->with('pesan', 'Akun berhasil dibuat. Silakan cek email Anda untuk verifikasi (termasuk folder spam).');
     }
 
     // Menampilkan halaman notice verifikasi email
@@ -78,7 +80,7 @@ class AuthController extends Controller
         }
 
         $request->user()->sendEmailVerificationNotification();
-        return back()->with('pesan', 'Link verifikasi telah dikirim ulang ke email Anda.');
+        return back()->with('pesan', 'Kami telah mengirim ulang link verifikasi ke email Anda. Silakan cek email Anda (termasuk folder spam).');
     }
 
     // Menampilkan halaman login
@@ -143,6 +145,78 @@ class AuthController extends Controller
         }
 
         return back()->with('error', 'Email atau Password salah!');
+    }
+
+    // Menampilkan form lupa password
+    public function showForgotPasswordForm() {
+        return view('auth.forgot-password', [
+            'title' => 'Lupa Password'
+        ]);
+    }
+
+    // Mengirim link reset password
+    public function sendResetLinkEmail(Request $request) {
+        $request->validate(['email' => 'required|email']);
+
+        $user = User::where('email', $request->email)->first();
+
+        if (!$user) {
+            return back()->with('error', 'Email tidak ditemukan!');
+        }
+
+        // Cek jika user bukan pelanggan
+        if ($user->level !== 'pelanggan') {
+            return back()->with('error', 'Fitur lupa password hanya untuk pelanggan!');
+        }
+
+        $status = Password::sendResetLink(
+            $request->only('email')
+        );
+
+        return $status === Password::RESET_LINK_SENT
+            ? back()->with('pesan', 'Link reset password telah dikirim ke email Anda. Silakan cek email Anda (termasuk folder spam)!')
+            : back()->with('error', 'Gagal mengirim link reset password!');
+    }
+
+    // Menampilkan form reset password
+    public function showResetPasswordForm(Request $request, $token) {
+        return view('auth.reset-password', [
+            'title' => 'Reset Password',
+            'token' => $token,
+            'email' => $request->email
+        ]);
+    }
+
+    // Proses reset password
+    public function resetPassword(Request $request) {
+        $user = User::where('email', $request->email)->first();
+
+        // Validasi tambahan untuk pelanggan
+        if (!$user || $user->level !== 'pelanggan') {
+            return back()->with('error', 'Reset password hanya untuk pelanggan!');
+        }
+
+        $status = Password::reset(
+            $request->only('email', 'password', 'password_confirmation', 'token'),
+            function ($user, $password) {
+                $user->forceFill([
+                    'password' => Hash::make($password)
+                ])->save();
+
+                // Optional: Hapus token yang sudah digunakan
+                DB::table('password_reset_tokens')
+                    ->where('email', $user->email)
+                    ->delete();
+            }
+        );
+
+        if ($status == Password::PASSWORD_RESET) {
+            return redirect()->route('login')->with('pesan', 'Password berhasil direset! Silakan login.');
+        } else {
+            return back()
+                ->withInput($request->only('email'))
+                ->withErrors(['email' => __($status)]);
+        }
     }
 
     // Menangani proses logout

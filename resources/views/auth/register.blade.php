@@ -76,9 +76,9 @@
             <!-- Step 3: Keamanan -->
             <div class="form-step d-none">
                 <div class="mb-3">
-                    <label for="password" class="form-label text-muted fs-5">Kata Sandi Baru</label>
+                    <label for="password" class="form-label text-muted fs-5">Kata Password</label>
                     <div class="input-group">
-                        <input type="password" id="Password" name="password" class="form-control form-control-lg" placeholder="Masukkan Kata Sandi" required>
+                        <input type="password" id="Password" name="password" class="form-control form-control-lg" placeholder="Masukkan Password" required>
                           <div class="input-group-append">
                               <span class="input-group-text" onclick="togglePassword()" style="cursor: pointer;">
                                   <i class="fa fa-eye-slash" id="togglePasswordIcon"></i>
@@ -87,9 +87,9 @@
                       </div>
                 </div>
                 <div class="mb-3">
-                    <label for="password_confirmation" class="form-label text-muted fs-5">Konfirmasi Kata Sandi</label>
+                    <label for="password_confirmation" class="form-label text-muted fs-5">Konfirmasi Password</label>
                     <div class="input-group">
-                        <input type="password" id="password_confirmation" name="password_confirmation" class="form-control form-control-lg" placeholder="Konfirmasi Kata Sandi" required>
+                        <input type="password" id="password_confirmation" name="password_confirmation" class="form-control form-control-lg" placeholder="Konfirmasi Password" required>
                           <div class="input-group-append">
                               <span class="input-group-text" onclick="togglePassword2()" style="cursor: pointer;">
                                   <i class="fa fa-eye-slash" id="togglePasswordIcon2"></i>
@@ -98,7 +98,7 @@
                       </div>
                 </div>
 
-                <p class="h6 text-warning">Note: Pastikan memiliki kata sandi yang kuat dan mudah diingat.</p>
+                <p class="h6 text-warning">Note: Pastikan memiliki password yang kuat dan mudah diingat.</p>
 
                 <button type="button" class="btn btn-secondary prev-step">Previous</button>
                 <button type="button" id="save" class="btn btn-info text-white"><i class="fe fe-save mr-1"></i> Register</button>
