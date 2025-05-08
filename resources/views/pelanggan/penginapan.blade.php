@@ -30,13 +30,27 @@
                       </div>
 
                       <div class="form-group">
-                        <input type="submit" value="Cari" class="btn btn-primary py-3 px-5">
+                        <button type="submit" class="btn btn-primary py-3 px-3 w-100">
+                            <i class="fas fa-search mr-2"></i> Cari Penginapan
+                        </button>
+                        @if(request()->has('nama_penginapan'))
+                            <a href="{{ url('pelanggan/penginapan') }}" class="btn btn-outline-secondary py-3 px-5 w-100 mt-2">
+                                Reset Pencarian
+                            </a>
+                        @endif
                       </div>
                     </div>
                   </form>
               </div>
           </div>
         <div class="col-lg-9">
+            @if($penginapans->isEmpty())
+                <div class="col-12">
+                    <div class="alert alert-warning">
+                        <i class="icon-info-circle"></i>Tidak ditemukan penginapan yang sesuai dengan kriteria pencarian Anda.
+                    </div>
+                </div>
+            @else
             <div class="row">
                 @foreach($penginapans as $penginapan)
                 <div class="col-md-4 ftco-animate">
@@ -66,6 +80,7 @@
                 </div>
                 @endforeach
             </div>
+            @endif
             <div class="row mt-5">
                 <div class="col text-center">
                     <div class="d-flex justify-content-center">

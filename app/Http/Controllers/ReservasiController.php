@@ -373,8 +373,8 @@ class ReservasiController extends Controller
     {
         $reservasi = Reservasi::findOrFail($id);
 
-        if ($reservasi->status_reservasi_wisata !== 'pesan') {
-            return redirect()->back()->with('error', 'Pembatalan hanya bisa dilakukan saat status masih Pesan!');
+        if (!in_array($reservasi->status_reservasi_wisata, ['pesan', 'dibayar'])) {
+            return redirect()->back()->with('error', 'Pembatalan hanya bisa dilakukan saat status Pesan atau Dibayar!');
         }
 
         // Hapus file bukti jika ada

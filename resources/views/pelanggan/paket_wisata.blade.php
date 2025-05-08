@@ -63,7 +63,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label class="form-label">Rentang Harga</label>
+                            <label class="form-label">Rentang Harga (Rp)</label>
                             <div class="range-slider">
                                 <div class="d-flex align-items-center mb-2">
                                     <input type="number" name="harga_min" class="form-control form-control-sm"

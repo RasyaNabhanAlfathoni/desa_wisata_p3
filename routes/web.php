@@ -57,19 +57,33 @@ Route::middleware('guest')->group(function () {
     Route::post('/register', [AuthController::class, 'register']);
 });
 
+// Email Verification Routes
+Route::middleware(['auth'])->group(function () {
+    Route::get('/email/verify', function () {
+        return app()->make(AuthController::class)->verificationNotice();
+    })->name('verification.notice');
+
+    Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
+        return app()->make(AuthController::class)->verificationVerify($request);
+    })->middleware(['signed'])->name('verification.verify');
+
+    Route::post('/email/verification-notification', function (Request $request) {
+        return app()->make(AuthController::class)->verificationResend($request);
+    })->middleware(['throttle:6,1'])->name('verification.send');
+});
 
 // Email Verification Routes
-Route::get('/email/verify', function () {
-    return app()->make(AuthController::class)->verificationNotice();
-})->name('verification.notice');
+// Route::get('/email/verify', function () {
+//     return app()->make(AuthController::class)->verificationNotice();
+// })->name('verification.notice');
 
-Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
-    return app()->make(AuthController::class)->verificationVerify($request);
-})->middleware(['signed'])->name('verification.verify');
+// Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
+//     return app()->make(AuthController::class)->verificationVerify($request);
+// })->middleware(['signed'])->name('verification.verify');
 
-Route::post('/email/verification-notification', function (Request $request) {
-    return app()->make(AuthController::class)->verificationResend($request);
-})->middleware(['throttle:6,1'])->name('verification.send');
+// Route::post('/email/verification-notification', function (Request $request) {
+//     return app()->make(AuthController::class)->verificationResend($request);
+// })->middleware(['throttle:6,1'])->name('verification.send');
 
 // Password Reset Routes
 Route::get('/forgot-password', [AuthController::class, 'showForgotPasswordForm'])->name('password.request');

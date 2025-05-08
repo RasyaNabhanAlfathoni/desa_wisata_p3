@@ -26,49 +26,79 @@
                   <h3 class="mb-4">Temukan Paket Wisata</h3>
                   <form action="{{ url('paket-wisata') }}" method="GET">
                     <div class="fields">
-                      <div class="form-group">
-                        <div class="select-wrap one-third">
-                          <div class="icon"><span class="ion-ios-arrow-down"></span></div>
-                          <select name="paket_id" class="form-control">
-                            <option value="">Pilih Paket Wisata</option>
-                            @foreach($paketWisatasAll as $paket)
-                              <option value="{{$paket->id}}" {{ request('paket_id') == $paket->id ? 'selected' : '' }}>
-                                {{$paket->nama_paket}}
-                              </option>
-                            @endforeach
-                          </select>
+                        <div class="form-group">
+                            <label for="paket_id" class="form-label">Jenis Paket</label>
+                            <div class="select-wrap one-third">
+                                <div class="icon"><span class="ion-ios-arrow-down"></span></div>
+                                <select name="paket_id" id="paket_id" class="form-control">
+                                    <option value="">Semua Paket Wisata</option>
+                                    @foreach($paketWisatasAll as $paket)
+                                        <option value="{{$paket->id}}" {{ request('paket_id') == $paket->id ? 'selected' : '' }}>
+                                            {{$paket->nama_paket}} (Rp {{ number_format($paket->harga_per_pack, 0, ',', '.') }})
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
                         </div>
-                      </div>
 
-                      <div class="form-group mt-3">
-                        <input type="number" name="jumlah_peserta" class="form-control" placeholder="Jumlah Peserta" value="{{ request('jumlah_peserta') }}">
-                      </div>
-
-                      <div class="form-group">
-                        <input type="text" name="date_from" class="form-control" placeholder="Date from" value="{{ request('date_from') }}">
-                      </div>
-
-                      <div class="form-group">
-                        <input type="text" name="date_to" class="form-control" placeholder="Date to" value="{{ request('date_to') }}">
-                      </div>
-
-                      <div class="form-group">
-                        <div class="range-slider">
-                          <span>
-                            <input type="number" name="harga_min" value="{{ request('harga_min', 25000) }}" min="0" max="120000"/> -
-                            <input type="number" name="harga_max" value="{{ request('harga_max', 50000) }}" min="0" max="120000"/>
-                          </span>
+                        <div class="form-group mt-3">
+                            <label for="jumlah_peserta" class="form-label">Jumlah Peserta</label>
+                            <input type="number" name="jumlah_peserta" id="jumlah_peserta" class="form-control"
+                                   placeholder="Contoh: 5" min="1" value="{{ request('jumlah_peserta') }}">
+                            <small class="text-muted">Paket dengan kapasitas tersedia akan ditampilkan</small>
                         </div>
-                      </div>
 
-                      <div class="form-group">
-                        <input type="submit" value="Search" class="btn btn-primary py-3 px-5">
-                      </div>
+                        <div class="form-group">
+                            <label for="date_from" class="form-label">Tanggal Mulai</label>
+                            <input type="date" name="date_from" id="date_from" class="form-control datepicker"
+                                   placeholder="Pilih tanggal" value="{{ request('date_from') }}"
+                                   min="{{ date('Y-m-d') }}">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="date_to" class="form-label">Tanggal Akhir</label>
+                            <input type="date" name="date_to" id="date_to" class="form-control datepicker"
+                                   placeholder="Pilih tanggal" value="{{ request('date_to') }}"
+                                   min="{{ date('Y-m-d') }}">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Rentang Harga (Rp)</label>
+                            <div class="range-slider">
+                                <div class="d-flex align-items-center mb-2">
+                                    <input type="number" name="harga_min" class="form-control form-control-sm"
+                                           value="{{ request('harga_min', 250000) }}" min="0" placeholder="Min">
+                                    <span class="mx-2">-</span>
+                                    <input type="number" name="harga_max" class="form-control form-control-sm"
+                                           value="{{ request('harga_max', 500000) }}" min="0" placeholder="Max">
+                                </div>
+                                <div id="harga-slider" class="slider mb-3"></div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary py-3 px-5 w-100">
+                                <i class="fas fa-search mr-2"></i> Cari Paket
+                            </button>
+                            @if(request()->has('paket_id') || request()->has('jumlah_peserta') ||
+                               request()->has('date_from') || request()->has('harga_min'))
+                                <a href="{{ url('paket-wisata') }}" class="btn btn-outline-secondary py-3 px-5 w-100 mt-2">
+                                    Reset Pencarian
+                                </a>
+                            @endif
+                        </div>
                     </div>
-                  </form>
+                </form>
               </div>
         </div>
         <div class="col-lg-9">
+            @if($paketWisatas->isEmpty())
+                <div class="col-12">
+                    <div class="alert alert-warning">
+                        <i class="icon-info-circle"></i>Tidak ditemukan paket wisata yang sesuai dengan kriteria pencarian Anda.
+                    </div>
+                </div>
+            @else
             <div class="row">
                 @foreach($paketWisatas as $paket)
                 <div class="col-md-4 ftco-animate">
@@ -101,6 +131,7 @@
                 </div>
                 @endforeach
             </div>
+            @endif
             <div class="row mt-5">
                 <div class="col text-center">
                     <div class="d-flex justify-content-center">

@@ -125,7 +125,9 @@
                                             <i class="fe fe-check-circle"></i> Konfirmasi
                                         </button>
                                     </form>
+                                @endif
 
+                                @if(in_array($reservasi->status_reservasi_wisata, ['pesan', 'dibayar']))
                                     <form action="{{ route('kelola_reservasi.batal', $reservasi->id) }}" method="POST" class="d-inline">
                                         @csrf
                                         @method('DELETE')

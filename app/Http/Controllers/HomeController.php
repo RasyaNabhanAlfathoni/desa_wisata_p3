@@ -62,42 +62,43 @@ class HomeController extends Controller
     {
         $query = PaketWisata::query();
 
-        // Validasi tanggal dari form
-        $start = $request->date_from ? Carbon::parse($request->date_from) : null;
-        $end = $request->date_to ? Carbon::parse($request->date_to) : null;
-
-        if ($start && $end) {
-            $query->whereDoesntHave('reservasi', function ($q) use ($start, $end) {
-                $q->whereIn('status_reservasi_wisata', ['pesan', 'dibayar'])
-                  ->where(function ($subQuery) use ($start, $end) {
-                      $subQuery
-                          ->whereBetween('tgl_reservasi_mulai', [$start, $end])
-                          ->orWhereBetween('tgl_reservasi_akhir', [$start, $end])
-                          ->orWhere(function ($q2) use ($start, $end) {
-                              $q2->where('tgl_reservasi_mulai', '<=', $start)
-                                 ->where('tgl_reservasi_akhir', '>=', $end);
-                          });
-                  });
-            });
-        }
-
-        // Filter berdasarkan paket_id
-        if ($request->filled('paket_id')) {
+        // Filter berdasarkan nama paket
+        if ($request->has('paket_id') && $request->paket_id != '') {
             $query->where('id', $request->paket_id);
         }
 
-        // Filter berdasarkan jumlah peserta
-        if ($request->filled('jumlah_peserta')) {
-            $query->where('jumlah_peserta', '<=', $request->jumlah_peserta);
+        // Filter berdasarkan jumlah peserta (minimal kapasitas)
+        if ($request->has('jumlah_peserta') && $request->jumlah_peserta != '') {
+            $query->where('kuota_peserta', '>=', $request->jumlah_peserta);
         }
 
-        // Filter berdasarkan harga
-        if ($request->filled('harga_min')) {
+        // Filter berdasarkan rentang harga
+        if ($request->has('harga_min') && $request->harga_min != '') {
             $query->where('harga_per_pack', '>=', $request->harga_min);
         }
 
-        if ($request->filled('harga_max')) {
+        if ($request->has('harga_max') && $request->harga_max != '') {
             $query->where('harga_per_pack', '<=', $request->harga_max);
+        }
+
+        // Filter berdasarkan tanggal ketersediaan
+        if ($request->has('date_from') && $request->date_from != '' &&
+            $request->has('date_to') && $request->date_to != '') {
+
+            $dateFrom = $request->date_from;
+            $dateTo = $request->date_to;
+
+            $query->whereDoesntHave('reservasi', function($q) use ($dateFrom, $dateTo) {
+                $q->where(function($q) use ($dateFrom, $dateTo) {
+                    $q->whereBetween('tgl_reservasi_mulai', [$dateFrom, $dateTo])
+                    ->orWhereBetween('tgl_reservasi_akhir', [$dateFrom, $dateTo])
+                    ->orWhere(function($q) use ($dateFrom, $dateTo) {
+                        $q->where('tgl_reservasi_mulai', '<=', $dateFrom)
+                            ->where('tgl_reservasi_akhir', '>=', $dateTo);
+                    });
+                })
+                ->whereIn('status_reservasi_wisata', ['pesan', 'dibayar']);
+            });
         }
 
         // Ambil hasil akhir dengan pagination

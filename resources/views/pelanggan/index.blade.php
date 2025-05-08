@@ -40,7 +40,7 @@
                 </div>
                 <div class="media-body p-2 mt-2">
                 <h3 class="heading mb-3">Reservasi Mudah</h3>
-                <p>Booking penginapan, aktivitas, dan paket wisata desa hanya dalam beberapa klik.</p>
+                <p>Booking paket wisata desa hanya dalam beberapa klik.</p>
                 </div>
             </div>
             </div>

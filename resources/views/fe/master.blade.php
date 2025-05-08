@@ -77,11 +77,11 @@
             <div class="ftco-footer-widget mb-4">
                 <h2 class="ftco-heading-2">pesonaDesa.</h2>
                 <p>Platform reservasi digital untuk menjelajahi keindahan dan budaya desa wisata. Temukan pengalaman unik, aktivitas lokal, dan keramahan masyarakat dalam satu aplikasi.</p>
-                <ul class="ftco-footer-social list-unstyled float-md-left float-lft mt-5">
+                {{-- <ul class="ftco-footer-social list-unstyled float-md-left float-lft mt-5">
                   <li class="ftco-animate"><a href="#"><span class="icon-youtube"></span></a></li>
                   <li class="ftco-animate"><a href="#"><span class="icon-facebook"></span></a></li>
                   <li class="ftco-animate"><a href="#"><span class="icon-instagram"></span></a></li>
-                </ul>
+                </ul> --}}
               </div>
         </div>
         <div class="col-md">
@@ -104,8 +104,21 @@
            <div class="ftco-footer-widget mb-4">
             <h2 class="ftco-heading-2">Hubungi Kami</h2>
             <ul class="list-unstyled">
-                <li><a href="#"><span class="icon icon-phone mr-2"></span><span class="text">+62 392 3929 210</span></a></li>
-                <li><a href="#"><span class="icon icon-envelope mr-2"></span><span class="text">pemilik@pesonaDesa.co.id</span></a></li>
+                @php
+                // Ambil data pemilik pertama yang valid
+                $pemilik = App\Models\User::where('level', 'pemilik')
+                            ->where('aktif', true)
+                            ->with('karyawan')
+                            ->first();
+                @endphp
+
+                @if($pemilik && $pemilik->karyawan)
+                    <li><a><span class="icon icon-phone mr-2"></span><span class="text">{{ $pemilik->karyawan->no_hp ?? 'Nomor tidak tersedia' }}</span></a></li>
+                    <li><a><span class="icon icon-envelope mr-2"></span><span class="text">{{ $pemilik->email }}</span></a></li>
+                @else
+                    <li><a><span class="icon icon-phone mr-2"></span><span class="text">+62 392 3929 210</span></a></li>
+                    <li><a><span class="icon icon-envelope mr-2"></span><span class="text">pemilik@pesonaDesa.co.id</span></a></li>
+                @endif
             </ul>
           </div>
         </div>

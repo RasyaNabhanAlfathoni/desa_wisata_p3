@@ -101,7 +101,7 @@
                                                             $statusClass = 'badge-danger';
                                                             break;
                                                         case 'selesai':
-                                                            $statusClass = 'badge-secondary';
+                                                            $statusClass = 'badge-success';
                                                             break;
                                                         default:
                                                             $statusClass = 'badge-warning';

@@ -53,4 +53,15 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasOne(Karyawan::class, 'id_user');
     }
+
+    public function hasVerifiedEmail()
+    {
+        // Jika user adalah pelanggan, perlu verifikasi email
+        if ($this->level === 'pelanggan') {
+            return !is_null($this->email_verified_at);
+        }
+
+        // Untuk admin/pemilik/bendahara, dianggap sudah terverifikasi
+        return true;
+    }
 }

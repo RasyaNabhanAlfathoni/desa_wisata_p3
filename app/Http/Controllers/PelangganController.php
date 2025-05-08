@@ -87,7 +87,7 @@ class PelangganController extends Controller
 
         // Filter berdasarkan jumlah peserta (minimal kapasitas)
         if ($request->has('jumlah_peserta') && $request->jumlah_peserta != '') {
-            $query->where('jumlah_peserta', '>=', $request->jumlah_peserta);
+            $query->where('kuota_peserta', '>=', $request->jumlah_peserta);
         }
 
         // Filter berdasarkan rentang harga

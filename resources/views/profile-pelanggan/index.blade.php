@@ -112,11 +112,11 @@
                                         <td>{{ $reservasi->paket->nama_paket }}</td>
                                         <td>{{ \Carbon\Carbon::parse($reservasi->tgl_reservasi_mulai)->format('d M Y') }}</td>
                                         <td>
-                                            @if($reservasi->status == 'selesai')
+                                            @if($reservasi->status_reservasi_wisata == 'selesai')
                                                 <span class="badge badge-success">Selesai</span>
-                                            @elseif($reservasi->status == 'dibatalkan')
+                                            @elseif($reservasi->status_reservasi_wisata == 'dibatalkan')
                                                 <span class="badge badge-danger">Dibatalkan</span>
-                                            @elseif($reservasi->status == 'dibayar')
+                                            @elseif($reservasi->status_reservasi_wisata == 'dibayar')
                                                 <span class="badge badge-primary">Dibayar</span>
                                             @else
                                                 <span class="badge badge-warning">Pesan</span>

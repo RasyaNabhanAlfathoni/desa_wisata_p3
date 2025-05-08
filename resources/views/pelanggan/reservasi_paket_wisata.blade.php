@@ -225,13 +225,10 @@
                 <h6>2. Pembatalan</h6>
                 <p>Pembatalan yang dilakukan lebih dari 7 hari sebelum tanggal keberangkatan akan dikenakan biaya administrasi 10% dari total pembayaran. Pembatalan dalam waktu kurang dari 7 hari tidak dapat dilakukan refund.</p>
 
-                <h6>3. Perubahan Jadwal</h6>
-                <p>Perubahan jadwal dapat dilakukan maksimal 3 hari sebelum tanggal keberangkatan dengan syarat ketersediaan kuota.</p>
+                <h6>3. Ketentuan Diskon</h6>
+                <p>Diskon hanya berlaku jika jumlah peserta telah sama atau melebihi kriteria jumlah peserta diskon.</p>
 
-                <h6>4. Ketentuan Diskon</h6>
-                <p>Diskon hanya berlaku untuk pembayaran penuh dan tidak dapat digabungkan dengan promo lainnya.</p>
-
-                <h6>5. Dokumen Perjalanan</h6>
+                <h6>4. Dokumen Perjalanan</h6>
                 <p>Peserta wajib membawa dokumen identitas asli selama perjalanan.</p>
             </div>
             <div class="modal-footer">

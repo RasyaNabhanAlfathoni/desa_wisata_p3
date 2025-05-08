@@ -195,11 +195,11 @@
                                                         @if($reservasi->status_reservasi_wisata == 'pesan')
                                                             <span class="badge badge-warning">Sedang Proses</span>
                                                         @elseif($reservasi->status_reservasi_wisata == 'dibayar')
-                                                            <span class="badge badge-success">Sudah Dikonfirmasi</span>
+                                                            <span class="badge badge-primary">Sudah Dikonfirmasi</span>
                                                         @elseif($reservasi->status_reservasi_wisata == 'dibatalkan')
                                                             <span class="badge badge-danger">Telah Dibatalkan</span>
                                                         @elseif($reservasi->status_reservasi_wisata == 'selesai')
-                                                            <span class="badge badge-secondary">Selesai</span>
+                                                            <span class="badge badge-success">Selesai</span>
                                                         @endif
                                                     </p>
                                                     <p><strong>Bukti Transfer:</strong></p>
