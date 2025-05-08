@@ -217,6 +217,8 @@
                                                 <span class="badge badge-primary text-white">Dibayar</span>
                                             @elseif ($reservasi->status_reservasi_wisata === 'selesai')
                                                 <span class="badge badge-success text-white">Selesai</span>
+                                            @elseif ($reservasi->status_reservasi_wisata === 'dibatalkan')
+                                                <span class="badge badge-danger text-white">Dibatalkan</span>
                                             @else
                                                 <span class="badge bg-secondary">{{ ucfirst($reservasi->status_reservasi_wisata) }}</span>
                                             @endif
