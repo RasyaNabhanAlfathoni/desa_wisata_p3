@@ -107,6 +107,11 @@
                                                         <td>: {{ date('d-m-Y', strtotime($reservasi->tgl_reservasi_mulai)) }} s/d {{ date('d-m-Y', strtotime($reservasi->tgl_reservasi_akhir)) }}</td>
                                                     </tr>
                                                     <tr>
+                                                        <td colspan="2">
+                                                            <small class="text-muted d-block">Note: Tanggal menggunakan format dd/mm/yyyy</small>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
                                                         <th>Durasi</th>
                                                         <td>: {{ $reservasi->paket->durasi_hari }} Hari</td>
                                                     </tr>

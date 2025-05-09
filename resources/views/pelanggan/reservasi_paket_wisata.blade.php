@@ -101,13 +101,14 @@
                             <h5 class="mt-4 mb-3 border-bottom pb-2"><i class="icon-calendar mr-2"></i> Detail Reservasi</h5>
 
                             <div class="form-row">
-                                <!-- Tanggal Mulai -->
-                                <div class="col-md-4">
+                               <!-- Tanggal Mulai -->
+                               <div class="col-md-4">
                                     <div class="form-group">
                                         <label class="small mb-1" for="tgl_reservasi_mulai">Tanggal Mulai <span class="text-danger">*</span></label>
                                         <input class="form-control datepicker" id="tgl_reservasi_mulai" name="tgl_reservasi_mulai"
-                                               type="date" min="{{ date('Y-m-d') }}"
-                                               value="{{ old('tgl_reservasi_mulai') }}"  required />
+                                            type="date" min="{{ date('Y-m-d') }}"
+                                            value="{{ old('tgl_reservasi_mulai') }}"  required />
+                                            <small class="text-muted">Note: Tanggal menggunakan format mm/dd/yyyy</small>
                                         @error('tgl_reservasi_mulai')
                                             <div class="invalid-feedback d-block">{{ $message }}</div>
                                         @enderror
@@ -122,6 +123,7 @@
                                                id="tgl_reservasi_akhir"
                                                readonly />
                                         <input type="hidden" name="tgl_reservasi_akhir" id="tgl_reservasi_akhir_hidden">
+                                        <small class="text-muted">Note: Tanggal menggunakan format mm/dd/yyyy</small>
                                     </div>
                                 </div>
 
@@ -257,11 +259,6 @@
         if (error.trim() !== '') {
             swal('Error', error.trim(), 'error');
         }
-        // if(pesan.innerHTML.trim() !== ''){
-        // swal('Good Job', pesan.innerHTML, 'success')
-        // // }else if(status.innerHTML.trim() === 'edit'){
-        // // swal('Good Job', pesan.innerHTML, 'success')
-        // }
     }
 
     function hapus(event, el){
@@ -276,7 +273,6 @@
         closeOnConfirm: false
         },
         function(){
-
             frm.setAttribute('action', el.getAttribute('href'))
             frm.submit()
         });
@@ -290,164 +286,161 @@
 
 <!-- JavaScript for Dynamic Calculation -->
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const pricePerPerson = {{ $paket->harga_per_pack }};
-    const discountThreshold = {{ $paket->peserta_diskon }};
-    const discountPercentage = {{ $paket->nilai_diskon }};
-    const durationDays = {{ $paket->durasi_hari }};
+    document.addEventListener('DOMContentLoaded', function() {
+        const pricePerPerson = {{ $paket->harga_per_pack }};
+        const discountThreshold = {{ $paket->peserta_diskon }};
+        const discountPercentage = {{ $paket->nilai_diskon }};
+        const durationDays = {{ $paket->durasi_hari }};
 
-    const jumlahPesertaInput = document.getElementById('jumlah_peserta');
-    const tglMulaiInput = document.getElementById('tgl_reservasi_mulai');
-    const tglAkhirDisplay = document.getElementById('tgl_reservasi_akhir');
-    const tglAkhirHidden = document.getElementById('tgl_reservasi_akhir_hidden');
-    const participantCount = document.getElementById('participantCount');
-    const discountInfo = document.getElementById('discountInfo');
-    const discountText = document.getElementById('discountText');
-    const discountRow = document.getElementById('discountRow');
-    const discountAmount = document.getElementById('discountAmount');
-    const totalPayment = document.getElementById('totalPayment');
-    const dateRangeDisplay = document.getElementById('dateRangeDisplay');
+        const jumlahPesertaInput = document.getElementById('jumlah_peserta');
+        const tglMulaiInput = document.getElementById('tgl_reservasi_mulai');
+        const tglAkhirDisplay = document.getElementById('tgl_reservasi_akhir');
+        const tglAkhirHidden = document.getElementById('tgl_reservasi_akhir_hidden');
+        const participantCount = document.getElementById('participantCount');
+        const discountInfo = document.getElementById('discountInfo');
+        const discountText = document.getElementById('discountText');
+        const discountRow = document.getElementById('discountRow');
+        const discountAmount = document.getElementById('discountAmount');
+        const totalPayment = document.getElementById('totalPayment');
+        const dateRangeDisplay = document.getElementById('dateRangeDisplay');
 
-    // Format number with thousand separators
-    function formatNumber(num) {
-        return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-    }
+        // Format number with thousand separators
+        function formatNumber(num) {
+            return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        }
 
-    // Format date to DD/MM/YYYY
-    function formatDate(dateString) {
-        const date = new Date(dateString);
-        return date.toLocaleDateString('id-ID', {
-            day: '2-digit',
-            month: '2-digit',
-            year: 'numeric'
+        // // Format date to DD/MM/YYYY
+        // function formatDate(dateString) {
+        //     const date = new Date(dateString);
+        //     return date.toLocaleDateString('id-ID', {
+        //         day: '2-digit',
+        //         month: '2-digit',
+        //         year: 'numeric'
+        //     });
+        // }
+
+        // Format date to MM/DD/YYYY (English/American format)
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            const year = date.getFullYear();
+            return `${month}/${day}/${year}`;
+        }
+
+        // Calculate end date based on start date and duration
+        function calculateEndDate(startDate) {
+            if (!startDate) return null;
+
+            const date = new Date(startDate);
+            date.setDate(date.getDate() + (durationDays - 1)); // Subtract 1 from duration
+            return date.toISOString().split('T')[0]; // Return in YYYY-MM-DD format
+        }
+
+        // Update date display
+        function updateDateDisplay(startDate) {
+            if (!startDate) {
+                tglAkhirDisplay.value = '';
+                tglAkhirHidden.value = '';
+                dateRangeDisplay.textContent = '';
+                return;
+            }
+
+            const endDate = calculateEndDate(startDate);
+            // tglAkhirDisplay.value = endDate;
+            tglAkhirDisplay.value = formatDate(endDate);
+            tglAkhirHidden.value = endDate;
+            dateRangeDisplay.textContent = `${formatDate(startDate)} - ${formatDate(endDate)}`;
+        }
+
+        // Calculate total payment
+        function calculateTotal() {
+            const jumlahPeserta = parseInt(jumlahPesertaInput.value) || 0;
+            participantCount.textContent = jumlahPeserta;
+
+            let subtotal = pricePerPerson * jumlahPeserta;
+            let discount = 0;
+
+            // Check if package has discount
+            if (discountPercentage > 0) {
+                // Check if eligible for discount
+                if (jumlahPeserta >= discountThreshold) {
+                    // Eligible for discount
+                    discount = subtotal * (discountPercentage / 100);
+                    discountInfo.classList.remove('d-none');
+                    discountRow.classList.remove('d-none');
+
+                    // Update to success style
+                    discountInfo.classList.add('alert-success');
+                    discountInfo.classList.remove('alert-warning', 'alert-danger');
+                    discountIcon.classList.remove('icon-info-circle');
+                    discountIcon.classList.add('icon-gift');
+
+                    discountText.textContent = `Anda mendapatkan diskon ${discountPercentage}% karena memesan minimal ${discountThreshold} peserta.`;
+                } else {
+                    // Not eligible for discount
+                    discountInfo.classList.remove('d-none');
+                    discountRow.classList.remove('d-none');
+
+                    // Update to warning style
+                    discountInfo.classList.add('alert-warning');
+                    discountInfo.classList.remove('alert-success', 'alert-danger');
+                    discountIcon.classList.remove('icon-gift');
+                    discountIcon.classList.add('icon-info-circle');
+
+                    discountText.textContent = `Anda akan mendapatkan diskon ${discountPercentage}% jika memesan minimal ${discountThreshold} peserta.`;
+                }
+            } else {
+                // No discount available for this package
+                if (jumlahPeserta > 0) {
+                    discountInfo.classList.remove('d-none');
+                    discountRow.classList.add('d-none'); // Hide discount row
+
+                    // Update to danger style
+                    discountInfo.classList.add('alert-danger');
+                    discountInfo.classList.remove('alert-success', 'alert-warning');
+                    discountIcon.classList.remove('icon-gift', 'icon-info-circle');
+                    discountIcon.classList.add('icon-info-circle');
+
+                    discountText.textContent = 'Paket ini tidak memiliki diskon untuk jumlah peserta berapapun.';
+                } else {
+                    discountInfo.classList.add('d-none');
+                    discountRow.classList.add('d-none');
+                }
+            }
+
+            const total = subtotal - discount;
+
+            // Update display
+            discountAmount.textContent = formatNumber(Math.round(discount));
+
+            // Set hidden input value (raw number, tanpa format titik)
+            document.getElementById('diskon_input').value = Math.round(discount);
+
+            totalPayment.textContent = formatNumber(Math.round(total));
+        }
+
+        // Initialize calculation
+        calculateTotal();
+        updateDateDisplay(tglMulaiInput.value);
+
+        // Add event listeners
+        jumlahPesertaInput.addEventListener('input', calculateTotal);
+        jumlahPesertaInput.addEventListener('change', function() {
+            const maxPeserta = {{ $paket->kuota_peserta }};
+            if (this.value > maxPeserta) {
+                this.value = maxPeserta;
+                calculateTotal();
+            }
         });
-    }
 
-    // // Format date to MM/DD/YYYY (English/American format)
-    // function formatDate(dateString) {
-    //     const date = new Date(dateString);
-    //     const month = String(date.getMonth() + 1).padStart(2, '0');
-    //     const day = String(date.getDate()).padStart(2, '0');
-    //     const year = date.getFullYear();
-    //     return `${month}/${day}/${year}`;
-    // }
-
-    // Calculate end date based on start date and duration
-    function calculateEndDate(startDate) {
-        if (!startDate) return null;
-
-        const date = new Date(startDate);
-        date.setDate(date.getDate() + (durationDays - 1)); // Subtract 1 from duration
-        return date.toISOString().split('T')[0]; // Return in YYYY-MM-DD format
-    }
-
-    // Update date display
-    function updateDateDisplay(startDate) {
-        if (!startDate) {
-            tglAkhirDisplay.value = '';
-            tglAkhirHidden.value = '';
-            dateRangeDisplay.textContent = '';
-            return;
-        }
-
-        const endDate = calculateEndDate(startDate);
-        // tglAkhirDisplay.value = endDate;
-        tglAkhirDisplay.value = formatDate(endDate);
-        tglAkhirHidden.value = endDate;
-        dateRangeDisplay.textContent = `${formatDate(startDate)} - ${formatDate(endDate)}`;
-    }
-
-    // Calculate total payment
-    function calculateTotal() {
-        const jumlahPeserta = parseInt(jumlahPesertaInput.value) || 0;
-        participantCount.textContent = jumlahPeserta;
-
-        let subtotal = pricePerPerson * jumlahPeserta;
-        let discount = 0;
-
-        // Check if package has discount
-        if (discountPercentage > 0) {
-            // Check if eligible for discount
-            if (jumlahPeserta >= discountThreshold) {
-                // Eligible for discount
-                discount = subtotal * (discountPercentage / 100);
-                discountInfo.classList.remove('d-none');
-                discountRow.classList.remove('d-none');
-
-                // Update to success style
-                discountInfo.classList.add('alert-success');
-                discountInfo.classList.remove('alert-warning', 'alert-danger');
-                discountIcon.classList.remove('icon-info-circle');
-                discountIcon.classList.add('icon-gift');
-
-                discountText.textContent = `Anda mendapatkan diskon ${discountPercentage}% karena memesan minimal ${discountThreshold} peserta.`;
-            } else {
-                // Not eligible for discount
-                discountInfo.classList.remove('d-none');
-                discountRow.classList.remove('d-none');
-
-                // Update to warning style
-                discountInfo.classList.add('alert-warning');
-                discountInfo.classList.remove('alert-success', 'alert-danger');
-                discountIcon.classList.remove('icon-gift');
-                discountIcon.classList.add('icon-info-circle');
-
-                discountText.textContent = `Anda akan mendapatkan diskon ${discountPercentage}% jika memesan minimal ${discountThreshold} peserta.`;
-            }
-        } else {
-            // No discount available for this package
-            if (jumlahPeserta > 0) {
-                discountInfo.classList.remove('d-none');
-                discountRow.classList.add('d-none'); // Hide discount row
-
-                // Update to danger style
-                discountInfo.classList.add('alert-danger');
-                discountInfo.classList.remove('alert-success', 'alert-warning');
-                discountIcon.classList.remove('icon-gift', 'icon-info-circle');
-                discountIcon.classList.add('icon-info-circle');
-
-                discountText.textContent = 'Paket ini tidak memiliki diskon untuk jumlah peserta berapapun.';
-            } else {
-                discountInfo.classList.add('d-none');
-                discountRow.classList.add('d-none');
-            }
-        }
-
-        const total = subtotal - discount;
-
-        // Update display
-        discountAmount.textContent = formatNumber(Math.round(discount));
-
-        // Set hidden input value (raw number, tanpa format titik)
-        document.getElementById('diskon_input').value = Math.round(discount);
-
-        totalPayment.textContent = formatNumber(Math.round(total));
-    }
-
-    // Initialize calculation
-    calculateTotal();
-    updateDateDisplay(tglMulaiInput.value);
-
-    // Add event listeners
-    jumlahPesertaInput.addEventListener('input', calculateTotal);
-    jumlahPesertaInput.addEventListener('change', function() {
-        const maxPeserta = {{ $paket->kuota_peserta }};
-        if (this.value > maxPeserta) {
-            this.value = maxPeserta;
-            calculateTotal();
-        }
+        tglMulaiInput.addEventListener('change', function() {
+            updateDateDisplay(this.value);
+        });
     });
-
-    tglMulaiInput.addEventListener('change', function() {
-        updateDateDisplay(this.value);
-    });
-});
-</script>
+    </script>
 
 <style>
-    .datepicker {
-        z-index: 9999 !important;
-    }
     .bg-dark-transparent {
         background-color: rgba(0, 0, 0, 0.3);
     }
@@ -460,6 +453,9 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     .form-control-plaintext.bg-light {
         background-color: #f8f9fa !important;
+    }
+    .input-group-text {
+        cursor: pointer;
     }
 </style>
 @endsection
