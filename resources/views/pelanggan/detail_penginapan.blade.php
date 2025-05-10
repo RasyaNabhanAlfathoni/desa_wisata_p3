@@ -91,11 +91,14 @@
                 <div class="card shadow-sm border-0 mb-4">
                     <div class="card-body">
                         <div class="alert alert-info" role="alert">
-                            <h5 class="font-weight-bold mb-1">Kontak Penginapan:</h5>
-                            <p class="mb-0">
-                                Hubungi penginapan untuk informasi lebih lanjut
+                            <h5 class="font-weight-bold mb-3">Penginapan Ini Hanya Informasi</h5>
+                            <p class="small text-muted mb-4">
+                                Anda dapat memesan paket wisata yang mencakup penginapan melalui halaman berikut.
                             </p>
                         </div>
+                        <a href="{{ route('pelanggan.paket_wisata') }}" class="btn btn-primary btn-block">
+                            <i class="icon-briefcase mr-1"></i> Lihat Paket Wisata
+                        </a>
                     </div>
                 </div>
 
