@@ -45,8 +45,6 @@ Route::get('/penginapan', [HomeController::class, 'penginapan'])->name('penginap
 Route::get('/penginapan/{id}', [HomeController::class, 'detailPenginapan'])->name('penginapan.detail');
 Route::get('/berita', [HomeController::class, 'berita'])->name('berita');
 Route::get('/berita/{id}', [HomeController::class, 'beritaDetail'])->name('berita.detail');
-Route::get('/contact', [HomeController::class, 'contact'])->name('contact');
-
 
 // Authentication Routes (Gunakan middleware 'guest' untuk mencegah akses jika sudah login)
 Route::middleware('guest')->group(function () {
