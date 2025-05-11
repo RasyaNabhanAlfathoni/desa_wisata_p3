@@ -86,7 +86,7 @@
                         <div class="item">
                             <div class="destination">
                                 <a href="{{ route('pelanggan.obyek-wisata.detail', $obyek->id) }}" class="img d-flex justify-content-center align-items-center"
-                                    style="background-image: url('{{ asset('Storage/' . $obyek->foto1) }}');">
+                                    style="background-image: url('{{ asset('storage/' . $obyek->foto1) }}');">
                                     <div class="icon d-flex justify-content-center align-items-center">
                                         <span class="icon-search2"></span>
                                     </div>
@@ -120,7 +120,7 @@
                 <div class="item">
                     <div class="destination">
                         <a href="{{ route('pelanggan.paket-wisata.detail', $paket->id) }}" class="img d-flex justify-content-center align-items-center"
-                                    style="background-image: url('{{ asset('Storage/' . $paket->foto1) }}');">
+                                    style="background-image: url('{{ asset('storage/' . $paket->foto1) }}');">
                                     <div class="icon d-flex justify-content-center align-items-center">
                                         <span class="icon-search2"></span>
                                     </div>
@@ -214,7 +214,7 @@
                 <div class="item">
                     <div class="destination">
                         <a href="{{ route('pelanggan.penginapan.detail', $penginapan->id) }}" class="img d-flex justify-content-center align-items-center"
-                                    style="background-image: url('{{ asset('Storage/' . $penginapan->foto1) }}');">
+                                    style="background-image: url('{{ asset('storage/' . $penginapan->foto1) }}');">
                                     <div class="icon d-flex justify-content-center align-items-center">
                                         <span class="icon-search2"></span>
                                     </div>
@@ -269,7 +269,7 @@
                 <div class="item px-2">
                     <div class="blog-entry h-100">
                         <a href="{{ route('pelanggan.berita.detail', $berita->id) }}" class="block-20 d-flex justify-content-center align-items-center"
-                                    style="background-image: url('{{ asset('Storage/' . $berita->foto) }}'); min-height: 200px;">
+                                    style="background-image: url('{{ asset('storage/' . $berita->foto) }}'); min-height: 200px;">
                         </a>
                         <div class="text p-4">
                             <span class="tag badge badge-primary">{{$berita->kategori->kategori_berita}}</span>

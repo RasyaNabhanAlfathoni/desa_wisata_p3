@@ -60,7 +60,7 @@
                                 <div class="form-text text-warning">Edit Foto Berita Anda! (Maks 3MB)</div>
                                 @if($berita->foto)
                                 <small class="text-muted">Foto sebelumnya:</small>
-                                    <img src="{{ asset('Storage/' . $berita->foto) }}" alt="Foto Berita" class="img-thumbnail" width="150">
+                                    <img src="{{ asset('storage/' . $berita->foto) }}" alt="Foto Berita" class="img-thumbnail" width="150">
                                 @endif
                             </div>
 

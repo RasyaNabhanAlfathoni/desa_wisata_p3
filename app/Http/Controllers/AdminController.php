@@ -252,13 +252,13 @@ class AdminController extends Controller
                     // Jika ada foto baru, hapus foto lama dan simpan yang baru
                     if ($request->hasFile('foto')) {
                         // Hapus foto lama jika ada
-                        if (!empty($existingPelanggan->foto) && Storage::exists('Storage/' . $existingPelanggan->foto)) {
-                            Storage::delete('Storage/' . $existingPelanggan->foto);
+                        if (!empty($existingPelanggan->foto) && Storage::exists('storage/' . $existingPelanggan->foto)) {
+                            Storage::delete('storage/' . $existingPelanggan->foto);
                         }
 
                         // Simpan foto baru
                         $fotoPath = $request->file('foto')->store('Pelanggan');
-                        $fotoPath = str_replace('Storage/', '', $fotoPath); // Simpan tanpa "public/" di database
+                        $fotoPath = str_replace('storage/', '', $fotoPath); // Simpan tanpa "public/" di database
                     } else {
                         $fotoPath = $existingPelanggan->foto; // Gunakan foto lama jika tidak ada upload baru
                     }
@@ -273,7 +273,7 @@ class AdminController extends Controller
                     // Jika pelanggan baru, simpan foto jika ada
                     if ($request->hasFile('foto')) {
                         $fotoPath = $request->file('foto')->store('Pelanggan');
-                        $fotoPath = str_replace('Storage/', '', $fotoPath);
+                        $fotoPath = str_replace('storage/', '', $fotoPath);
                     } else {
                         $fotoPath = null;
                     }

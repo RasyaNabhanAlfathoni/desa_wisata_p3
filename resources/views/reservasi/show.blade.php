@@ -76,7 +76,7 @@
                                     <label class="text-muted"><i class="fe fe-upload"></i> Bukti Pembayaran</label>
                                     @if($reservasi->file_bukti_tf)
                                         <div class="mt-2">
-                                            <img src="{{ asset('Storage/' . $reservasi->file_bukti_tf) }}"
+                                            <img src="{{ asset('storage/' . $reservasi->file_bukti_tf) }}"
                                                  class="img-thumbnail rounded shadow-sm"
                                                  width="250" style="cursor: pointer;"
                                                  onclick="showModal(this)">

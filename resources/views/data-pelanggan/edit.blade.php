@@ -64,7 +64,7 @@
                             <div id="foto" class="form-text text-warning">Edit Foto Profile Anda! (Maks 3MB)</div>
                             @if($pelanggan->foto)
                                 <small class="text-muted">Foto sebelumnya:</small>
-                                <img src="{{ asset('Storage/'.$pelanggan->foto) }}" alt="Foto Pelanggan" class="img-thumbnail" width="100">
+                                <img src="{{ asset('storage/'.$pelanggan->foto) }}" alt="Foto Pelanggan" class="img-thumbnail" width="100">
                             @endif
                         </div>
                         <button type="button" class="btn btn-primary" id="save"><i class="fe fe-save mr-1"></i>Simpan</button>

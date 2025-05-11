@@ -116,7 +116,7 @@
                                 <label for="file_bukti_tf" class="form-label">Bukti Pembayaran</label>
                                 @if($reservasi->file_bukti_tf)
                                     <div class="mb-2">
-                                        <small>File saat ini: <a href="{{ asset('Storage/'.$reservasi->file_bukti_tf) }}" target="_blank">Lihat Bukti</a></small>
+                                        <small>File saat ini: <a href="{{ asset('storage/'.$reservasi->file_bukti_tf) }}" target="_blank">Lihat Bukti</a></small>
                                     </div>
                                 @endif
                                 <input type="file" name="file_bukti_tf" id="file_bukti_tf" class="form-control">

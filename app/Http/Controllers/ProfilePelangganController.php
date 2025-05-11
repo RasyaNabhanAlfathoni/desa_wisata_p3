@@ -146,7 +146,7 @@ class ProfilePelangganController extends Controller
                 // Jika pelanggan baru, simpan foto jika ada
                 if ($request->hasFile('foto')) {
                     $fotoPath = $request->file('foto')->store('Pelanggan');
-                    $fotoPath = str_replace('Storage/', '', $fotoPath);
+                    $fotoPath = str_replace('storage/', '', $fotoPath);
                 } else {
                     $fotoPath = null;
                 }

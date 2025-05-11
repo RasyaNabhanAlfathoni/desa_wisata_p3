@@ -175,7 +175,7 @@
                                             {{-- Menampilkan foto lama jika ada --}}
                                             @if($user->pelanggan && $user->pelanggan->foto)
                                                 <div class="mt-3">
-                                                    <img src="{{ asset('Storage/' . $user->pelanggan->foto) }}" alt="Foto Profil" class="img-thumbnail" width="150">
+                                                    <img src="{{ asset('storage/' . $user->pelanggan->foto) }}" alt="Foto Profil" class="img-thumbnail" width="150">
                                                 </div>
                                             @endif
                                         </div>

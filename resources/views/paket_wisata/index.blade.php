@@ -123,7 +123,7 @@
                                     <td>
                                         @if(!empty($paket->$foto) && file_exists(public_path('storage/' . $paket->$foto)))
                                             <div class="avatar avatar-md">
-                                                <img src="{{ asset('Storage/' . $paket->$foto) }}" alt="Foto Paket" class="img-thumbnail rounded" style="cursor: pointer;"
+                                                <img src="{{ asset('storage/' . $paket->$foto) }}" alt="Foto Paket" class="img-thumbnail rounded" style="cursor: pointer;"
                                                 onclick="showModal(this)">
                                             </div>
                                         @else

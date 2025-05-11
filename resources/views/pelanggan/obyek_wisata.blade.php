@@ -69,7 +69,7 @@
                 <div class="col-md-4 ftco-animate">
                     <div class="destination">
                         <a href="{{ route('pelanggan.obyek-wisata.detail', $obyek->id) }}" class="img img-2 d-flex justify-content-center align-items-center"
-                           style="background-image: url('{{ asset('Storage/' . $obyek->foto1) }}');">
+                           style="background-image: url('{{ asset('storage/' . $obyek->foto1) }}');">
                             <div class="icon d-flex justify-content-center align-items-center">
                                 <span class="icon-search2"></span>
                             </div>

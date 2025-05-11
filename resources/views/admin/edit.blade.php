@@ -188,7 +188,7 @@
                                             {{-- Menampilkan foto lama jika ada --}}
                                             @if($profileData->foto)
                                                 <div class="mt-3">
-                                                    <img src="{{ asset('Storage/' . $profileData->foto) }}" alt="Foto Profil" class="img-thumbnail" width="150">
+                                                    <img src="{{ asset('storage/' . $profileData->foto) }}" alt="Foto Profil" class="img-thumbnail" width="150">
                                                 </div>
                                             @endif
                                         </div>

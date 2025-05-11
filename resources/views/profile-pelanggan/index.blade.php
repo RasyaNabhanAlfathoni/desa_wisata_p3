@@ -24,7 +24,7 @@
                 <div class="card shadow mb-4">
                     <div class="card-body text-center">
                         @if($user->pelanggan && $user->pelanggan->foto)
-                            <img src="{{ asset('Storage/' . $user->pelanggan->foto) }}"
+                            <img src="{{ asset('storage/' . $user->pelanggan->foto) }}"
                                  class="rounded-circle mb-3"
                                  width="200" height="200"
                                  alt="Foto Profil">

@@ -19,7 +19,7 @@
                     <div class="card-body text-center p-4">
 
                         @if($pelanggan->foto)
-                            <img src="{{ asset('Storage/' . $pelanggan->foto) }}"
+                            <img src="{{ asset('storage/' . $pelanggan->foto) }}"
                                 class="rounded-circle mb-3 border shadow-sm"
                                 width="120" height="120"
                                 alt="Foto Profil">

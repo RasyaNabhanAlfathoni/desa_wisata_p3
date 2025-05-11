@@ -126,11 +126,11 @@ class ProfileController extends Controller
                     }
 
                     if ($request->hasFile('foto')) {
-                        if (!empty($existingPelanggan->foto) && Storage::exists('Storage/' . $existingPelanggan->foto)) {
-                            Storage::delete('Storage/' . $existingPelanggan->foto);
+                        if (!empty($existingPelanggan->foto) && Storage::exists('storage/' . $existingPelanggan->foto)) {
+                            Storage::delete('storage/' . $existingPelanggan->foto);
                         }
                         $fotoPath = $request->file('foto')->store('Pelanggan');
-                        $fotoPath = str_replace('Storage/', '', $fotoPath);
+                        $fotoPath = str_replace('storage/', '', $fotoPath);
                     } else {
                         $fotoPath = $existingPelanggan->foto;
                     }
@@ -144,7 +144,7 @@ class ProfileController extends Controller
                 } else {
                     if ($request->hasFile('foto')) {
                         $fotoPath = $request->file('foto')->store('Pelanggan');
-                        $fotoPath = str_replace('Storage/', '', $fotoPath);
+                        $fotoPath = str_replace('storage/', '', $fotoPath);
                     } else {
                         $fotoPath = null;
                     }

@@ -32,7 +32,7 @@
 
                             <div class="text-center mb-4">
                                 @if($user->pelanggan && $user->pelanggan->foto)
-                                    <img id="previewFoto" src="{{ asset('Storage/' . $user->pelanggan->foto) }}"
+                                    <img id="previewFoto" src="{{ asset('storage/' . $user->pelanggan->foto) }}"
                                          class="rounded-circle mb-3"
                                          width="150" height="150"
                                          alt="Foto Profil">

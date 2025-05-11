@@ -91,7 +91,7 @@
                             </div>
                             <div class="card-body text-center">
                                 @if($user->level == 'pelanggan' && $profileData->foto)
-                                    <img src="{{ asset('Storage/' . $profileData->foto) }}" class="rounded-circle mb-3" width="120" height="120" alt="Foto Profil">
+                                    <img src="{{ asset('storage/' . $profileData->foto) }}" class="rounded-circle mb-3" width="120" height="120" alt="Foto Profil">
                                 {{-- @else
                                     <img src="{{ asset('back-end/assets/avatars/default.png') }}" class="rounded-circle mb-3" width="120" height="120" alt="Foto Profil"> --}}
                                 @endif

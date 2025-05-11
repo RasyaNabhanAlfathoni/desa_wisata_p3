@@ -84,7 +84,7 @@
                 </div>
                 <div class="card-body text-center">
                     @if(Auth::user()->level == 'pelanggan' && Auth::user()->pelanggan->foto)
-                        <img src="{{ asset('Storage/' . Auth::user()->pelanggan->foto) }}"
+                        <img src="{{ asset('storage/' . Auth::user()->pelanggan->foto) }}"
                             class="rounded-circle mb-3"
                             width="120" height="120"
                             alt="Foto Profil">

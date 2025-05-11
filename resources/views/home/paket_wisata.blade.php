@@ -104,7 +104,7 @@
                 <div class="col-md-4 ftco-animate">
                     <div class="destination">
                         <a href="{{ route('paket-wisata.detail', $paket->id) }}" class="img img-2 d-flex justify-content-center align-items-center"
-                           style="background-image: url('{{ asset('Storage/' . $paket->foto1) }}');">
+                           style="background-image: url('{{ asset('storage/' . $paket->foto1) }}');">
                             <div class="icon d-flex justify-content-center align-items-center">
                                 <span class="icon-search2"></span>
                             </div>

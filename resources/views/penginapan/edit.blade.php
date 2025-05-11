@@ -49,7 +49,7 @@
                                         <input type="file" class="form-control" name="foto{{ $i }}" id="foto{{ $i }}" accept="image/*" onchange="previewImage(event, 'preview{{ $i }}')">
                                         @if(isset($penginapan["foto{$i}"]))
                                             <small class="text-muted">Foto saat ini:</small>
-                                            <img id="preview{{ $i }}" src="{{ asset('Storage/' . $penginapan["foto{$i}"]) }}" alt="Preview Foto" style="width:150px; margin-top:10px;">
+                                            <img id="preview{{ $i }}" src="{{ asset('storage/' . $penginapan["foto{$i}"]) }}" alt="Preview Foto" style="width:150px; margin-top:10px;">
                                         @else
                                             <small class="text-muted">Foto saat ini:</small>
                                             <img id="preview{{ $i }}" src="" alt="Preview Foto" style="display:none; width:150px; margin-top:10px;">
