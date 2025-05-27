@@ -140,7 +140,7 @@ Route::middleware(['auth', 'level:bendahara'])->group(function () {
 });
 
 // CRUD DATA ADMIN & PEMILIK
-Route::middleware(['auth', 'level:admin,pemilik'])->group(function () {
+Route::middleware(['auth', 'level:admin'])->group(function () {
     Route::resource('/kelola_obyek_wisata', ObyekWisataController::class);
     Route::resource('/kelola_kategori_wisata', KategoriWisataController::class);
     Route::resource('/kelola_paket_wisata', PaketWisataController::class);
@@ -159,8 +159,13 @@ Route::middleware(['auth', 'level:admin,pemilik'])->group(function () {
 
 // CRUD DATA ADMIN, PEMILIK & BENDAHARA
 Route::middleware(['auth', 'level:admin,pemilik,bendahara'])->group(function () {
-    Route::resource('/kelola_keuangan', KeuanganController::class);
     Route::resource('/kelola_notifikasi', NotifikasiController::class);
+    Route::resource('/profile', ProfileController::class);
+});
+
+// CRUD DATA ADMIN, PEMILIK & BENDAHARA
+Route::middleware(['auth', 'level:pemilik,bendahara'])->group(function () {
+    Route::resource('/kelola_keuangan', KeuanganController::class);
 
     // For Export keuangan data to excel
     Route::get('/download-excel-keuangan', function (Request $request) {
@@ -205,8 +210,6 @@ Route::middleware(['auth', 'level:admin,pemilik,bendahara'])->group(function () 
         $filename = 'data_reservasi_' . Carbon::now()->format('Y-m-d_H-i') . '.xlsx';
         return Excel::download(new ReservasiExport, $filename);
     })->name('download.excel-reservasi');
-
-    Route::resource('/profile', ProfileController::class);
 });
 
 // ✅ Pelanggan hanya bisa melakukan reservasi

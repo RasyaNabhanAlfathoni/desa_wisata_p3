@@ -114,25 +114,6 @@
             </li>
         </ul>
 
-        {{-- Data Reservasi & Keuangan --}}
-        <p class="text-muted nav-heading mt-4 mb-1">
-            <span>Data Reservasi & Keuangan</span>
-        </p>
-        <ul class="navbar-nav flex-fill w-100 mb-2">
-            <li class="nav-item w-100  @if(@isset($menu) and $menu === 'reservasi') active @endif">
-                <a class="nav-link nav-item" href="{{route('kelola_reservasi.index')}}">
-                    <i class="fe fe-calendar fe-16"></i>
-                    <span class="ml-3 item-text">Kelola Reservasi</span>
-                </a>
-            </li>
-            <li class="nav-item w-100  @if(@isset($menu) and $menu === 'keuangan') active @endif">
-                <a class="nav-link nav-item" href="{{route('kelola_keuangan.index')}}">
-                    <i class="fe fe-dollar-sign fe-16"></i>
-                    <span class="ml-3 item-text">Kelola Keuangan</span>
-                </a>
-            </li>
-        </ul>
-
         {{-- Notifikasi & Pengaturan --}}
         <p class="text-muted nav-heading mt-4 mb-1">
             <span>Notifikasi</span>
@@ -192,56 +173,6 @@
                     <span class="ml-3 item-text">Dashboard</span
                     ><span class="sr-only">(current)</span>
                 </a>
-        </ul>
-
-        {{-- Data Wisata --}}
-        <p class="text-muted nav-heading mt-4 mb-1">
-            <span>Data Wisata</span>
-        </p>
-        <ul class="navbar-nav flex-fill w-100 mb-2">
-            <li class="nav-item w-100 @if(@isset($menu) and $menu === 'obyek_wisata') active @endif">
-                <a class="nav-link nav-item" href="{{route('kelola_obyek_wisata.index')}}">
-                    <i class="fe fe-compass fe-16"></i>
-                    <span class="ml-3 item-text">Kelola Obyek Wisata</span>
-                </a>
-            </li>
-            <li class="nav-item w-100 @if(@isset($menu) and $menu === 'paket_wisata') active @endif">
-                <a class="nav-link nav-item" href="{{route('kelola_paket_wisata.index')}}">
-                    <i class="fe fe-map fe-16"></i>
-                    <span class="ml-3 item-text">Kelola Paket Wisata</span>
-                </a>
-            </li>
-            <li class="nav-item w-100 @if(@isset($menu) and $menu === 'kategori_wisata') active @endif">
-                <a class="nav-link nav-item" href="{{route('kelola_kategori_wisata.index')}}">
-                    <i class="fe fe-airplay fe-16"></i>
-                    <span class="ml-3 item-text">Kelola Kategori Wisata</span>
-                </a>
-            </li>
-            <li class="nav-item w-100 @if(@isset($menu) and $menu === 'penginapan') active @endif">
-                <a class="nav-link nav-item" href="{{route('kelola_penginapan.index')}}">
-                    <i class="fe fe-home fe-16"></i>
-                    <span class="ml-3 item-text">Kelola Penginapan</span>
-                </a>
-            </li>
-        </ul>
-
-        {{-- Data Berita --}}
-        <p class="text-muted nav-heading mt-4 mb-1">
-            <span>Data Berita</span>
-        </p>
-        <ul class="navbar-nav flex-fill w-100 mb-2">
-            <li class="nav-item w-100 @if(@isset($menu) and $menu === 'berita') active @endif">
-                <a class="nav-link nav-item" href="{{route('kelola_berita.index')}}">
-                    <i class="fe fe-book-open fe-16"></i>
-                    <span class="ml-3 item-text">Kelola Berita</span>
-                </a>
-            </li>
-            <li class="nav-item w-100  @if(@isset($menu) and $menu === 'kategori_berita') active @endif">
-                <a class="nav-link nav-item" href="{{route('kelola_kategori_berita.index')}}">
-                    <i class="fe fe-file-text fe-16"></i>
-                    <span class="ml-3 item-text">Kelola Kategori Berita</span>
-                </a>
-            </li>
         </ul>
 
         {{-- Data Reservasi & Keuangan --}}
