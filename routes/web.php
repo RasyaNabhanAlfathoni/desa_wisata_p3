@@ -32,20 +32,6 @@ use App\Exports\ReservasiExport;
 use App\Exports\LaporanKeuanganExport;
 use Carbon\Carbon;
 
-// Halaman utama
-Route::get('/', [HomeController::class, 'index'])->name('home');
-Route::get('/about', [HomeController::class, 'about'])->name('about');
-Route::get('/paket-wisata', [HomeController::class, 'paketWisata'])->name('paket_wisata');
-Route::get('/paket-wisata/{id}', [HomeController::class, 'paketWisataDetail'])->name('paket-wisata.detail');
-Route::get('/paket-wisata/{id}/reservasi', [HomeController::class, 'showReservasiForm'])->name('paket-wisata.reservasi');
-Route::post('/paket-wisata/{id}/reservasi', [HomeController::class, 'processReservasi'])->name('paket-wisata.reservasi.submit');
-Route::get('/obyek-wisata', [HomeController::class, 'obyekWisata'])->name('obyek_wisata');
-Route::get('/obyek-wisata/{id}', [HomeController::class, 'obyekWisatadetail'])->name('obyek-wisata.detail');
-Route::get('/penginapan', [HomeController::class, 'penginapan'])->name('penginapan');
-Route::get('/penginapan/{id}', [HomeController::class, 'detailPenginapan'])->name('penginapan.detail');
-Route::get('/berita', [HomeController::class, 'berita'])->name('berita');
-Route::get('/berita/{id}', [HomeController::class, 'beritaDetail'])->name('berita.detail');
-
 // Authentication Routes (Gunakan middleware 'guest' untuk mencegah akses jika sudah login)
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
@@ -53,6 +39,20 @@ Route::middleware('guest')->group(function () {
 
     Route::get('/register', [AuthController::class, 'showRegistrationForm'])->name('register');
     Route::post('/register', [AuthController::class, 'register']);
+
+    // Halaman utama
+    Route::get('/', [HomeController::class, 'index'])->name('home');
+    Route::get('/about', [HomeController::class, 'about'])->name('about');
+    Route::get('/paket-wisata', [HomeController::class, 'paketWisata'])->name('paket_wisata');
+    Route::get('/paket-wisata/{id}', [HomeController::class, 'paketWisataDetail'])->name('paket-wisata.detail');
+    Route::get('/paket-wisata/{id}/reservasi', [HomeController::class, 'showReservasiForm'])->name('paket-wisata.reservasi');
+    Route::post('/paket-wisata/{id}/reservasi', [HomeController::class, 'processReservasi'])->name('paket-wisata.reservasi.submit');
+    Route::get('/obyek-wisata', [HomeController::class, 'obyekWisata'])->name('obyek_wisata');
+    Route::get('/obyek-wisata/{id}', [HomeController::class, 'obyekWisatadetail'])->name('obyek-wisata.detail');
+    Route::get('/penginapan', [HomeController::class, 'penginapan'])->name('penginapan');
+    Route::get('/penginapan/{id}', [HomeController::class, 'detailPenginapan'])->name('penginapan.detail');
+    Route::get('/berita', [HomeController::class, 'berita'])->name('berita');
+    Route::get('/berita/{id}', [HomeController::class, 'beritaDetail'])->name('berita.detail');
 });
 
 // Email Verification Routes

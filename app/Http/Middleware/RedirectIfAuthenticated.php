@@ -30,8 +30,26 @@ class RedirectIfAuthenticated
 
     public function handle(Request $request, Closure $next, ...$guards)
     {
-        if (Auth::check()) {
-            return redirect(RouteServiceProvider::redirectTo()); // Pakai fungsi redirect yang sudah dibuat
+        $guards = empty($guards) ? [null] : $guards;
+
+        foreach ($guards as $guard) {
+            if (Auth::guard($guard)->check()) {
+                $user = Auth::user();
+
+                // Redirect berdasarkan level user
+                switch ($user->level) {
+                    case 'admin':
+                        return redirect()->route('admin.index')->with('error', 'Anda tidak memiliki akses ke halaman ini.');
+                    case 'pemilik':
+                        return redirect()->route('pemilik.index')->with('error', 'Anda tidak memiliki akses ke halaman ini.');
+                    case 'bendahara':
+                        return redirect()->route('bendahara.index')->with('error', 'Anda tidak memiliki akses ke halaman ini.');
+                    case 'pelanggan':
+                        return redirect()->route('pelanggan.index')->with('error', 'Anda tidak memiliki akses ke halaman ini.');
+                    default:
+                        return redirect('/');
+                }
+            }
         }
 
         return $next($request);
