@@ -10,7 +10,6 @@ use App\Http\Controllers\BeritaController;
 use App\Http\Controllers\DataKaryawanController;
 use App\Http\Controllers\DataPelangganController;
 use App\Http\Controllers\KategoriBeritaController;
-use App\Http\Controllers\UserController;
 use App\Http\Controllers\KeuanganController;
 use App\Http\Controllers\PaketWisataController;
 use App\Http\Controllers\KategoriWisataController;
@@ -20,7 +19,6 @@ use App\Http\Controllers\ObyekWisataController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\NotifikasiController;
 use App\Http\Controllers\ProfilePelangganController;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 use App\Http\Controllers\ProfileController;
@@ -70,19 +68,6 @@ Route::middleware(['auth'])->group(function () {
     })->middleware(['throttle:6,1'])->name('verification.send');
 });
 
-// Email Verification Routes
-// Route::get('/email/verify', function () {
-//     return app()->make(AuthController::class)->verificationNotice();
-// })->name('verification.notice');
-
-// Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
-//     return app()->make(AuthController::class)->verificationVerify($request);
-// })->middleware(['signed'])->name('verification.verify');
-
-// Route::post('/email/verification-notification', function (Request $request) {
-//     return app()->make(AuthController::class)->verificationResend($request);
-// })->middleware(['throttle:6,1'])->name('verification.send');
-
 // Password Reset Routes
 Route::get('/forgot-password', [AuthController::class, 'showForgotPasswordForm'])->name('password.request');
 Route::post('/forgot-password', [AuthController::class, 'sendResetLinkEmail'])->name('password.email');
@@ -110,28 +95,11 @@ Route::middleware(['auth', 'level:admin'])->group(function () {
         $filename = 'data_pelanggan_' . Carbon::now()->format('Y-m-d_H-i') . '.xlsx';
         return Excel::download(new PelangganWithUserExport, $filename);
     })->name('download.excel-pelanggan');
-
-    // Route::resource('/keuangan', KeuanganController::class);
-    // Route::resource('/obyek_wisata', ObyekWisataController::class);
-    // Route::resource('/kategori_wisata', KategoriWisataController::class);
-    // Route::resource('/paket_wisata', PaketWisataController::class);
-    // Route::resource('/penginapan', PenginapanController::class);
-    // Route::resource('/berita', BeritaController::class);
-    // Route::resource('/kategori_berita', KategoriBeritaController::class);
-    // Route::resource('/reservasi', ReservasiController::class);
 });
 
 // ✅ Admin juga bisa CRUD semua yang ada di Pemilik
 Route::middleware(['auth', 'level:pemilik'])->group(function () {
     Route::get('/pemilik', [PemilikController::class, 'index'])->name('pemilik.index');
-    // Route::resource('/obyek_wisata', ObyekWisataController::class);
-    // Route::resource('/kategori_wisata', KategoriWisataController::class);
-    // Route::resource('/paket_wisata', PaketWisataController::class);
-    // Route::resource('/penginapan', PenginapanController::class);
-    // Route::resource('/berita', BeritaController::class);
-    // Route::resource('/kategori_berita', KategoriBeritaController::class);
-    // Route::resource('/keuangan', KeuanganController::class);
-    // Route::resource('/reservasi', ReservasiController::class);
 });
 
 // ✅ Bendahara hanya bisa mengelola keuangan
