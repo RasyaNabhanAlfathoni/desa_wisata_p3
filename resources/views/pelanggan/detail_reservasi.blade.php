@@ -219,7 +219,7 @@
                                                     @endif
                                                 </div>
                                             @else
-                                                <div class="alert alert-warning">
+                                                {{-- <div class="alert alert-warning">
                                                     <p><strong>Status Pembayaran:</strong>
                                                         <span class="badge badge-info">Belum Dibayar</span>
                                                     </p>
@@ -228,7 +228,25 @@
                                                        class="btn btn-sm btn-warning">
                                                         <i class="icon-credit-card mr-1"></i> Lanjutkan Pembayaran
                                                     </a>
-                                                </div>
+                                                </div> --}}
+
+                                                @if($reservasi->status_reservasi_wisata != 'dibatalkan')
+                                                    <div class="alert alert-warning">
+                                                        <p><strong>Status Pembayaran:</strong>
+                                                            <span class="badge badge-info">Belum Dibayar</span>
+                                                        </p>
+                                                        <p>Silakan lakukan pembayaran sebelum {{ date('d F Y H:i', strtotime($reservasi->created_at->addDays(1))) }}</p>
+                                                        <a href="{{ route('pelanggan.paket-wisata.pembayaran', $reservasi->id) }}"
+                                                        class="btn btn-sm btn-warning">
+                                                            <i class="icon-credit-card mr-1"></i> Lanjutkan Pembayaran
+                                                        </a>
+                                                    </div>
+                                                @else
+                                                    <div class="alert alert-danger">
+                                                        <p><strong>Status:</strong> Reservasi sudah {{ $reservasi->status_reservasi_wisata }}</p>
+                                                        <p>Pembayaran tidak dapat dilakukan.</p>
+                                                    </div>
+                                                @endif
                                             @endif
                                         </div>
 
