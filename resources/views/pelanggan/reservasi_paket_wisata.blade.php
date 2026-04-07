@@ -225,7 +225,7 @@
                 <p>Pembayaran harus dilakukan dalam waktu 24 jam setelah reservasi dibuat. Jika tidak, reservasi akan dibatalkan secara otomatis.</p>
 
                 <h6>2. Pembatalan</h6>
-                <p>Pembatalan yang dilakukan lebih dari 7 hari sebelum tanggal keberangkatan akan dikenakan biaya administrasi 10% dari total pembayaran. Pembatalan dalam waktu kurang dari 7 hari tidak dapat dilakukan refund.</p>
+                <p>Pembatalan yang dilakukan 5 hari sebelum tanggal keberangkatan akan dikenakan biaya administrasi 10% dari total pembayaran. Pembatalan dalam waktu kurang dari 5 hari tidak dapat dilakukan refund.</p>
 
                 <h6>3. Ketentuan Diskon</h6>
                 <p>Diskon hanya berlaku jika jumlah peserta telah sama atau melebihi kriteria jumlah peserta diskon.</p>
