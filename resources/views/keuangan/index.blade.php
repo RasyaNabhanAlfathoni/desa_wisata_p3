@@ -104,6 +104,7 @@
                                 'status' => request('status'),
                                 'tanggal_awal' => request('tanggal_awal'),
                                 'tanggal_akhir' => request('tanggal_akhir'),
+                                'periode' => request('periode'),
                             ]) }}"
                             class="btn btn-danger text-white w-100 w-md-auto mb-2"
                         >

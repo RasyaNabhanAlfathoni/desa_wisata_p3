@@ -28,7 +28,7 @@
                             {{-- Pilih Pelanggan --}}
                             <div class="form-group">
                                 <label for="id_pelanggan" class="form-label">Pelanggan</label>
-                                <select name="id_pelanggan" id="id_pelanggan" class="form-control">
+                                <select name="id_pelanggan" id="id_pelanggan" class="form-control" disabled>
                                     <option value="">-- Pilih Pelanggan --</option>
                                     @foreach($pelanggans as $p)
                                         <option value="{{ $p->id }}" {{ old('id_pelanggan', $reservasi->id_pelanggan) == $p->id ? 'selected' : '' }}>
@@ -36,13 +36,14 @@
                                         </option>
                                     @endforeach
                                 </select>
+                                <input type="hidden" name="id_pelanggan" value="{{ $reservasi->id_pelanggan }}">
                                 @error('id_pelanggan') <div class="text-danger">{{ $message }}</div> @enderror
                             </div>
 
                             {{-- Pilih Paket Wisata --}}
                             <div class="form-group">
                                 <label for="id_paket" class="form-label">Paket Wisata</label>
-                                <select name="id_paket" id="id_paket" class="form-control">
+                                <select name="id_paket" id="id_paket" class="form-control" disabled>
                                     <option value="">-- Pilih Paket --</option>
                                     @foreach($pakets as $p)
                                         <option value="{{ $p->id }}" {{ old('id_paket', $reservasi->id_paket) == $p->id ? 'selected' : '' }} data-durasi="{{ $p->durasi_hari }}" data-kuota="{{ $p->kuota_peserta }}" data-harga="{{ $p->harga_per_pack }}" data-peserta-diskon="{{ $p->peserta_diskon }}" data-nilai-diskon="{{ $p->nilai_diskon }}">
@@ -50,6 +51,7 @@
                                         </option>
                                     @endforeach
                                 </select>
+                                <input type="hidden" name="id_paket" value="{{ $reservasi->id_paket }}">
                                 @error('id_paket') <div class="text-danger">{{ $message }}</div> @enderror
                             </div>
 
@@ -63,7 +65,7 @@
                             {{-- Tanggal Mulai Reservasi --}}
                             <div class="form-group">
                                 <label for="tgl_reservasi_mulai" class="form-label">Tanggal Mulai Reservasi</label>
-                                <input type="datetime-local" name="tgl_reservasi_mulai" id="tgl_reservasi_mulai" class="form-control" value="{{ old('tgl_reservasi_mulai', \Carbon\Carbon::parse($reservasi->tgl_reservasi_mulai)->format('Y-m-d\TH:i')) }}" required>
+                                <input type="datetime-local" name="tgl_reservasi_mulai" id="tgl_reservasi_mulai" class="form-control" value="{{ old('tgl_reservasi_mulai', \Carbon\Carbon::parse($reservasi->tgl_reservasi_mulai)->format('Y-m-d\TH:i')) }}" readonly required>
                                 @error('tgl_reservasi_mulai') <div class="text-danger">{{ $message }}</div> @enderror
                             </div>
 
@@ -84,7 +86,7 @@
                             {{-- Jumlah Peserta --}}
                             <div class="form-group">
                                 <label for="jumlah_peserta" class="form-label">Jumlah Peserta</label>
-                                <input type="number" name="jumlah_peserta" id="jumlah_peserta" class="form-control" value="{{ old('jumlah_peserta', $reservasi->jumlah_peserta) }}">
+                                <input type="number" name="jumlah_peserta" id="jumlah_peserta" class="form-control" value="{{ old('jumlah_peserta', $reservasi->jumlah_peserta) }}" readonly>
                                 @error('jumlah_peserta') <div class="text-danger">{{ $message }}</div> @enderror
                                 <p id="peserta-error" class="form-text text-danger d-none">Jumlah peserta melebihi kuota!</p>
                             </div>
