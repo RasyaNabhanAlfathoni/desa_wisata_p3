@@ -30,9 +30,14 @@
                     </div>
 
                     <div class="d-flex justify-content-between align-items-center mb-4">
+                        @if ($title == 'Admin')
                         <a href="{{ route('kelola_data_pelanggan.create') }}" class="btn btn-primary">
                             <i class="fe fe-plus mr-1"></i>Tambah
                         </a>
+                        @else
+                        <a href="{{ route('kelola_data_pelanggan.create') }}" class="btn disabled">
+                        </a>
+                        @endif
                         <form class="form">
                             <div class="form-group mb-0">
                                 <label for="search1" class="sr-only">Search</label>
@@ -99,6 +104,7 @@
                                     <button class="btn btn-sm dropdown-toggle more-horizontal" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         <span class=" sr-only">Action</span>
                                     </button>
+                                    @if ($title == 'Admin')
                                     <div class="dropdown-menu dropdown-menu-right">
                                         <a class="dropdown-item text-info" href="{{ route('kelola_data_pelanggan.show', $pelanggan->id) }}"><i class="fe fe-info mr-1"></i>Detail</a>
                                         <a class="dropdown-item text-warning" href="{{ route('kelola_data_pelanggan.edit', $pelanggan->id) }}"><i class="fe fe-edit mr-1"></i>Edit</a>
@@ -106,6 +112,12 @@
                                             <i class="fe fe-trash mr-1"></i>Delete
                                         </a>
                                     </div>
+                                    @else
+                                    <div class="dropdown-menu dropdown-menu-right">
+                                        <a class="dropdown-item text-info" href="{{ route('kelola_data_pelanggan.show', $pelanggan->id) }}"><i class="fe fe-info mr-1"></i>Detail</a>
+                                        </a>
+                                    </div>
+                                    @endif
                                 </td>
                             </tr>
                             @endforeach

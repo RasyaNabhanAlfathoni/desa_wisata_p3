@@ -28,11 +28,15 @@
                             <i class="fe fe-file-text mr-1"></i>Download Format Excel
                         </a>
                     </div>
-
                     <div class="d-flex justify-content-between align-items-center mb-4">
+                        @if ($title == 'Admin')
                         <a href="{{ route('kelola_data_karyawan.create') }}" class="btn btn-primary">
                             <i class="fe fe-plus mr-1"></i>Tambah
                         </a>
+                        @else
+                        <a href="{{ route('kelola_data_karyawan.create') }}" class="btn disabled">
+                        </a>
+                        @endif
 
                         <form class="form">
                             <div class="form-group mb-0">
@@ -100,6 +104,7 @@
                                         <button class="btn btn-sm dropdown-toggle more-horizontal" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                             <span class="sr-only">Action</span>
                                         </button>
+                                        @if ($title == 'Admin')
                                         <div class="dropdown-menu dropdown-menu-right">
                                             <a class="dropdown-item text-info" href="{{ route('kelola_data_karyawan.show', $karyawan->id) }}"><i class="fe fe-info mr-1"></i>Detail</a>
                                             <a class="dropdown-item text-warning" href="{{ route('kelola_data_karyawan.edit', $karyawan->id) }}"><i class="fe fe-edit mr-1"></i>Edit</a>
@@ -107,6 +112,11 @@
                                                 <i class="fe fe-trash mr-1"></i>Delete
                                             </a>
                                         </div>
+                                        @else
+                                        <div class="dropdown-menu dropdown-menu-right">
+                                            <a class="dropdown-item text-info" href="{{ route('kelola_data_karyawan.show', $karyawan->id) }}"><i class="fe fe-info mr-1"></i>Detail</a>
+                                        </div>
+                                        @endif
                                     </td>
                                 </tr>
                             @endforeach
