@@ -46,12 +46,12 @@
             <div class="form-step active">
                 <div class="mb-3">
                     <label for="nama_lengkap" class="form-label text-muted fs-5">Nama Lengkap</label>
-                    <input type="text" name="nama_lengkap" class="form-control form-control-lg" id="nama_lengkap" placeholder="Masukkan Nama Lengkap" required>
+                    <input type="text" name="nama_lengkap" class="form-control form-control-lg" id="nama_lengkap" placeholder="Masukkan Nama Lengkap" value="{{ old('nama_lengkap') }}" required>
                 </div>
 
                 <div class="mb-3">
                     <label for="email" class="form-label text-muted fs-5">Email</label>
-                    <input type="email" name="email" class="form-control form-control-lg" id="email" placeholder="Masukkan Alamat Email" required>
+                    <input type="email" name="email" class="form-control form-control-lg" id="email" placeholder="Masukkan Alamat Email" value="{{ old('email') }}" required>
                 </div>
 
                 <button type="button" class="btn btn-primary  next-step">Next</button>
@@ -61,12 +61,12 @@
             <div class="form-step d-none">
                 <div class="mb-3">
                     <label for="no_hp" class="form-label text-muted fs-5">No HP</label>
-                    <input type="text" name="no_hp" class="form-control form-control-lg" id="no_hp" placeholder="Masukkan Nomor HP" required>
+                    <input type="text" name="no_hp" class="form-control form-control-lg" id="no_hp" placeholder="Masukkan Nomor HP" value="{{ old('no_hp') }}" required>
                 </div>
 
                 <div class="mb-3">
                     <label for="alamat" class="form-label text-muted fs-5">Alamat</label>
-                    <textarea name="alamat" class="form-control form-control-lg" id="alamat" placeholder="Masukkan Alamat Rumah" required></textarea>
+                    <textarea name="alamat" class="form-control form-control-lg" id="alamat" placeholder="Masukkan Alamat Rumah" value="{{ old('alamat') }}" required></textarea>
                 </div>
 
                 <button type="button" class="btn btn-secondary prev-step">Previous</button>
@@ -213,29 +213,52 @@
         }
 
         function simpan(event) {
-                    // Cek apakah ada field yang kosong dan tampilkan pesan error sesuai
-                    if (email.value === '') {
-                        event.preventDefault();
-                        swal("Invalid Data!", "Mohon isi bagian email!", "error");
-                    } else if (nama.value === '') {
-                        event.preventDefault();
-                        swal("Invalid Data!", "Mohon isi bagian nama lengkap!", "error");
-                    } else if (no_hp.value === '') {
-                        event.preventDefault();
-                        swal("Invalid Data!", "Mohon isi bagian nomor handphone!", "error");
-                    } else if (alamat.value === '') {
-                        event.preventDefault();
-                        swal("Invalid Data!", "Mohon isi bagian alamat!", "error");
-                    } else if (password.value === '') {
-                        event.preventDefault();
-                        swal("Invalid Data!", "Mohon isi bagian password!", "error");
-                    } else if (password_confirmation.value === '') {
-                        event.preventDefault();
-                        swal("Invalid Data!", "Mohon isi bagian konfirmasi password!", "error");
-                    } else {
-                        // Menampilkan pesan sukses saat form valid dan berhasil disubmit
-                        form.submit();
-                    }
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            const hpRegex = /^08[0-9]{8,11}$/;
+
+            if (nama.value.trim() === '') {
+                event.preventDefault();
+                swal("Invalid Data!", "Mohon isi bagian nama lengkap!", "error");
+
+            } else if (email.value.trim() === '') {
+                event.preventDefault();
+                swal("Invalid Data!", "Mohon isi bagian email!", "error");
+
+            } else if (!emailRegex.test(email.value)) {
+                event.preventDefault();
+                swal("Invalid Data!", "Format email tidak valid!", "error");
+
+            } else if (no_hp.value.trim() === '') {
+                event.preventDefault();
+                swal("Invalid Data!", "Mohon isi bagian nomor handphone!", "error");
+
+            } else if (!hpRegex.test(no_hp.value)) {
+                event.preventDefault();
+                swal("Invalid Data!", "Nomor HP harus diawali 08 dan hanya angka!", "error");
+
+            } else if (alamat.value.trim() === '') {
+                event.preventDefault();
+                swal("Invalid Data!", "Mohon isi bagian alamat!", "error");
+
+            } else if (password.value === '') {
+                event.preventDefault();
+                swal("Invalid Data!", "Mohon isi bagian password!", "error");
+
+            } else if (password.value.length < 6) {
+                event.preventDefault();
+                swal("Invalid Data!", "Password minimal 6 karakter!", "error");
+
+            } else if (password_confirmation.value === '') {
+                event.preventDefault();
+                swal("Invalid Data!", "Mohon isi bagian konfirmasi password!", "error");
+
+            } else if (password.value !== password_confirmation.value) {
+                event.preventDefault();
+                swal("Invalid Data!", "Konfirmasi password tidak cocok!", "error");
+
+            } else {
+                form.submit();
+            }
         }
 
         body.onload = function(){

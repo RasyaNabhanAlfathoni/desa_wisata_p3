@@ -30,7 +30,7 @@ class AuthController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'level' => 'pelanggan', // Set level secara otomatis sebagai pelanggan
-            'akif' => 1, // Set status aktif
+            'aktif' => 1, // Set status aktif
             'remember_token' => Str::random(60), // Generate remember token
         ]);
 
