@@ -91,9 +91,13 @@ Route::post('/reset-password', [AuthController::class, 'resetPassword'])->name('
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // ✅ Dashboard untuk masing-masing level
-Route::middleware(['auth', 'level:admin,pemilik'])->group(function () {
+// ✅ Dashboard untuk masing-masing level
+Route::middleware(['auth', 'level:admin'])->group(function () {
     Route::get('/admin', [AdminController::class, 'index'])->name('admin.index');
     Route::resource('/admin', AdminController::class);
+});
+
+Route::middleware(['auth', 'level:admin,pemilik'])->group(function () {
     Route::resource('/kelola_data_karyawan', DataKaryawanController::class);
 
     // For Export users data to excel
