@@ -53,20 +53,34 @@ Route::middleware('guest')->group(function () {
     Route::get('/berita/{id}', [HomeController::class, 'beritaDetail'])->name('berita.detail');
 });
 
-// Email Verification Routes
+// ✅ Route untuk halaman verifikasi notice (akses tanpa login)
+Route::get('/verify-email', [AuthController::class, 'verificationNotice'])->name('verification.notice');
+// ✅ Email Verification Routes (tanpa middleware auth)
+Route::get('/email/verify/{id}/{hash}', [AuthController::class, 'verificationVerify'])
+    ->middleware(['signed'])
+    ->name('verification.verify');
+
+// ✅ Resend verification (tetap pakai auth karena perlu user)
 Route::middleware(['auth'])->group(function () {
-    Route::get('/email/verify', function () {
-        return app()->make(AuthController::class)->verificationNotice();
-    })->name('verification.notice');
-
-    Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
-        return app()->make(AuthController::class)->verificationVerify($request);
-    })->middleware(['signed'])->name('verification.verify');
-
     Route::post('/email/verification-notification', function (Request $request) {
         return app()->make(AuthController::class)->verificationResend($request);
     })->middleware(['throttle:6,1'])->name('verification.send');
 });
+
+// // Email Verification Routes
+// Route::middleware(['auth'])->group(function () {
+//     Route::get('/email/verify', function () {
+//         return app()->make(AuthController::class)->verificationNotice();
+//     })->name('verification.notice');
+
+//     Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
+//         return app()->make(AuthController::class)->verificationVerify($request);
+//     })->middleware(['signed'])->name('verification.verify');
+
+//     Route::post('/email/verification-notification', function (Request $request) {
+//         return app()->make(AuthController::class)->verificationResend($request);
+//     })->middleware(['throttle:6,1'])->name('verification.send');
+// });
 
 // Password Reset Routes
 Route::get('/forgot-password', [AuthController::class, 'showForgotPasswordForm'])->name('password.request');
