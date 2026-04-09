@@ -451,7 +451,7 @@
                                                         </p>
 
                                                         <p class="mt-3">
-                                                            Silakan klik tombol di bawah untuk menghubungi bendahara:
+                                                            Silakan klik tombol di bawah untuk menghubungi tim kami:
                                                         </p>
                                                     </div>
 
@@ -459,7 +459,7 @@
                                                         <a href="https://wa.me/{{ $no_hp_bendahara }}?text={{ $pesan_batal }}"
                                                         target="_blank"
                                                         class="btn btn-success">
-                                                            <i class="icon-whatsapp mr-1"></i> Hubungi Bendahara
+                                                            <i class="icon-whatsapp mr-1"></i> Hubungi Kami
                                                         </a>
 
                                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">
