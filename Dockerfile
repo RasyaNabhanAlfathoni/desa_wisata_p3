@@ -1,18 +1,21 @@
 FROM php:8.2-apache
 
+USER root
+
 # Install dependency
 RUN apt-get update && apt-get install -y \
     libpng-dev libjpeg-dev libfreetype6-dev \
     libzip-dev zip unzip git curl \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install gd zip pdo pdo_mysql
+    && docker-php-ext-install gd pdo pdo_mysql zip
 
-RUN rm -f /etc/apache2/mods-enabled/mpm_*.load \
-    && rm -f /etc/apache2/mods-enabled/mpm_*.conf \
-    && a2enmod mpm_prefork
+# FIX MPM (WAJIB)
+RUN a2dismod mpm_event || true \
+ && a2dismod mpm_worker || true \
+ && a2enmod mpm_prefork
 
-# Enable rewrite
-RUN a2enmod rewrite
+# Enable apache modules
+RUN a2enmod rewrite headers expires deflate mime
 
 # Set working dir
 WORKDIR /var/www/html
@@ -24,13 +27,16 @@ COPY . .
 RUN curl -sS https://getcomposer.org/installer | php \
     && php composer.phar install --no-dev --optimize-autoloader
 
-# Set permission
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+# Storage link
+RUN php artisan storage:link || true
 
-# Set document root ke public
-ENV APACHE_DOCUMENT_ROOT /var/www/html/public
+# Permission
+RUN chown -R www-data:www-data /var/www/html \
+    && chmod -R 755 /var/www/html \
+    && chmod -R 775 storage bootstrap/cache
 
-RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
+# Apache config
+COPY 000-default.conf /etc/apache2/sites-available/000-default.conf
 
 EXPOSE 80
 
