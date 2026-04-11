@@ -7,13 +7,12 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install gd zip pdo pdo_mysql
 
-# Enable rewrite (Laravel wajib)
-RUN a2enmod rewrite
+RUN rm -f /etc/apache2/mods-enabled/mpm_*.load \
+    && rm -f /etc/apache2/mods-enabled/mpm_*.conf \
+    && a2enmod mpm_prefork
 
-# FIX MPM CONFLICT
-RUN a2dismod mpm_event || true
-RUN a2dismod mpm_worker || true
-RUN a2enmod mpm_prefork
+# Enable rewrite
+RUN a2enmod rewrite
 
 # Set working dir
 WORKDIR /var/www/html
