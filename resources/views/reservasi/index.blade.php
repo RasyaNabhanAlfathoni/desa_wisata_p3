@@ -124,7 +124,11 @@
                                             <div class="dropdown-menu dropdown-menu-right">
                                                 <a class="dropdown-item text-info" href="{{ route('kelola_reservasi.show', $reservasi->id) }}"><i class="fe fe-info mr-1"></i>Detail</a>
                                                 <a class="dropdown-item text-warning" href="{{ route('kelola_reservasi.edit', $reservasi->id) }}"><i class="fe fe-edit mr-1"></i>Edit</a>
-                                                <a class="dropdown-item text-danger" href="{{route('kelola_reservasi.destroy', $reservasi->id)}}"><i class="fe fe-trash mr-1"></i>Delete</a>
+                                                <a class="dropdown-item text-danger"
+                                                    href="{{ route('kelola_reservasi.destroy', $reservasi->id) }}"
+                                                    onclick="hapus(event, this)">
+                                                        <i class="fe fe-trash mr-1"></i>Delete
+                                                </a>
                                             </div>
                                             @else
                                             <div class="dropdown-menu dropdown-menu-right">
