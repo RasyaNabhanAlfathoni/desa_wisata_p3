@@ -10,6 +10,11 @@ RUN apt-get update && apt-get install -y \
 # Enable rewrite (Laravel wajib)
 RUN a2enmod rewrite
 
+# FIX MPM CONFLICT
+RUN a2dismod mpm_event || true
+RUN a2dismod mpm_worker || true
+RUN a2enmod mpm_prefork
+
 # Set working dir
 WORKDIR /var/www/html
 
