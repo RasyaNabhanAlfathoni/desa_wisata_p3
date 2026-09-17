@@ -10,7 +10,6 @@ use App\Http\Controllers\BeritaController;
 use App\Http\Controllers\DataKaryawanController;
 use App\Http\Controllers\DataPelangganController;
 use App\Http\Controllers\KategoriBeritaController;
-use App\Http\Controllers\UserController;
 use App\Http\Controllers\KeuanganController;
 use App\Http\Controllers\PaketWisataController;
 use App\Http\Controllers\KategoriWisataController;
@@ -20,7 +19,6 @@ use App\Http\Controllers\ObyekWisataController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\NotifikasiController;
 use App\Http\Controllers\ProfilePelangganController;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 use App\Http\Controllers\ProfileController;
@@ -55,33 +53,34 @@ Route::middleware('guest')->group(function () {
     Route::get('/berita/{id}', [HomeController::class, 'beritaDetail'])->name('berita.detail');
 });
 
-// Email Verification Routes
+// ✅ Route untuk halaman verifikasi notice (akses tanpa login)
+Route::get('/verify-email', [AuthController::class, 'verificationNotice'])->name('verification.notice');
+// ✅ Email Verification Routes (tanpa middleware auth)
+Route::get('/email/verify/{id}/{hash}', [AuthController::class, 'verificationVerify'])
+    ->middleware(['signed'])
+    ->name('verification.verify');
+
+// ✅ Resend verification (tetap pakai auth karena perlu user)
 Route::middleware(['auth'])->group(function () {
-    Route::get('/email/verify', function () {
-        return app()->make(AuthController::class)->verificationNotice();
-    })->name('verification.notice');
-
-    Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
-        return app()->make(AuthController::class)->verificationVerify($request);
-    })->middleware(['signed'])->name('verification.verify');
-
     Route::post('/email/verification-notification', function (Request $request) {
         return app()->make(AuthController::class)->verificationResend($request);
     })->middleware(['throttle:6,1'])->name('verification.send');
 });
 
-// Email Verification Routes
-// Route::get('/email/verify', function () {
-//     return app()->make(AuthController::class)->verificationNotice();
-// })->name('verification.notice');
+// // Email Verification Routes
+// Route::middleware(['auth'])->group(function () {
+//     Route::get('/email/verify', function () {
+//         return app()->make(AuthController::class)->verificationNotice();
+//     })->name('verification.notice');
 
-// Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
-//     return app()->make(AuthController::class)->verificationVerify($request);
-// })->middleware(['signed'])->name('verification.verify');
+//     Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
+//         return app()->make(AuthController::class)->verificationVerify($request);
+//     })->middleware(['signed'])->name('verification.verify');
 
-// Route::post('/email/verification-notification', function (Request $request) {
-//     return app()->make(AuthController::class)->verificationResend($request);
-// })->middleware(['throttle:6,1'])->name('verification.send');
+//     Route::post('/email/verification-notification', function (Request $request) {
+//         return app()->make(AuthController::class)->verificationResend($request);
+//     })->middleware(['throttle:6,1'])->name('verification.send');
+// });
 
 // Password Reset Routes
 Route::get('/forgot-password', [AuthController::class, 'showForgotPasswordForm'])->name('password.request');
@@ -92,9 +91,13 @@ Route::post('/reset-password', [AuthController::class, 'resetPassword'])->name('
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // ✅ Dashboard untuk masing-masing level
+// ✅ Dashboard untuk masing-masing level
 Route::middleware(['auth', 'level:admin'])->group(function () {
     Route::get('/admin', [AdminController::class, 'index'])->name('admin.index');
     Route::resource('/admin', AdminController::class);
+});
+
+Route::middleware(['auth', 'level:admin,pemilik'])->group(function () {
     Route::resource('/kelola_data_karyawan', DataKaryawanController::class);
 
     // For Export users data to excel
@@ -110,37 +113,23 @@ Route::middleware(['auth', 'level:admin'])->group(function () {
         $filename = 'data_pelanggan_' . Carbon::now()->format('Y-m-d_H-i') . '.xlsx';
         return Excel::download(new PelangganWithUserExport, $filename);
     })->name('download.excel-pelanggan');
-
-    // Route::resource('/keuangan', KeuanganController::class);
-    // Route::resource('/obyek_wisata', ObyekWisataController::class);
-    // Route::resource('/kategori_wisata', KategoriWisataController::class);
-    // Route::resource('/paket_wisata', PaketWisataController::class);
-    // Route::resource('/penginapan', PenginapanController::class);
-    // Route::resource('/berita', BeritaController::class);
-    // Route::resource('/kategori_berita', KategoriBeritaController::class);
-    // Route::resource('/reservasi', ReservasiController::class);
 });
 
 // ✅ Admin juga bisa CRUD semua yang ada di Pemilik
 Route::middleware(['auth', 'level:pemilik'])->group(function () {
     Route::get('/pemilik', [PemilikController::class, 'index'])->name('pemilik.index');
-    // Route::resource('/obyek_wisata', ObyekWisataController::class);
-    // Route::resource('/kategori_wisata', KategoriWisataController::class);
-    // Route::resource('/paket_wisata', PaketWisataController::class);
-    // Route::resource('/penginapan', PenginapanController::class);
-    // Route::resource('/berita', BeritaController::class);
-    // Route::resource('/kategori_berita', KategoriBeritaController::class);
-    // Route::resource('/keuangan', KeuanganController::class);
-    // Route::resource('/reservasi', ReservasiController::class);
 });
 
 // ✅ Bendahara hanya bisa mengelola keuangan
 Route::middleware(['auth', 'level:bendahara'])->group(function () {
     Route::get('/bendahara', [BendaharaController::class, 'index'])->name('bendahara.index');
+    Route::post('/reservasi/{id}/konfirmasi', [ReservasiController::class, 'konfirmasi'])->name('kelola_reservasi.konfirmasi');
+    Route::delete('/reservasi/{id}/batal', [ReservasiController::class, 'batal'])->name('kelola_reservasi.batal');
+    Route::post('/reservasi/{id}/upload', [ReservasiController::class, 'upload'])->name('kelola_reservasi.upload');
 });
 
 // CRUD DATA ADMIN & PEMILIK
-Route::middleware(['auth', 'level:admin'])->group(function () {
+Route::middleware(['auth', 'level:admin,pemilik'])->group(function () {
     Route::resource('/kelola_obyek_wisata', ObyekWisataController::class);
     Route::resource('/kelola_kategori_wisata', KategoriWisataController::class);
     Route::resource('/kelola_paket_wisata', PaketWisataController::class);
@@ -161,6 +150,13 @@ Route::middleware(['auth', 'level:admin'])->group(function () {
 Route::middleware(['auth', 'level:admin,pemilik,bendahara'])->group(function () {
     Route::resource('/kelola_notifikasi', NotifikasiController::class);
     Route::resource('/profile', ProfileController::class);
+    Route::resource('/kelola_reservasi', ReservasiController::class);
+     // For Export reservasi data to excel
+    Route::get('/download-excel-reservasi', function () {
+        $filename = 'data_reservasi_' . Carbon::now()->format('Y-m-d_H-i') . '.xlsx';
+        return Excel::download(new ReservasiExport, $filename);
+    })->name('download.excel-reservasi');
+
 });
 
 // CRUD DATA ADMIN, PEMILIK & BENDAHARA
@@ -198,18 +194,6 @@ Route::middleware(['auth', 'level:pemilik,bendahara'])->group(function () {
 
         return $pdf->download($filename);
     })->name('download.pdf-keuangan');
-
-
-    Route::resource('/kelola_reservasi', ReservasiController::class);
-    Route::post('/reservasi/{id}/upload', [ReservasiController::class, 'upload'])->name('kelola_reservasi.upload');
-    Route::post('/reservasi/{id}/konfirmasi', [ReservasiController::class, 'konfirmasi'])->name('kelola_reservasi.konfirmasi');
-    Route::delete('/reservasi/{id}/batal', [ReservasiController::class, 'batal'])->name('kelola_reservasi.batal');
-
-    // For Export reservasi data to excel
-    Route::get('/download-excel-reservasi', function () {
-        $filename = 'data_reservasi_' . Carbon::now()->format('Y-m-d_H-i') . '.xlsx';
-        return Excel::download(new ReservasiExport, $filename);
-    })->name('download.excel-reservasi');
 });
 
 // ✅ Pelanggan hanya bisa melakukan reservasi

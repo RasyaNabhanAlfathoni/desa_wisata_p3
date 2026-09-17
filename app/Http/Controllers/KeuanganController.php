@@ -63,6 +63,20 @@ class KeuanganController extends Controller
             $reservasi = $query->get(); // Ambil hasil filter
         }
 
+        $tanggalAwal = $request->tanggal_awal;
+        $tanggalAkhir = $request->tanggal_akhir;
+
+        if ($tanggalAwal && $tanggalAkhir) {
+            $periode = \Carbon\Carbon::parse($tanggalAwal)->format('d M Y') . ' - ' .
+                    \Carbon\Carbon::parse($tanggalAkhir)->format('d M Y');
+        } elseif ($tanggalAwal) {
+            $periode = 'Dari ' . \Carbon\Carbon::parse($tanggalAwal)->format('d M Y');
+        } elseif ($tanggalAkhir) {
+            $periode = 'Sampai ' . \Carbon\Carbon::parse($tanggalAkhir)->format('d M Y');
+        } else {
+            $periode = 'Semua Data';
+        }
+
         return view('keuangan.index', [
             'title' => ucfirst(Auth::user()->level),
             'menu' => 'keuangan',
@@ -70,7 +84,8 @@ class KeuanganController extends Controller
             'reservasi' => $reservasi,
             'paketWisata' => $paketWisata,
             'statusReservasi' => $statusReservasi,
-            'pelanggan' => $pelanggan
+            'pelanggan' => $pelanggan,
+            'periode' => $periode
         ]);
     }
 

@@ -63,7 +63,7 @@
             </li>
 
             <!-- Dropdown Profil -->
-            <li class="nav-item dropdown">
+            <li class="nav-item dropdown d-none d-lg-block">
                 <a
                     class="nav-link dropdown-toggle pr-0 d-flex align-items-center"
                     href="#"
@@ -91,6 +91,27 @@
                         <button type="submit" class="dropdown-item text-danger"><i class="fas fa-sign-out-alt mr-2"></i>Logout</button>
                     </form>
                 </div>
+            </li>
+            <!-- MOBILE VERSION (NO DROPDOWN) -->
+            <li class="nav-item d-lg-none">
+                <a class="nav-link d-flex align-items-center" href="{{ route('profile-pelanggan.index') }}">
+                    <img
+                        src="{{ asset($pelanggan->foto ? 'storage/' . $pelanggan->foto : 'back-end/assets/avatars/default.png') }}"
+                        class="rounded-circle mr-2"
+                        width="30"
+                        height="30"
+                    />
+                    Profile
+                </a>
+            </li>
+
+            <li class="nav-item d-lg-none">
+                <form action="{{ route('logout') }}" method="POST">
+                    @csrf
+                    <button type="submit" class="nav-link btn btn-link text-danger ml-4">
+                        <i class="fas fa-sign-out-alt mr-2"></i> Logout
+                    </button>
+                </form>
             </li>
         </ul>
     </div>

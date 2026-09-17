@@ -146,8 +146,7 @@
 
                 <div class="d-flex justify-content-between align-items-center mb-2">
                     <div class="d-flex align-items-center">
-                        <a href="{{ route('kelola_reservasi.create') }}" class="btn btn-primary">
-                            <i class="fe fe-plus mr-1"></i>Tambah
+                        <a href="{{ route('kelola_reservasi.create') }}" class="btn disabled">
                         </a>
                     </div>
 
@@ -231,8 +230,6 @@
                                             </button>
                                             <div class="dropdown-menu dropdown-menu-right">
                                                 <a class="dropdown-item text-info" href="{{ route('kelola_reservasi.show', $reservasi->id) }}"><i class="fe fe-info mr-1"></i>Detail</a>
-                                                <a class="dropdown-item text-warning" href="{{ route('kelola_reservasi.edit', $reservasi->id) }}"><i class="fe fe-edit mr-1"></i>Edit</a>
-                                                <a class="dropdown-item text-danger" href="{{route('kelola_reservasi.destroy', $reservasi->id)}}"><i class="fe fe-trash mr-1"></i>Delete</a>
                                             </div>
                                         </td>
                                 </tr>

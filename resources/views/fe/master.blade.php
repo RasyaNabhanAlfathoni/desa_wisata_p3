@@ -105,19 +105,41 @@
             <h2 class="ftco-heading-2">Hubungi Kami</h2>
             <ul class="list-unstyled">
                 @php
-                // Ambil data pemilik pertama yang valid
-                $pemilik = App\Models\User::where('level', 'pemilik')
+                // Ambil data admin pertama yang valid
+                $admin = App\Models\User::where('level', 'admin')
                             ->where('aktif', true)
                             ->with('karyawan')
                             ->first();
                 @endphp
 
-                @if($pemilik && $pemilik->karyawan)
-                    <li><a><span class="icon icon-phone mr-2"></span><span class="text">{{ $pemilik->karyawan->no_hp ?? 'Nomor tidak tersedia' }}</span></a></li>
-                    <li><a><span class="icon icon-envelope mr-2"></span><span class="text">{{ $pemilik->email }}</span></a></li>
+                @php
+                    $no_hp = $admin->karyawan->no_hp ?? '628123456789'; // default
+                    $no_hp = preg_replace('/^0/', '62', $no_hp); // ubah 08 jadi 628
+                    $pesan = urlencode("Halo Admin, saya ingin menanyakan informasi terkait reservasi di Pesona Desa. Terima kasih.");
+                @endphp
+
+                @php
+                    $email = $admin->email ?? 'admin@pesonaDesa.co.id';
+                    $subject = urlencode("Pertanyaan Reservasi Pesona Desa");
+                    $body = urlencode("Halo Admin,\n\nSaya ingin menanyakan informasi terkait reservasi di Pesona Desa.\n\nTerima kasih.");
+                @endphp
+
+                @if($admin && $admin->karyawan)
+                    <li>
+                        <a href="https://wa.me/{{ $no_hp }}?text={{ $pesan }}" target="_blank">
+                            <span class="icon icon-phone mr-2"></span>
+                            <span class="text">{{ $admin->karyawan->no_hp ?? 'Nomor tidak tersedia' }}</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://mail.google.com/mail/?view=cm&fs=1&to={{ $email }}&su={{ $subject }}&body={{ $body }}" target="_blank">
+                            <span class="icon icon-envelope mr-2"></span>
+                            <span class="text">{{ $admin->email }}</span>
+                        </a>
+                    </li>
                 @else
                     <li><a><span class="icon icon-phone mr-2"></span><span class="text">+62 392 3929 210</span></a></li>
-                    <li><a><span class="icon icon-envelope mr-2"></span><span class="text">pemilik@pesonaDesa.co.id</span></a></li>
+                    <li><a><span class="icon icon-envelope mr-2"></span><span class="text">admin@pesonaDesa.co.id</span></a></li>
                 @endif
             </ul>
           </div>
@@ -214,6 +236,7 @@
         const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
         const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
     </script>
+    @stack('scripts')
 
   </body>
 </html>

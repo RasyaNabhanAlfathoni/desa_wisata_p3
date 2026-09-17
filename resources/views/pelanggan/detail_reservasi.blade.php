@@ -209,6 +209,18 @@
                                                         <i class="icon-download mr-1"></i> Lihat Bukti Transfer
                                                     </a>
 
+                                                    @php
+                                                        $bendahara = App\Models\User::where('level', 'bendahara')
+                                                                        ->where('aktif', true)
+                                                                        ->with('karyawan')
+                                                                        ->first();
+
+                                                        $no_hp_bendahara = $bendahara->karyawan->no_hp ?? '628123456789';
+                                                        $no_hp_bendahara = preg_replace('/^0/', '62', $no_hp_bendahara);
+
+                                                        $pesan_wa = urlencode("Halo, saya {$pelanggan->nama_lengkap} ingin menanyakan status konfirmasi pembayaran reservasi ID {$reservasi->id}.");
+                                                    @endphp
+
                                                     @if($reservasi->status_reservasi_wisata == 'pesan')
                                                         <button type="button"
                                                                 class="btn btn-sm btn-warning mt-3"
@@ -216,10 +228,120 @@
                                                                 data-target="#gantiBuktiModal">
                                                             <i class="icon-refresh mr-1"></i> Ganti Bukti Transfer
                                                         </button>
+                                                        <div class="mt-3">
+                                                            <div class="alert alert-info">
+                                                                <p class="mb-2">
+                                                                    ⏳ <strong>Menunggu Konfirmasi Pembayaran</strong><br>
+                                                                    Pembayaran Anda sedang diverifikasi oleh tim kami.
+                                                                </p>
+
+                                                                <p class="mb-2">
+                                                                    Proses konfirmasi maksimal <strong>3 x 24 jam</strong> pada hari kerja.
+                                                                    Jika dalam waktu tersebut belum ada konfirmasi, silakan hubungi tim kami.
+                                                                </p>
+
+                                                                <a href="https://wa.me/{{ $no_hp_bendahara }}?text={{ $pesan_wa }}"
+                                                                target="_blank"
+                                                                class="btn btn-success btn-sm">
+                                                                    <i class="icon-whatsapp mr-1"></i> Hubungi Kami
+                                                                </a>
+                                                            </div>
+                                                        </div>
+
+                                                    @elseif ($reservasi->status_reservasi_wisata == 'selesai')
+                                                        <div class="mt-3">
+                                                            <div class="alert alert-success">
+                                                                <p class="mb-2">
+                                                                    🏡 <strong>Wisata Selesai. Terima Kasih!</strong><br>
+                                                                    Kami mengucapkan terima kasih atas kepercayaan Anda berkunjung ke Desa Wisata kami. Senang bisa menjadi bagian dari cerita liburan Anda. Jangan lupa rekomendasikan kami kepada kerabat!
+                                                                </p>
+                                                            </div>
+                                                        </div>
+
+                                                    @elseif($reservasi->status_reservasi_wisata == 'dibayar')
+                                                        @php
+                                                            $admin = App\Models\User::where('level', 'admin')
+                                                                        ->where('aktif', true)
+                                                                        ->with('karyawan')
+                                                                        ->first();
+
+                                                            $no_hp_admin = $admin->karyawan->no_hp ?? '628123456789';
+                                                            $no_hp_admin = preg_replace('/^0/', '62', $no_hp_admin);
+
+                                                            $pesan_admin = urlencode("Halo, saya {$pelanggan->nama_lengkap} dengan reservasi ID {$reservasi->id}. Saya ingin menanyakan informasi lebih lanjut terkait persiapan wisata.");
+                                                        @endphp
+
+                                                        <div class="mt-3">
+                                                            <div class="alert alert-primary">
+                                                                <p class="mb-2">
+                                                                    ✅ <strong>Reservasi Anda Telah Dikonfirmasi</strong><br>
+                                                                    Pembayaran Anda telah kami terima dan reservasi telah berhasil diproses.
+                                                                </p>
+
+                                                                <hr>
+
+                                                                <p class="mb-2">
+                                                                    🧳 <strong>Persiapan Sebelum Keberangkatan:</strong>
+                                                                </p>
+                                                                <ul class="mb-2">
+                                                                    <li>Pastikan kondisi tubuh dalam keadaan sehat</li>
+                                                                    <li>Siapkan perlengkapan pribadi sesuai kebutuhan</li>
+                                                                    <li>Membawa dokumen penting (jika diperlukan)</li>
+                                                                    <li>Datang tepat waktu sesuai jadwal keberangkatan</li>
+                                                                </ul>
+
+                                                                <p class="mb-2">
+                                                                    📅 <strong>Jadwal Wisata Anda:</strong><br>
+                                                                    {{ date('d F Y', strtotime($reservasi->tgl_reservasi_mulai)) }}
+                                                                </p>
+
+                                                                <p class="mb-2">
+                                                                    Kami sangat menantikan kehadiran Anda 😊
+                                                                </p>
+
+                                                                <hr>
+
+                                                                <p class="mb-2">
+                                                                    📞 <strong>Butuh bantuan?</strong><br>
+                                                                    Untuk informasi lebih lanjut, silakan hubungi admin kami:
+                                                                </p>
+
+                                                                <a href="https://wa.me/{{ $no_hp_admin }}?text={{ $pesan_admin }}"
+                                                                target="_blank"
+                                                                class="btn btn-success btn-sm">
+                                                                    <i class="icon-whatsapp mr-1"></i> Hubungi Admin
+                                                                </a>
+                                                            </div>
+                                                        </div>
+
+                                                    @elseif($reservasi->status_reservasi_wisata == 'dibatalkan' && $reservasi->file_bukti_tf)
+                                                        <div class="mt-3">
+                                                            <div class="alert alert-danger">
+                                                                <p class="mb-2">
+                                                                    ❌ <strong>Reservasi Dibatalkan oleh Tim</strong><br>
+                                                                    Mohon maaf atas ketidaknyamanannya, reservasi Anda telah dibatalkan oleh tim kami karena alasan tertentu.
+                                                                </p>
+
+                                                                <p class="mb-2">
+                                                                    💰 Anda telah melakukan pembayaran. Untuk informasi lebih lanjut dan proses <strong>refund</strong>,
+                                                                    silakan hubungi tim kami.
+                                                                </p>
+
+                                                                <p class="mb-2">
+                                                                    Tim kami akan membantu proses pengembalian dana sesuai kebijakan yang berlaku.
+                                                                </p>
+
+                                                                <a href="https://wa.me/{{ $no_hp_bendahara }}?text={{ urlencode("Halo, saya {$pelanggan->nama_lengkap} dengan reservasi ID {$reservasi->id}. Reservasi saya dibatalkan oleh tim desa wisata. Mohon informasi refund dana sebesar Rp {$reservasi->total_bayar}. Terima kasih.") }}"
+                                                                target="_blank"
+                                                                class="btn btn-success btn-sm">
+                                                                    <i class="icon-whatsapp mr-1"></i> Hubungi Kami
+                                                                </a>
+                                                            </div>
+                                                        </div>
                                                     @endif
                                                 </div>
                                             @else
-                                                <div class="alert alert-warning">
+                                                {{-- <div class="alert alert-warning">
                                                     <p><strong>Status Pembayaran:</strong>
                                                         <span class="badge badge-info">Belum Dibayar</span>
                                                     </p>
@@ -228,7 +350,31 @@
                                                        class="btn btn-sm btn-warning">
                                                         <i class="icon-credit-card mr-1"></i> Lanjutkan Pembayaran
                                                     </a>
-                                                </div>
+                                                </div> --}}
+
+                                                @if($reservasi->status_reservasi_wisata != 'dibatalkan')
+                                                    <div class="alert alert-warning">
+                                                        <p><strong>Status Pembayaran:</strong>
+                                                            <span class="badge badge-info">Belum Dibayar</span>
+                                                        </p>
+                                                        <p>Silakan lakukan pembayaran sebelum {{ date('d F Y H:i', strtotime($reservasi->created_at->addDays(1))) }}</p>
+                                                        <a href="{{ route('pelanggan.paket-wisata.pembayaran', $reservasi->id) }}"
+                                                        class="btn btn-sm btn-warning">
+                                                            <i class="icon-credit-card mr-1"></i> Lanjutkan Pembayaran
+                                                        </a>
+                                                    </div>
+                                                @else
+                                                    <div class="alert alert-danger">
+                                                        <p class="mb-2">
+                                                            ❌ <strong>Reservasi Dibatalkan</strong><br>
+                                                            Reservasi ini telah dibatalkan sebelum pembayaran dilakukan.
+                                                            Karena itu, Anda <strong>tidak perlu melakukan pembayaran</strong> untuk reservasi ini.
+                                                        </p>
+                                                        <p class="mb-0 small">
+                                                            💡 Ingin berwisata? Silakan buat reservasi paket wisata baru melalui halaman utama.
+                                                        </p>
+                                                    </div>
+                                                @endif
                                             @endif
                                         </div>
 
@@ -262,6 +408,69 @@
                                             </div>
                                         </div>
 
+                                        <!-- Modal Pengajuan Pembatalan -->
+                                        <div class="modal fade" id="batalReservasiModal" tabindex="-1" role="dialog">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title"><i class="icon-info mr-2"></i> Ajukan Pembatalan Reservasi</h5>
+                                                        <button type="button" class="close" data-dismiss="modal">
+                                                            <span>&times;</span>
+                                                        </button>
+                                                    </div>
+
+                                                    @php
+                                                        $bendahara = App\Models\User::where('level', 'bendahara')
+                                                                        ->where('aktif', true)
+                                                                        ->with('karyawan')
+                                                                        ->first();
+
+                                                        $no_hp_bendahara = $bendahara->karyawan->no_hp ?? '628123456789';
+                                                        $no_hp_bendahara = preg_replace('/^0/', '62', $no_hp_bendahara);
+
+                                                        $pesan_batal = urlencode("Halo, saya {$pelanggan->nama_lengkap} ingin mengajukan pembatalan reservasi ID {$reservasi->id}. Mohon informasi lebih lanjut terkait proses dan refund.");
+                                                    @endphp
+
+                                                    <div class="modal-body">
+                                                        <p>
+                                                            Anda tidak dapat membatalkan reservasi secara langsung melalui sistem.
+                                                            Silakan ajukan pembatalan dengan menghubungi tim kami.
+                                                        </p>
+
+                                                        <hr>
+
+                                                        <h6>Ketentuan Pembatalan:</h6>
+                                                        <p class="mb-2">
+                                                            1. Pembatalan yang dilakukan <strong>5 hari sebelum tanggal keberangkatan</strong>
+                                                            akan dikenakan biaya administrasi sebesar <strong>10%</strong> dari total pembayaran.
+                                                        </p>
+
+                                                        <p class="mb-2 text-danger">
+                                                            2. Pembatalan dalam waktu <strong>kurang dari 5 hari</strong> tidak dapat dilakukan refund.
+                                                        </p>
+
+                                                        <p class="mt-3">
+                                                            Silakan klik tombol di bawah untuk menghubungi tim kami:
+                                                        </p>
+                                                    </div>
+
+                                                    <div class="modal-footer">
+                                                        <a href="https://wa.me/{{ $no_hp_bendahara }}?text={{ $pesan_batal }}"
+                                                        target="_blank"
+                                                        class="btn btn-success">
+                                                            <i class="icon-whatsapp mr-1"></i> Hubungi Kami
+                                                        </a>
+
+                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                                                            Tutup
+                                                        </button>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+
                                         <!-- Tombol Aksi -->
                                         <div class="d-flex flex-wrap justify-content-between align-items-center mt-4 gap-2">
                                             <a href="{{ route('pelanggan.reservasiku') }}" class="btn btn-secondary me-2 mb-2">
@@ -276,20 +485,14 @@
                                             @endif
 
                                             @if(in_array($reservasi->status_reservasi_wisata, ['pesan', 'dibayar']))
-                                                <form id="frmHapus"
-                                                    action="{{ route('pelanggan.paket-wisata.reservasi.batal', $reservasi->id) }}"
-                                                    method="POST" class="mb-2">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="button"
-                                                            onclick="hapus(event, this)"
-                                                            class="btn btn-danger">
-                                                        <i class="icon-trash me-2"></i> Batalkan Reservasi
-                                                    </button>
-                                                </form>
+                                                <button type="button"
+                                                        class="btn btn-danger mb-2"
+                                                        data-toggle="modal"
+                                                        data-target="#batalReservasiModal">
+                                                    <i class="icon-trash me-2"></i> Ajukan Pembatalan
+                                                </button>
                                             @endif
                                         </div>
-
                                     </div>
                                 </div>
                             </div>
@@ -318,24 +521,6 @@
         if (error.trim() !== '') {
             swal('Error', error.trim(), 'error');
         }
-    }
-
-    function hapus(event, el){
-        event.preventDefault();
-        const form = el.closest('form');
-
-        swal({
-            title: "Anda Yakin?",
-            text: "Anda Akan Membatalkan Reservasi Ini!",
-            type: "warning",
-            showCancelButton: true,
-            confirmButtonClass: "btn-danger",
-            confirmButtonText: "Iya, Batalkan!",
-            closeOnConfirm: false
-        },
-        function(){
-            form.submit();
-        });
     }
 
     body.onload = function(){

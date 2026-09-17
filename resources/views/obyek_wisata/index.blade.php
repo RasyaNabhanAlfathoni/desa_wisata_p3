@@ -27,9 +27,14 @@
                     </div>
 
                     <div class="d-flex justify-content-between align-items-center mb-3">
+                        @if ($title == 'Admin')
                         <a href="{{ route('kelola_obyek_wisata.create') }}" class="btn btn-primary">
                             <i class="fe fe-plus mr-1"></i>Tambah
                         </a>
+                        @else
+                        <a href="{{ route('kelola_obyek_wisata.create') }}" class="btn disabled">
+                        </a>
+                        @endif
                         <form class="form">
                             <div class="form-group mb-0">
                                 <label for="search1" class="sr-only">Search</label>
@@ -79,7 +84,11 @@
                                 <th>Foto 3</th>
                                 <th>Foto 4</th>
                                 <th>Foto 5</th>
+                                @if ($title == 'Admin')
                                 <th>Aksi</th>
+                                @else
+                                <th></th>
+                                @endif
                             </tr>
                         </thead>
                         <tbody>
@@ -129,7 +138,7 @@
                                     </td>
                                 @endforeach
 
-
+                                @if ($title == 'Admin')
                                 <td>
                                     <button class="btn btn-sm dropdown-toggle more-horizontal" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         <span class="text-muted sr-only">Action</span>
@@ -141,6 +150,9 @@
                                         </a>
                                     </div>
                                 </td>
+                                @else
+                                <td></td>
+                                @endif
                             </tr>
                             @endforeach
                             @else

@@ -117,6 +117,7 @@
                                 <i class="fe fe-arrow-left"></i> Kembali
                             </a>
 
+                            @if ($title == 'Bendahara')
                             <div>
                                 @if($reservasi->status_reservasi_wisata == 'pesan')
                                     <form action="{{ route('kelola_reservasi.konfirmasi', $reservasi->id) }}" method="POST" class="d-inline">
@@ -137,6 +138,7 @@
                                     </form>
                                 @endif
                             </div>
+                            @endif
                         </div>
                     </div>
                 </div>

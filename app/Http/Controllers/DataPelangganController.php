@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Pelanggan;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Storage;
@@ -37,7 +38,7 @@ class DataPelangganController extends Controller
         ]);
 
         return view('data-pelanggan.index', [
-            'title' => 'Admin',
+            'title' => ucfirst(Auth::user()->level),
             'menu' => 'data_pelanggan',
             'page' => 'Data Pelanggan',
             'pelanggans' => $pelanggans,
@@ -50,7 +51,7 @@ class DataPelangganController extends Controller
         public function create()
         {
             return view('data-pelanggan.create', [
-                'title' => 'Admin',
+                'title' => ucfirst(Auth::user()->level),
                 'menu' => 'data_pelanggan',
                 'page' => 'Create Data Pelanggan',
             ]);
@@ -148,7 +149,7 @@ class DataPelangganController extends Controller
         $jumlahReservasi = $pelanggan->reservasi->count();
 
         return view('data-pelanggan.show', [
-            'title' => 'Admin',
+            'title' => ucfirst(Auth::user()->level),
             'menu' => 'data_pelanggan',
             'page' => 'Detail Pelanggan',
             'pelanggan' => $pelanggan,
@@ -164,7 +165,7 @@ class DataPelangganController extends Controller
         $pelanggan = Pelanggan::with('user')->findOrFail($id);
 
         return view('data-pelanggan.edit', [
-            'title' => 'Admin',
+            'title' => ucfirst(Auth::user()->level),
             'menu' => 'data_pelanggan',
             'page' => 'Edit Data Pelanggan',
             'pelanggan' => $pelanggan,

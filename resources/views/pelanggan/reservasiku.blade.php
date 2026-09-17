@@ -126,21 +126,6 @@
                                                             <i class="icon-credit-card"></i>
                                                         </a>
                                                     @endif
-
-                                                    @if(in_array($reservasi->status_reservasi_wisata, ['pesan', 'dibayar']))
-                                                        <form id="frmHapus{{ $reservasi->id }}"
-                                                              action="{{ route('pelanggan.paket-wisata.reservasi.batal', $reservasi->id) }}"
-                                                              method="POST">
-                                                            @csrf
-                                                            @method('DELETE')
-                                                            <button type="button"
-                                                                    onclick="hapus(event, this)"
-                                                                    class="btn btn-sm btn-danger"
-                                                                    title="Batalkan Reservasi">
-                                                                <i class="icon-trash"></i>
-                                                            </button>
-                                                        </form>
-                                                    @endif
                                                 </div>
                                             </td>
                                         </tr>

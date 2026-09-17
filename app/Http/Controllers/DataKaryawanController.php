@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\KaryawanWithUserExport;
 use Carbon\Carbon;
@@ -41,7 +42,7 @@ class DataKaryawanController extends Controller
         ]);
 
         return view('data-karyawan.index', [
-            'title' => 'Admin',
+            'title' => ucfirst(Auth::user()->level),
             'menu' => 'Data_karyawan',
             'page' => 'Data Karyawan',
             'karyawans' => $karyawans,
@@ -54,7 +55,7 @@ class DataKaryawanController extends Controller
     public function create()
     {
         return view('data-karyawan.create', [
-            'title' => 'Admin',
+            'title' => ucfirst(Auth::user()->level),
             'menu' => 'Data_karyawan',
             'page' => 'Create Data Karyawan',
         ]);
@@ -141,7 +142,7 @@ class DataKaryawanController extends Controller
         $karyawan = Karyawan::with('user')->findOrFail($id);
 
         return view('data-karyawan.show', [
-            'title' => 'Admin',
+            'title' => ucfirst(Auth::user()->level),
             'menu' => 'Admin',
             'page' => 'Detail Karyawan',
             'karyawan' => $karyawan,
@@ -156,7 +157,7 @@ class DataKaryawanController extends Controller
         $karyawan = Karyawan::with('user')->findOrFail($id);
 
         return view('data-karyawan.edit', [
-            'title' => 'Admin',
+            'title' => ucfirst(Auth::user()->level),
             'menu' => 'Data_karyawan',
             'page' => 'Edit Data Karyawan',
             'karyawan' => $karyawan,

@@ -30,7 +30,7 @@ class AuthController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'level' => 'pelanggan', // Set level secara otomatis sebagai pelanggan
-            'akif' => 1, // Set status aktif
+            'aktif' => 1, // Set status aktif
             'remember_token' => Str::random(60), // Generate remember token
         ]);
 
@@ -53,33 +53,62 @@ class AuthController extends Controller
 
     // Menampilkan halaman notice verifikasi email
     public function verificationNotice() {
+        if (Auth::check()) {
+            $user = Auth::user();
+            if ($user->level === 'pelanggan') {
+                return redirect()->route('pelanggan.index');
+            } elseif ($user->level === 'admin') {
+                return redirect()->route('admin.index');
+            } elseif ($user->level === 'pemilik') {
+                return redirect()->route('pemilik.index');
+            } elseif ($user->level === 'bendahara') {
+                return redirect()->route('bendahara.index');
+            }
+        }
+
+        // Tampilkan halaman verifikasi
         return view('auth.verify', [
-            'title' => 'Verifikasi Email'
+            'title' => 'Verifikasi Email',
+            'email' => session('registered_email') // optional: kirim email yang baru register
         ]);
     }
 
     // Menangani verifikasi email
-    public function verificationVerify(EmailVerificationRequest $request) {
-        // Jika user belum login, coba login dulu
-        if (!Auth::check()) {
-            $user = User::find($request->route('id'));
-            if ($user) {
-                Auth::login($user);
-            }
+    public function verificationVerify(Request $request, $id, $hash) {
+        // Cari user berdasarkan ID
+        $user = User::findOrFail($id);
+
+        // Validasi hash
+        if (!hash_equals(sha1($user->getEmailForVerification()), $hash)) {
+            return redirect()->route('login')->with('error', 'Link verifikasi tidak valid!');
         }
-        $request->fulfill();
-        // Logout user jika kebetulan sudah login
-        Auth::logout();
-        return redirect()->route('login')->with('pesan', 'Email berhasil diverifikasi. Silakan login.');
+
+        // Cek apakah sudah terverifikasi
+        if ($user->hasVerifiedEmail()) {
+            return redirect()->route('login')->with('pesan', 'Email sudah diverifikasi sebelumnya.');
+        }
+
+        // Tandai email sebagai terverifikasi
+        $user->markEmailAsVerified();
+
+        // Redirect ke halaman login dengan pesan sukses
+        return redirect()->route('login')->with('pesan', 'Email berhasil diverifikasi! Silakan login.');
     }
 
     // Mengirim ulang link verifikasi
     public function verificationResend(Request $request) {
+        // Cek apakah user login
+        if (!Auth::check()) {
+            return redirect()->route('login')->with('error', 'Silakan login terlebih dahulu.');
+        }
+
+        $user = Auth::user();
+
         if ($request->user()->hasVerifiedEmail()) {
             return redirect()->route('login')->with('pesan', 'Email sudah diverifikasi.');
         }
 
-        $request->user()->sendEmailVerificationNotification();
+        ($request->user()->sendEmailVerificationNotification());
         return back()->with('pesan', 'Kami telah mengirim ulang link verifikasi ke email Anda. Silakan cek email Anda (termasuk folder spam).');
     }
 
@@ -114,8 +143,8 @@ class AuthController extends Controller
                 // if ($user) {
                 //     $request->user()->sendEmailVerificationNotification();
                 // }
-                // Auth::logout();
-                $request->user()->sendEmailVerificationNotification();
+                Auth::logout();
+                // $request->user()->sendEmailVerificationNotification();
                 return back()->with('error', 'Akun belum diverifikasi! Kami telah mengirim ulang link verifikasi ke email Anda. Silakan cek email Anda (termasuk folder spam).')
                             ->with('resend_verification', true)
                             ->with('email', $user->email);

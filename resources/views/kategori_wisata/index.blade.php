@@ -27,9 +27,14 @@
                     </div>
 
                     <div class="d-flex justify-content-between align-items-center mb-3">
+                        @if ($title == 'Admin')
                         <a href="{{ route('kelola_kategori_wisata.create') }}" class="btn btn-primary">
                             <i class="fe fe-plus mr-1"></i>Tambah
                         </a>
+                        @else
+                        <a href="{{ route('kelola_kategori_wisata.create') }}" class="btn disabled">
+                        </a>
+                        @endif
                         <form class="form">
                             <div class="form-group mb-0">
                                 <label for="search1" class="sr-only">Search</label>
@@ -60,7 +65,11 @@
                             <tr>
                                 <th>No.</th>
                                 <th>Nama Kategori Wisata</th>
+                                @if ($title == 'Admin')
                                 <th>Aksi</th>
+                                @else
+                                <th></th>
+                                @endif
                             </tr>
                         </thead>
                         <tbody>
@@ -69,10 +78,14 @@
                             <tr>
                                 <td><p class="mb-0">{{ ($kategori_wisatas->currentPage() - 1) * $kategori_wisatas->perPage() + $index + 1 }}</p></td>
                                 <td><p class="mb-0">{{ $kategori->kategori_wisata }}</p></td>
+                                @if ($title == 'Admin')
                                 <td>
                                     <a class="btn btn-warning text-white" href="{{ route('kelola_kategori_wisata.edit', $kategori->id) }}"><i class="fe fe-edit"></i> Edit</a>
                                     <a type="button" class="btn btn-danger" href="{{ route('kelola_kategori_wisata.destroy', $kategori->id) }}" onclick="hapus(event, this)"><i class="fe fe-trash"></i> Delete</a>
                                 </td>
+                                @else
+                                <td></td>
+                                @endif
                             </tr>
                             @endforeach
 
